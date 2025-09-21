@@ -29,7 +29,7 @@ class ProfileController extends Controller
 
         // Processa upload da foto de perfil
         if ($request->hasFile('profile_photo')) {
-            $profilePhotoPath = $request->file('profile_photo')->store('profile_photos', 'public');
+            $profilePhotoPath      = $request->file('profile_photo')->store('profile_photos', 'public');
             $data['profile_photo'] = $profilePhotoPath;
         }
 
