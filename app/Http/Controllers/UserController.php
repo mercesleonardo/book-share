@@ -58,7 +58,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if (!empty($user->profile_photo) && isset($data['profile_photo'])) {
+        if (!empty($user->profile_photo)) {
             Storage::disk('public')->delete($user->profile_photo);
         }
 
