@@ -49,7 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
-             'role' => \App\Enums\UserRole::class
+            'role'              => \App\Enums\UserRole::class,
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\Support\Facades\{Auth, Redirect};
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -27,10 +28,13 @@ class ProfileController extends Controller
         $user = $request->user();
         $data = $request->validated();
 
-        // Processa upload da foto de perfil
         if ($request->hasFile('profile_photo')) {
             $profilePhotoPath      = $request->file('profile_photo')->store('profile_photos', 'public');
             $data['profile_photo'] = $profilePhotoPath;
+        }
+
+        if (!empty($user->profile_photo) && isset($data['profile_photo'])) {
+            Storage::disk('public')->delete($user->profile_photo);
         }
 
         $user->fill($data);
@@ -54,6 +58,10 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        if (!empty($user->profile_photo)) {
+            Storage::disk('public')->delete($user->profile_photo);
+        }
 
         Auth::logout();
 

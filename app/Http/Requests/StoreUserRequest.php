@@ -9,11 +9,18 @@ use Illuminate\Validation\Rule;
 class StoreUserRequest extends FormRequest
 {
     /**
+     * The key to be used for the view error bag.
+     *
+     * @var string
+     */
+    protected $errorBag = 'store';
+
+    /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->role === UserRole::ADMIN;
     }
 
     /**
@@ -27,7 +34,7 @@ class StoreUserRequest extends FormRequest
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', 'string', 'min:8'],
-            'role'     => ['required', 'string', Rule::in(array_map(fn($case) => $case->value, UserRole::cases()))],
+            'role'     => ['required', 'string', Rule::in(array_map(fn ($case) => $case->value, UserRole::cases()))],
         ];
     }
 }

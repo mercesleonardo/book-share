@@ -1,36 +1,49 @@
-<form action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-    @csrf
-    @method('PUT')
-    <div>
-        <label for="name" class="block">{{ __('Name') }}</label>
-        <input type="text" name="name" id="name" class="w-full border rounded px-3 py-2" value="{{ old('name', $user->name) }}" required>
-        @error('name') <div class="text-red-600">{{ $message }}</div> @enderror
-    </div>
-    <div>
-        <label for="email" class="block">{{ __('Email') }}</label>
-        <input type="email" name="email" id="email" class="w-full border rounded px-3 py-2" value="{{ old('email', $user->email) }}" required>
-        @error('email') <div class="text-red-600">{{ $message }}</div> @enderror
-    </div>
-    <div>
-        <label for="profile_photo" class="block">{{ __('Profile Photo') }}</label>
-        <input type="file" name="profile_photo" id="profile_photo" class="w-full border rounded px-3 py-2">
-        @error('profile_photo') <div class="text-red-600">{{ $message }}</div> @enderror
-    </div>
-    <div>
-        <label for="description" class="block">{{ __('Description') }}</label>
-        <textarea name="description" id="description" class="w-full border rounded px-3 py-2">{{ old('description', $user->description) }}</textarea>
-        @error('description') <div class="text-red-600">{{ $message }}</div> @enderror
-    </div>
-    <div>
-        <label for="role" class="block">{{ __('Role') }}</label>
-        <select name="role" id="role" class="w-full border rounded px-3 py-2" required>
-            <option value="user" {{ old('role', $user->role->value) == 'user' ? 'selected' : '' }}>{{ __('User') }}</option>
-            <option value="admin" {{ old('role', $user->role->value) == 'admin' ? 'selected' : '' }}>{{ __('Admin') }}</option>
-        </select>
-        @error('role') <div class="text-red-600">{{ $message }}</div> @enderror
-    </div>
-    <div class="flex justify-end gap-2">
-        <button type="submit" class="px-4 py-2 bg-yellow-600 text-white rounded">{{ __('Update') }}</button>
-        <button type="button" class="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded" @click="$dispatch('close')">{{ __('Cancel') }}</button>
-    </div>
-</form>
+<section class="space-y-6">
+    <header>
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            {{ __('Edit User') }}
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            {{ __("Edit user's information below.") }}
+        </p>
+    </header>
+
+
+    <form method="POST" action="{{ route('users.update', $user->id) }}" class="space-y-4" enctype="multipart/form-data">
+        @csrf
+        @method('put')
+
+        <div>
+            <x-input-label for="name-{{ $user->id }}" :value="__('Name')" />
+            <x-text-input id="name-{{ $user->id }}" name="name" type="text" class="mt-1 block w-full"
+                :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-input-error class="mt-2" :messages="$errors->update->get('name')" />
+        </div>
+
+        <div>
+            <x-input-label for="email-{{ $user->id }}" :value="__('Email')" />
+            <x-text-input id="email-{{ $user->id }}" name="email" type="email" class="mt-1 block w-full"
+                :value="old('email', $user->email)" required autocomplete="username" />
+            <x-input-error class="mt-2" :messages="$errors->update->get('email')" />
+        </div>
+
+        <div>
+            <x-input-label for="role" :value="__('Role')" />
+            <x-select-input name="role" :options="$roles" :value="old('role', $user->role->value)" label="{{ __('Role') }}" required />
+            <x-input-error class="mt-2" :messages="$errors->update->get('role')" />
+        </div>
+
+        <div class="flex justify-end gap-2">
+            <x-secondary-button type="button" x-on:click.prevent="$dispatch('close'); window.location.reload()">
+                {{ __('Cancel') }}
+            </x-secondary-button>
+            <x-primary-button>{{ __('Save') }}</x-primary-button>
+
+            @if (session('status') === 'profile-updated')
+                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                    class="text-sm text-gray-600 dark:text-gray-400">{{ __('Saved.') }}</p>
+            @endif
+        </div>
+    </form>
+</section>

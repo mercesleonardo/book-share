@@ -10,12 +10,13 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="mb-4">
-                        <x-primary-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'create-user')">
+                        <x-primary-button x-data=""
+                            x-on:click.prevent="$dispatch('open-modal', 'create-user')">
                             {{ __('Create User') }}
                         </x-primary-button>
-                        <x-modal name="create-user" :show="$errors->any()" focusable>
+                        <x-modal name="create-user" :show="$errors->store->isNotEmpty()" focusable>
                             <div class="p-6">
-                                    @include('users.partials.create-modal', ['roles' => $roles])
+                                @include('users.partials.create-modal', ['roles' => $roles])
                             </div>
                         </x-modal>
                     </div>
@@ -43,8 +44,19 @@
                                             {{ $user->role->label() }}
                                         </td>
                                         <td class="py-2 px-4 border-b space-x-2">
-                                            <a href="{{ route('users.edit', $user) }}"
-                                                class="text-blue-600 hover:underline">{{ __('Edit') }}</a>
+                                            <x-primary-button x-data=""
+                                                x-on:click.prevent="$dispatch('open-modal', 'edit-user-{{ $user->id }}')">
+                                                {{ __('Edit') }}
+                                            </x-primary-button>
+                                            <x-modal name="edit-user-{{ $user->id }}" :show="$errors->update->isNotEmpty() &&
+                                                session('failed_user_id') === $user->id" focusable>
+                                                <div class="p-6">
+                                                    @include('users.partials.edit-modal', [
+                                                        'user' => $user,
+                                                        'roles' => $roles,
+                                                    ])
+                                                </div>
+                                            </x-modal>
                                         </td>
                                     </tr>
                                 @empty
