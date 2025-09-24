@@ -30,7 +30,7 @@
                     </div>
 
                     <!-- Role -->
-                    <div class="flex flex-col gap-1">
+                    <div class="flex flex-col gap-1 md:col-span-2">
                         <x-input-label for="role" :value="__('Role')" />
                         <x-select-input name="role" :options="$roles" :value="old('role')" label="{{ __('Role') }}"
                             required />
