@@ -16,4 +16,13 @@ enum UserRole: string
             self::USER      => 'Usuario',
         };
     }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::ADMIN     => 'font-semibold text-red-600 dark:text-red-400',
+            self::MODERATOR => 'font-semibold text-yellow-600 dark:text-yellow-400',
+            self::USER      => 'font-semibold text-blue-600 dark:text-blue-400',
+        };
+    }
 }
