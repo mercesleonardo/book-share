@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -41,7 +42,7 @@ class UpdateUserRequest extends FormRequest
                 Rule::unique(User::class, 'email')->ignore($this->route('user')),
             ],
             'description' => ['nullable', 'string', 'max:1000'],
-            'role'        => ['required', 'string', Rule::in(array_map(fn ($case) => $case->value, UserRole::cases()))],
+            'role'        => ['required', 'string', new Enum(UserRole::class)],
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreUserRequest extends FormRequest
 {
@@ -34,7 +35,7 @@ class StoreUserRequest extends FormRequest
             'name'        => ['required', 'string', 'max:255'],
             'email'       => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'role'        => ['required', 'string', Rule::in(array_map(fn ($case) => $case->value, UserRole::cases()))],
+            'role'        => ['required', 'string', new Enum(UserRole::class)],
         ];
     }
 }
