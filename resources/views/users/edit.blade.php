@@ -34,7 +34,7 @@
                     <!-- Role -->
                     <div class="flex flex-col gap-1 md:col-span-2">
                         <x-input-label for="role" :value="__('Role')" />
-                        <x-select-input name="role" :options="$roles" :value="old('role', $user->role_id)" label="{{ __('Role') }}"
+                        <x-select-input name="role" :options="$roles" :value="old('role', $user->role->value)" label="{{ __('Role') }}"
                             required />
                         <x-input-error :messages="$errors->update->get('role')" />
                     </div>
