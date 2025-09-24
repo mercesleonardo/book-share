@@ -27,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_photo',
         'description',
         'role',
+        'password_set_at',
     ];
 
     /**
@@ -50,6 +51,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
             'role'              => \App\Enums\UserRole::class,
+            'password_set_at'   => 'datetime',
         ];
+    }
+
+    /**
+     * Indica se o usuário já definiu a própria senha.
+     */
+    public function hasSetPassword(): bool
+    {
+        return !is_null($this->password_set_at);
     }
 }

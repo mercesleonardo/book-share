@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\UserRole;
 use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
-use Illuminate\Support\Facades\{Hash, Storage};
+use App\Notifications\InitialPasswordSetupNotification;
+use Illuminate\Support\Facades\{Hash, Password, Storage};
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -15,9 +17,19 @@ class UserController extends Controller
     public function index()
     {
         $roles = UserRole::cases();
-        $users = User::orderBy('name')->paginate(10);
+        $users = User::where('id', '!=', auth()->id())->orderBy('name')->paginate(15);
 
         return view('users.index', compact('users', 'roles'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $roles = UserRole::cases();
+
+        return view('users.create', compact('roles'));
     }
 
     /**
@@ -27,14 +39,32 @@ class UserController extends Controller
     {
         $validated = $request->validated();
 
-        User::create([
-            'name'     => $validated['name'],
-            'email'    => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role'     => UserRole::from($validated['role']),
+        $user = User::create([
+            'name'        => $validated['name'],
+            'email'       => $validated['email'],
+            'description' => $validated['description'] ?? null,
+            'password'    => Hash::make(Str::random(32)),
+            'role'        => UserRole::from($validated['role']),
         ]);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        // Gera token de reset manualmente para custom notification
+        $token = Password::createToken($user);
+
+        // Envia notificação customizada de configuração inicial
+        $user->notify(new InitialPasswordSetupNotification($token));
+
+        return redirect()->route('users.index')->with('success', __('User created. A password setup link was sent to the user.'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $user  = User::findOrFail($id);
+        $roles = UserRole::cases();
+
+        return view('users.edit', compact('user', 'roles'));
     }
 
     /**

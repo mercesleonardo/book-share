@@ -10,15 +10,11 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="mb-4">
+                        {{-- Button to open create page --}}
                         <x-primary-button x-data=""
-                            x-on:click.prevent="$dispatch('open-modal', 'create-user')">
+                            x-on:click.prevent="window.location.href='{{ route('users.create') }}'">
                             {{ __('Create User') }}
                         </x-primary-button>
-                        <x-modal name="create-user" :show="$errors->store->isNotEmpty()" focusable>
-                            <div class="p-6">
-                                @include('users.partials.create-modal', ['roles' => $roles])
-                            </div>
-                        </x-modal>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full bg-white dark:bg-gray-700 rounded shadow">
@@ -40,28 +36,17 @@
                                         </td>
                                         <td class="py-2 px-4 border-b font-medium">{{ $user->name }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->email }}</td>
-                                        <td class="py-2 px-4 border-b">
-                                            {{ $user->role->label() }}
-                                        </td>
+                                        <td class="py-2 px-4 border-b">{{ $user->role->label() }}</td>
                                         <td class="py-2 px-4 border-b space-x-2">
-                                            <x-primary-button x-data=""
-                                                x-on:click.prevent="$dispatch('open-modal', 'edit-user-{{ $user->id }}')">
+                                            <x-secondary-button x-data=""
+                                                x-on:click.prevent="window.location.href='{{ route('users.edit', $user->id) }}'">
                                                 {{ __('Edit') }}
-                                            </x-primary-button>
-                                            <x-modal name="edit-user-{{ $user->id }}" :show="$errors->update->isNotEmpty() &&
-                                                session('failed_user_id') === $user->id" focusable>
-                                                <div class="p-6">
-                                                    @include('users.partials.edit-modal', [
-                                                        'user' => $user,
-                                                        'roles' => $roles,
-                                                    ])
-                                                </div>
-                                            </x-modal>
+                                            </x-secondary-button>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="py-4 text-center text-gray-500">
+                                        <td colspan="6" class="py-4 text-center text-gray-500">
                                             {{ __('No users found.') }}</td>
                                     </tr>
                                 @endforelse

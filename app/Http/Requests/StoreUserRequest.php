@@ -31,10 +31,10 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'confirmed', 'string', 'min:8'],
-            'role'     => ['required', 'string', Rule::in(array_map(fn ($case) => $case->value, UserRole::cases()))],
+            'name'        => ['required', 'string', 'max:255'],
+            'email'       => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'role'        => ['required', 'string', Rule::in(array_map(fn ($case) => $case->value, UserRole::cases()))],
         ];
     }
 }

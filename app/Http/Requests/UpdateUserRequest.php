@@ -21,7 +21,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->role === UserRole::ADMIN;
     }
 
     /**
@@ -31,9 +31,6 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $routeParam = $this->route('user');
-        $userId     = (int) $routeParam;
-
         return [
             'name'  => ['required', 'string', 'max:255'],
             'email' => [
@@ -41,21 +38,10 @@ class UpdateUserRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                Rule::unique(User::class, 'email')->ignore($userId),
+                Rule::unique(User::class, 'email')->ignore($this->route('user')),
             ],
-            'role' => ['required', 'string', Rule::in(array_map(fn ($case) => $case->value, UserRole::cases()))],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'role'        => ['required', 'string', Rule::in(array_map(fn ($case) => $case->value, UserRole::cases()))],
         ];
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     */
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        $routeParam = $this->route('user');
-        $userId     = (int) $routeParam;
-
-        session()->flash('failed_user_id', $userId);
-        parent::failedValidation($validator);
     }
 }
