@@ -36,7 +36,7 @@
                                         </td>
                                         <td class="py-2 px-4 border-b font-medium">{{ $user->name }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->email }}</td>
-                                        <td class="py-2 px-4 border-b">{{ $user->role->label() }}</td>
+                                        <td class="py-2 px-4 border-b {{ $user->role->color() }}">{{ $user->role->label() }}</td>
                                         <td class="py-2 px-4 border-b space-x-2">
                                             <x-secondary-button x-data=""
                                                 x-on:click.prevent="window.location.href='{{ route('users.edit', $user->id) }}'">
