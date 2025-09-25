@@ -13,7 +13,7 @@
                 <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data"
                     class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     @csrf
-                    @method('PUT')
+                    @method('PATCH')
 
                     <!-- Name -->
                     <div class="flex flex-col gap-1">
