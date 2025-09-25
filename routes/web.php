@@ -17,6 +17,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('users', UserController::class)->except(['show']);
+    Route::patch('users/{user}/restore', [UserController::class, 'restore'])->name('users.restore')->withTrashed();
 });
 
 require __DIR__ . '/auth.php';

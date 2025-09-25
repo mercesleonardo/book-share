@@ -9,6 +9,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
+                    @if (session('success'))
+                        <div class="mb-4">
+                            <x-alert type="success" dismissible>
+                                {{ session('success') }}
+                            </x-alert>
+                        </div>
+                    @endif
+
                     <div class="mb-4">
                         {{-- Button to open create page --}}
                         <x-primary-button x-data=""
@@ -38,10 +46,21 @@
                                         <td class="py-2 px-4 border-b">{{ $user->email }}</td>
                                         <td class="py-2 px-4 border-b {{ $user->role->color() }}">{{ $user->role->label() }}</td>
                                         <td class="py-2 px-4 border-b space-x-2">
-                                            <x-secondary-button x-data=""
-                                                x-on:click.prevent="window.location.href='{{ route('users.edit', $user->id) }}'">
-                                                {{ __('Edit') }}
-                                            </x-secondary-button>
+                                            @if ($user->trashed())
+                                                <form method="POST" action="{{ route('users.restore', $user->id) }}"
+                                                    class="inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <x-primary-button>
+                                                        {{ __('Restore') }}
+                                                    </x-primary-button>
+                                                </form>
+                                            @else
+                                                <x-secondary-button x-data=""
+                                                    x-on:click.prevent="window.location.href='{{ route('users.edit', $user->id) }}'">
+                                                    {{ __('Edit') }}
+                                                </x-secondary-button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty

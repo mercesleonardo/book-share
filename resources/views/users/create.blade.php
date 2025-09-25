@@ -9,6 +9,16 @@
     </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            @if (session('success'))
+                <x-alert type="success" dismissible>
+                    {{ session('success') }}
+                </x-alert>
+            @endif
+            @if (session('error'))
+                <x-alert type="error" dismissible>
+                    {{ session('error') }}
+                </x-alert>
+            @endif
             <div class="p-6 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data"
                     class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">

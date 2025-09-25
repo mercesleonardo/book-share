@@ -6,18 +6,22 @@ use App\Enums\UserRole;
 use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
 use App\Notifications\InitialPasswordSetupNotification;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\{Hash, Password, Storage};
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
+        $this->authorize('viewAny', User::class);
+
         $roles = UserRole::cases();
-        $users = User::where('id', '!=', auth()->id())->orderBy('name')->paginate(15);
+        $users = User::withTrashed()->where('id', '!=', auth()->id())->orderBy('name')->paginate(15);
 
         return view('users.index', compact('users', 'roles'));
     }
@@ -25,7 +29,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         $roles = UserRole::cases();
 
@@ -35,8 +39,10 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
+        $this->authorize('create', User::class);
+
         $validated = $request->validated();
 
         $user = User::create([
@@ -47,21 +53,20 @@ class UserController extends Controller
             'role'        => UserRole::from($validated['role']),
         ]);
 
-        // Gera token de reset manualmente para custom notification
+        // Generate reset token manually for custom notification
         $token = Password::createToken($user);
 
-        // Envia notificação customizada de configuração inicial
+        // Send notification to set initial password
         $user->notify(new InitialPasswordSetupNotification($token));
 
-        return redirect()->route('users.index')->with('success', __('User created. A password setup link was sent to the user.'));
+        return redirect()->route('users.index')->with('success', __('users.created'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user): View
     {
-        $user  = User::findOrFail($id);
         $roles = UserRole::cases();
 
         return view('users.edit', compact('user', 'roles'));
@@ -70,23 +75,35 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, string $id)
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $user      = User::findOrFail($id);
+        $this->authorize('update', $user);
+
         $validated = $request->validated();
 
         $validated['role'] = UserRole::from($validated['role']);
         $user->update($validated);
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('users.index')->with('success', __('users.updated'));
+    }
+
+    /**
+    * Restore the specified resource from storage.
+    */
+    public function restore(User $user): RedirectResponse
+    {
+        $this->authorize('restore', $user);
+        $user->restore();
+
+        return redirect()->route('users.index')->with('success', __('users.restored'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user): RedirectResponse
     {
-        $user = User::findOrFail($id);
+        $this->authorize('delete', $user);
 
         if (!empty($user->profile_photo)) {
             Storage::disk('public')->delete($user->profile_photo);
@@ -94,6 +111,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('users.index')->with('success', __('users.deleted'));
     }
 }
