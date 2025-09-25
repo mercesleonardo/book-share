@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Enums\UserRole;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,5 +24,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Model::preventLazyLoading(!$this->app->isProduction());
+
+        /**
+         * Define um Gate para verificar se o usuário pode ver o dashboard de usuários.
+         * Apenas usuários com a role 'admin' ou 'moderator' podem.
+         */
+        Gate::define('access-user-dashboard', function (User $user) {
+            return in_array($user->role, [UserRole::ADMIN, UserRole::MODERATOR]);
+        });
     }
 }
