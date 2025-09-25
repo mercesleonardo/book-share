@@ -17,12 +17,16 @@
                         </div>
                     @endif
 
-                    <div class="mb-4">
-                        {{-- Button to open create page --}}
-                        <x-primary-button x-data=""
-                            x-on:click.prevent="window.location.href='{{ route('users.create') }}'">
-                            {{ __('Create User') }}
-                        </x-primary-button>
+                    <div class="mb-6 flex flex-col gap-4">
+                        {{-- Filtros de busca --}}
+                        <x-users-filter :roles="$roles" :name="request('name')" :role="request('role')" />
+
+                        {{-- Botão criar --}}
+                        <div>
+                            <x-create-button x-data="" x-on:click.prevent="window.location.href='{{ route('users.create') }}'">
+                                {{ __('Create User') }}
+                            </x-create-button>
+                        </div>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full bg-white dark:bg-gray-700 rounded shadow">

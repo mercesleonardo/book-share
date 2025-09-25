@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
-use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
+use App\Http\Requests\{IndexUserRequest, StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
 use App\Notifications\InitialPasswordSetupNotification;
 use Illuminate\Http\RedirectResponse;
@@ -16,12 +16,25 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(IndexUserRequest $request): View
     {
         $this->authorize('viewAny', User::class);
 
         $roles = UserRole::cases();
-        $users = User::withTrashed()->where('id', '!=', auth()->id())->orderBy('name')->paginate(15);
+        $users = User::withTrashed()->where('id', '!=', auth()->id());
+
+        $validated = $request->validated();
+
+        if (!empty($validated['name'])) {
+            $name = $validated['name'];
+            $users->where('name', 'like', "%{$name}%");
+        }
+
+        if (!empty($validated['role'])) {
+            $users->where('role', $validated['role']);
+        }
+
+        $users = $users->orderBy('name')->paginate(15)->withQueryString();
 
         return view('users.index', compact('users', 'roles'));
     }
@@ -31,6 +44,7 @@ class UserController extends Controller
      */
     public function create(): View
     {
+        $this->authorize('create', User::class);
         $roles = UserRole::cases();
 
         return view('users.create', compact('roles'));
@@ -67,6 +81,7 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
+        $this->authorize('update', $user);
         $roles = UserRole::cases();
 
         return view('users.edit', compact('user', 'roles'));
