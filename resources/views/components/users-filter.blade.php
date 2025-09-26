@@ -12,7 +12,7 @@
     </div>
     <div class="md:col-span-1">
         <x-input-label for="role" :value="__('Role')" />
-        <x-select-input id="role" name="role" :options="$roles" :value="$role" label="{{ __('Role') }}" :placeholder="__('Select') . '…'" />
+        <x-select-input id="role" name="role" :options="$roles" :value="$role" label="{{ __('Role') }}" :placeholder="__('All')" />
     </div>
     <div class="md:col-span-1 flex items-end gap-2">
         <x-primary-button type="submit">{{ __('Filter') }}</x-primary-button>

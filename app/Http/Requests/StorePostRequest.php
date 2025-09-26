@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StorePostRequest extends FormRequest
 {
+    protected $errorBag = 'store';
+
     public function authorize(): bool
     {
         return true;
@@ -15,9 +17,10 @@ class StorePostRequest extends FormRequest
     {
         return [
             'title'       => ['required', 'string', 'max:255'],
+            'author'      => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
-            'image'       => ['nullable', 'image', 'max:2048'],
+            'image'       => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }
 }

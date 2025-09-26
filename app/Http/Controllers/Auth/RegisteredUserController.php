@@ -28,18 +28,28 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        $validated = $request->validate([
+            'name'          => ['required', 'string', 'max:255'],
+            'email'         => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'password'      => ['required', 'confirmed', Rules\Password::defaults()],
+            'profile_photo' => ['nullable', 'image', 'max:2048'],
+            'description'   => ['nullable', 'string', 'max:1000'],
         ]);
 
+        $profilePhotoPath = null;
+
+        if ($request->hasFile('profile_photo')) {
+            $profilePhotoPath = $request->file('profile_photo')->store('profiles', 'public');
+        }
+
         $user = User::create([
-            'name'            => $request->name,
-            'email'           => $request->email,
-            'password'        => Hash::make($request->password),
+            'name'            => $validated['name'],
+            'email'           => $validated['email'],
+            'password'        => Hash::make($validated['password']),
             'role'            => UserRole::USER,
             'password_set_at' => now(),
+            'profile_photo'   => $profilePhotoPath,
+            'description'     => $validated['description'] ?? null,
         ]);
 
         event(new Registered($user));

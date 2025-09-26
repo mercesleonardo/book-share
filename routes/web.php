@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{ProfileController, UserController};
+use App\Http\Controllers\{CategoryController, PostController, ProfileController, UserController};
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +18,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('users', UserController::class)->except(['show']);
     Route::patch('users/{user}/restore', [UserController::class, 'restore'])->name('users.restore')->withTrashed();
+
+    Route::resource('categories', CategoryController::class)->except(['show']);
+    Route::resource('posts', PostController::class);
 });
 
 require __DIR__ . '/auth.php';

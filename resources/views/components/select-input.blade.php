@@ -1,12 +1,12 @@
 @props([
     'name',
     'id' => null,
-    'options' => [], // array de objetos ou arrays com value/label
-    'value' => null, // valor selecionado
+    'options' => [],
+    'value' => null,
     'label' => null,
     'required' => false,
     'class' => '',
-    'placeholder' => null, // texto do placeholder quando não requerido
+    'placeholder' => null,
 ])
 
 <div>

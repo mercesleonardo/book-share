@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Usuários
+        // Users
         /** @var User $admin */
         $admin = User::query()->firstOrCreate(
             ['email' => 'admin@example.com'],
@@ -39,14 +39,13 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Usuários comuns
+        // Regular users
         $regularUsers = User::factory(8)->create();
 
-        // Categorias
+        // Categories
         $categories = Category::factory(6)->create();
 
-        // Distribui posts: para cada categoria cria posts do admin, moderator e alguns usuários comuns.
-        // Campo de imagem deixado null nas factories (upload real ocorre via interface/formulário).
+        // For each category, create posts by admin, moderator, and some regular users.
         $categories->each(function (Category $category) use ($admin, $moderator, $regularUsers): void {
             Post::factory(2)->create([
                 'user_id'     => $admin->id,
@@ -56,7 +55,7 @@ class DatabaseSeeder extends Seeder
                 'user_id'     => $moderator->id,
                 'category_id' => $category->id,
             ]);
-            // Escolhe 3 usuários distintos aleatórios para posts
+            // Choose 3 distinct random users for posts
             $regularUsers->random(3)->each(function (User $user) use ($category): void {
                 Post::factory()->create([
                     'user_id'     => $user->id,

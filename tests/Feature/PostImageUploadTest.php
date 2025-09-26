@@ -25,6 +25,7 @@ class PostImageUploadTest extends TestCase
         $file     = UploadedFile::fake()->image('photo.jpg', 640, 480);
         $response = $this->post(route('posts.store'), [
             'title'       => 'With Image',
+            'author'      => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
             'image'       => $file,
@@ -47,6 +48,7 @@ class PostImageUploadTest extends TestCase
 
         $response = $this->post(route('posts.store'), [
             'title'       => 'Without Image',
+            'author'      => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
         ]);
@@ -67,6 +69,7 @@ class PostImageUploadTest extends TestCase
         /** @var Post $post */
         $post = Post::create([
             'title'       => 'Initial',
+            'author'      => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
             'user_id'     => $user->id,
@@ -75,6 +78,7 @@ class PostImageUploadTest extends TestCase
         $file     = UploadedFile::fake()->image('added.png');
         $response = $this->patch(route('posts.update', $post), [
             'title'       => 'Initial',
+            'author'      => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
             'image'       => $file,
@@ -97,6 +101,7 @@ class PostImageUploadTest extends TestCase
         /** @var Post $post */
         $post = Post::create([
             'title'       => 'Initial',
+            'author'      => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
             'user_id'     => $user->id,
@@ -105,6 +110,7 @@ class PostImageUploadTest extends TestCase
         $first = UploadedFile::fake()->image('first.png');
         $this->patch(route('posts.update', $post), [
             'title'       => 'Initial',
+            'author'      => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
             'image'       => $first,
@@ -116,6 +122,7 @@ class PostImageUploadTest extends TestCase
         $second = UploadedFile::fake()->image('second.png');
         $this->patch(route('posts.update', $post), [
             'title'       => 'Initial',
+            'author'      => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
             'image'       => $second,
@@ -123,6 +130,6 @@ class PostImageUploadTest extends TestCase
         $post->refresh();
         $this->assertNotEquals($oldPath, $post->image);
         $this->assertTrue(Storage::disk('public')->exists($post->image));
-        // Ainda não removemos o antigo automaticamente; melhoria futura seria apagar $oldPath.
+    $this->assertFalse(Storage::disk('public')->exists($oldPath));
     }
 }

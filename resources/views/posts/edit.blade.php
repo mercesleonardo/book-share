@@ -14,19 +14,24 @@
                         <x-text-input id="title" name="title" class="w-full"
                             value="{{ old('title', $post->title) }}" required />
                         <div class="text-xs text-gray-500 dark:text-gray-400">Slug: {{ $post->slug }}</div>
-                        <x-input-error :messages="$errors->get('title')" />
+                        <x-input-error :messages="$errors->update->get('title')" />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <x-input-label for="author" :value="__('posts.fields.author')" />
+                        <x-text-input id="author" name="author" class="w-full" value="{{ old('author', $post->author) }}" required />
+                        <x-input-error :messages="$errors->update->get('author')" />
                     </div>
                     <div class="flex flex-col gap-1">
                         <x-input-label for="category_id" :value="__('posts.fields.category')" />
                         <x-select-input name="category_id" :options="$categories->map(fn($c) => ['value' => $c->id, 'label' => $c->name])" :value="old('category_id', $post->category_id)" required />
-                        <x-input-error :messages="$errors->get('category_id')" />
+                        <x-input-error :messages="$errors->update->get('category_id')" />
                     </div>
                     <div class="flex flex-col gap-1">
                         <x-input-label for="description" :value="__('posts.fields.description')" />
                         <x-textarea-input id="description"
                             name="description">{{ old('description', $post->description) }}
                         </x-textarea-input>
-                        <x-input-error :messages="$errors->get('description')" />
+                        <x-input-error :messages="$errors->update->get('description')" />
                     </div>
                     <div class="flex flex-col gap-1">
                         <x-input-label for="image" :value="__('posts.fields.image')" />
@@ -38,7 +43,7 @@
                         @endif
                         <input id="image" name="image" type="file" accept="image/*"
                             class="w-full text-sm text-gray-700 dark:text-gray-200" />
-                        <x-input-error :messages="$errors->get('image')" />
+                        <x-input-error :messages="$errors->update->get('image')" />
                     </div>
                     <div class="flex items-center justify-end gap-4 md:gap-6 md:col-span-2">
                         <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('posts.index') }}'">{{ __('Cancel') }}</x-secondary-button>
