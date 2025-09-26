@@ -59,47 +59,13 @@
                     </div>
 
                     <!-- Buttons -->
-                    <div class="flex items-center justify-between gap-4 md:gap-6 md:col-span-2">
-                        <div>
-                            <x-danger-button x-data=""
-                                x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion-{{ $user->id }}')">{{ __('Delete Account') }}
-                            </x-danger-button>
-                        </div>
-                        <div class="flex justify-end gap-2">
-                            <x-secondary-button x-data=""
-                                x-on:click.prevent="window.location.href='{{ route('users.index') }}'">
-                                {{ __('Cancel') }}
-                            </x-secondary-button>
-                            <x-primary-button>{{ __('Update') }}</x-primary-button>
-                        </div>
+                    <div class="flex items-center justify-end gap-4 md:gap-6 md:col-span-2">
+                        <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('users.index') }}'">
+                            {{ __('Cancel') }}
+                        </x-secondary-button>
+                        <x-primary-button>{{ __('Update') }}</x-primary-button>
                     </div>
                 </form>
-
-                <!-- Confirm Delete User Modal -->
-                <x-modal name="confirm-user-deletion-{{ $user->id }}" :show="false" focusable>
-                    <form method="POST" action="{{ route('users.destroy', $user->id) }}" class="p-6">
-                        @csrf
-                        @method('delete')
-
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            {{ __('Are you sure you want to delete your account?') }}
-                        </h2>
-
-                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted.') }}
-                        </p>
-
-                        <div class="mt-6 flex justify-end gap-2">
-                            <x-secondary-button type="button" x-on:click="$dispatch('close')">
-                                {{ __('Cancel') }}
-                            </x-secondary-button>
-
-                            <x-danger-button type="submit">
-                                {{ __('Delete') }}
-                            </x-danger-button>
-                        </div>
-                    </form>
-                </x-modal>
             </div>
         </div>
     </div>

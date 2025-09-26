@@ -51,19 +51,30 @@
                                         <td class="py-2 px-4 border-b {{ $user->role->color() }}">{{ $user->role->label() }}</td>
                                         <td class="py-2 px-4 border-b space-x-2">
                                             @if ($user->trashed())
-                                                <form method="POST" action="{{ route('users.restore', $user->id) }}"
-                                                    class="inline">
+                                                <form method="POST" action="{{ route('users.restore', $user->id) }}" class="inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <x-primary-button>
-                                                        {{ __('Restore') }}
-                                                    </x-primary-button>
+                                                    <x-primary-button>{{ __('Restore') }}</x-primary-button>
                                                 </form>
                                             @else
-                                                <x-secondary-button x-data=""
-                                                    x-on:click.prevent="window.location.href='{{ route('users.edit', $user->id) }}'">
-                                                    {{ __('Edit') }}
-                                                </x-secondary-button>
+                                                @can('update', $user)
+                                                    <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('users.edit', $user->id) }}'">{{ __('Edit') }}</x-secondary-button>
+                                                @endcan
+                                                @can('delete', $user)
+                                                    <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'delete-user-{{ $user->id }}')">{{ __('Delete') }}</x-danger-button>
+                                                    <x-modal name="delete-user-{{ $user->id }}" :show="false" focusable>
+                                                        <form method="POST" action="{{ route('users.destroy', $user->id) }}" class="p-6">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('Delete User') }}</h2>
+                                                            <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">{{ __('Once the user is deleted, all of related data will be permanently removed.') }}</p>
+                                                            <div class="mt-6 flex justify-end gap-2">
+                                                                <x-secondary-button type="button" x-on:click="$dispatch('close')">{{ __('Cancel') }}</x-secondary-button>
+                                                                <x-danger-button type="submit">{{ __('Delete') }}</x-danger-button>
+                                                            </div>
+                                                        </form>
+                                                    </x-modal>
+                                                @endcan
                                             @endif
                                         </td>
                                     </tr>
