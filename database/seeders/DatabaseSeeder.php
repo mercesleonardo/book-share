@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Enums\UserRole;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\User;
+use App\Models\{Category, Post, User};
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,14 +14,55 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
+        // Usuários
+        /** @var User $admin */
+        $admin = User::query()->firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name'              => 'Admin',
+                'password'          => Hash::make('password'),
+                'role'              => UserRole::ADMIN,
+                'email_verified_at' => now(),
+                'password_set_at'   => now(),
+            ]
+        );
 
-        User::factory()->create([
-            'name'            => 'Leonardo Carvalho',
-            'email'           => 'leonardo@example.com',
-            'role'            => UserRole::ADMIN,
-            'description'     => 'Administrador do sistema',
-            'password_set_at' => now(),
-        ]);
+        /** @var User $moderator */
+        $moderator = User::query()->firstOrCreate(
+            ['email' => 'moderator@example.com'],
+            [
+                'name'              => 'Moderator',
+                'password'          => Hash::make('password'),
+                'role'              => UserRole::MODERATOR,
+                'email_verified_at' => now(),
+                'password_set_at'   => now(),
+            ]
+        );
+
+        // Usuários comuns
+        $regularUsers = User::factory(8)->create();
+
+        // Categorias
+        $categories = Category::factory(6)->create();
+
+        // Distribui posts: para cada categoria cria posts do admin, moderator e alguns usuários comuns.
+        // Campo de imagem deixado null nas factories (upload real ocorre via interface/formulário).
+        $categories->each(function (Category $category) use ($admin, $moderator, $regularUsers): void {
+            Post::factory(2)->create([
+                'user_id'     => $admin->id,
+                'category_id' => $category->id,
+            ]);
+            Post::factory(2)->create([
+                'user_id'     => $moderator->id,
+                'category_id' => $category->id,
+            ]);
+            // Escolhe 3 usuários distintos aleatórios para posts
+            $regularUsers->random(3)->each(function (User $user) use ($category): void {
+                Post::factory()->create([
+                    'user_id'     => $user->id,
+                    'category_id' => $category->id,
+                ]);
+            });
+        });
     }
 }
