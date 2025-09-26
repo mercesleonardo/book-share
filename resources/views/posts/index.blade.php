@@ -47,7 +47,8 @@
                                         <td class="py-2 px-4 border-b font-medium">{{ $post->title }}</td>
                                         <td class="py-2 px-4 border-b text-sm">{{ $post->category?->name }}</td>
                                         <td class="py-2 px-4 border-b text-sm">{{ $post->user?->name }}</td>
-                                        <td class="py-2 px-4 border-b space-x-2">
+                                        <td class="py-2 px-4 border-b">
+                                            <div class="flex flex-wrap gap-2">
                                             @can('update', $post)
                                                 <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('posts.edit', $post) }}'">{{ __('Edit') }}</x-secondary-button>
                                             @endcan
@@ -66,6 +67,7 @@
                                                     </form>
                                                 </x-modal>
                                             @endcan
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty

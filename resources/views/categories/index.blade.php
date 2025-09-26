@@ -35,7 +35,8 @@
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                                         <td class="py-2 px-4 border-b font-medium">{{ $category->name }}</td>
                                         <td class="py-2 px-4 border-b text-sm text-gray-500 dark:text-gray-400">{{ $category->slug }}</td>
-                                        <td class="py-2 px-4 border-b space-x-2">
+                                        <td class="py-2 px-4 border-b">
+                                            <div class="flex flex-wrap gap-2">
                                             @can('update', $category)
                                                 <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('categories.edit', $category) }}'">{{ __('Edit') }}</x-secondary-button>
                                             @endcan
@@ -46,7 +47,7 @@
                                                         @csrf
                                                         @method('DELETE')
                                                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('categories.actions.delete') }}</h2>
-                                                        <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">{{ __('categories.modals.delete.description') }}</p>
+                                                        <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">{{ __('categories.messages.confirm_delete') }}</p>
                                                         <div class="mt-6 flex justify-end gap-2">
                                                             <x-secondary-button type="button" x-on:click="$dispatch('close')">{{ __('Cancel') }}</x-secondary-button>
                                                             <x-danger-button type="submit">{{ __('categories.actions.delete') }}</x-danger-button>
@@ -54,6 +55,7 @@
                                                     </form>
                                                 </x-modal>
                                             @endcan
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty

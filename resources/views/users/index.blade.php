@@ -49,7 +49,8 @@
                                         <td class="py-2 px-4 border-b font-medium">{{ $user->name }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->email }}</td>
                                         <td class="py-2 px-4 border-b {{ $user->role->color() }}">{{ $user->role->label() }}</td>
-                                        <td class="py-2 px-4 border-b space-x-2">
+                                        <td class="py-2 px-4 border-b">
+                                            <div class="flex flex-wrap gap-2">
                                             @if ($user->trashed())
                                                 <form method="POST" action="{{ route('users.restore', $user->id) }}" class="inline">
                                                     @csrf
@@ -76,6 +77,7 @@
                                                     </x-modal>
                                                 @endcan
                                             @endif
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty
