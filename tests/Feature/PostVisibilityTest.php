@@ -18,9 +18,9 @@ class PostVisibilityTest extends TestCase
 
     public function test_regular_user_sees_only_own_posts(): void
     {
-        $user   = $this->makeUser();
-        $other  = $this->makeUser();
-        $mine   = Post::factory()->count(2)->create(['user_id' => $user->id]);
+        $user  = $this->makeUser();
+        $other = $this->makeUser();
+        $mine  = Post::factory()->count(2)->create(['user_id' => $user->id]);
         Post::factory()->count(3)->create(['user_id' => $other->id]);
 
         $this->actingAs($user)
@@ -46,9 +46,9 @@ class PostVisibilityTest extends TestCase
 
     public function test_user_cannot_force_user_filter(): void
     {
-        $user  = $this->makeUser();
-        $other = $this->makeUser();
-        $mine  = Post::factory()->create(['user_id' => $user->id]);
+        $user      = $this->makeUser();
+        $other     = $this->makeUser();
+        $mine      = Post::factory()->create(['user_id' => $user->id]);
         $otherPost = Post::factory()->create(['user_id' => $other->id]);
 
         $this->actingAs($user)

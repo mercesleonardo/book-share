@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
-use Illuminate\View\View;
+use App\Http\Requests\{IndexPostRequest, StorePostRequest, UpdatePostRequest};
 use App\Models\{Category, Post};
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\{RedirectResponse, UploadedFile};
-use App\Http\Requests\{StorePostRequest, UpdatePostRequest, IndexPostRequest};
+use Illuminate\Support\Facades\{Auth, Storage};
+use Illuminate\View\View;
 
 class PostController extends Controller
 {
@@ -24,7 +23,7 @@ class PostController extends Controller
         $query = Post::query()->with(['category', 'user']);
 
         // Users with basic role can only see their own posts
-        if (! in_array(Auth::user()->role, [UserRole::ADMIN, UserRole::MODERATOR], true)) {
+        if (!in_array(Auth::user()->role, [UserRole::ADMIN, UserRole::MODERATOR], true)) {
             $query->where('user_id', Auth::id());
             // Removed any malicious user filter sent
             unset($validated['user']);
@@ -33,9 +32,11 @@ class PostController extends Controller
         if (!empty($validated['category'])) {
             $query->where('category_id', $validated['category']);
         }
+
         if (!empty($validated['user'])) {
             $query->where('user_id', $validated['user']);
         }
+
         if (!empty($validated['q'])) {
             $q = $validated['q'];
             $query->where(function ($sub) use ($q) {
@@ -47,7 +48,7 @@ class PostController extends Controller
         $posts = $query->orderByDesc('id')->paginate(15)->withQueryString();
 
         $categories = Category::orderBy('name')->get(['id', 'name']);
-        $users    = \App\Models\User::orderBy('name')->get(['id', 'name']);
+        $users      = \App\Models\User::orderBy('name')->get(['id', 'name']);
 
         return view('posts.index', compact('posts', 'categories', 'users'));
     }
@@ -61,8 +62,8 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request): RedirectResponse
     {
-    $data            = $request->validated();
-    $data['user_id'] = Auth::id();
+        $data            = $request->validated();
+        $data['user_id'] = Auth::id();
 
         if ($request->hasFile('image')) {
             /** @var UploadedFile $uploaded */

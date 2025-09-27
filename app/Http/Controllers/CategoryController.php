@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexCategoryRequest;
 use App\Http\Requests\{StoreCategoryRequest, UpdateCategoryRequest};
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
@@ -14,9 +15,17 @@ class CategoryController extends Controller
         $this->authorizeResource(Category::class, 'category');
     }
 
-    public function index(): View
+    public function index(IndexCategoryRequest $request): View
     {
-        $categories = Category::query()->orderBy('name')->paginate(15);
+        $validated = $request->validated();
+
+        $query = Category::query();
+
+        if (!empty($validated['category'])) {
+            $query->where('id', $validated['category']);
+        }
+
+        $categories = $query->orderBy('name')->paginate(15)->withQueryString();
 
         return view('categories.index', compact('categories'));
     }

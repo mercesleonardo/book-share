@@ -19,4 +19,9 @@ return [
         'not_found'      => 'No categories found.',
         'confirm_delete' => 'Are you sure you want to delete this category? This action cannot be undone.',
     ],
+    'filters' => [
+        'filter' => 'Filter',
+        'all'    => 'All',
+        'reset'  => 'Reset',
+    ],
 ];

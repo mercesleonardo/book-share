@@ -15,7 +15,7 @@ class IndexPostRequest extends FormRequest
     {
         return [
             'category' => ['nullable', 'integer', 'exists:categories,id'],
-            'user'   => ['nullable', 'integer', 'exists:users,id'],
+            'user'     => ['nullable', 'integer', 'exists:users,id'],
             'q'        => ['nullable', 'string', 'max:255'],
         ];
     }

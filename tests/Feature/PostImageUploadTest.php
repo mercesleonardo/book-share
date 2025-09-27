@@ -130,6 +130,6 @@ class PostImageUploadTest extends TestCase
         $post->refresh();
         $this->assertNotEquals($oldPath, $post->image);
         $this->assertTrue(Storage::disk('public')->exists($post->image));
-    $this->assertFalse(Storage::disk('public')->exists($oldPath));
+        $this->assertFalse(Storage::disk('public')->exists($oldPath));
     }
 }

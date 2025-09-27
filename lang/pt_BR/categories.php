@@ -18,5 +18,10 @@ return [
         'deleted'        => 'Categoria excluída com sucesso.',
         'not_found'      => 'Nenhuma categoria encontrada.',
         'confirm_delete' => 'Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.',
-    ]
+    ],
+    'filters' => [
+        'filter' => 'Filtrar',
+        'all'    => 'Todas',
+        'reset'  => 'Limpar',
+    ],
 ];

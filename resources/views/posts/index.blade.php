@@ -55,10 +55,6 @@
                                         <td class="py-2 px-4 border-b text-sm">{{ $post->author }}</td>
                                         <td class="py-2 px-4 border-b">
                                             <div class="flex flex-wrap gap-2">
-                                                @can('view', $post)
-                                                    <x-secondary-button x-data=""
-                                                        x-on:click.prevent="window.location.href='{{ route('posts.show', $post) }}'">{{ __('View') }}</x-secondary-button>
-                                                @endcan
                                                 @can('update', $post)
                                                     <x-secondary-button x-data=""
                                                         x-on:click.prevent="window.location.href='{{ route('posts.edit', $post) }}'">{{ __('Edit') }}</x-secondary-button>

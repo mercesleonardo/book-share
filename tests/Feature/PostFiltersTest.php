@@ -34,6 +34,7 @@ class PostFiltersTest extends TestCase
         $response->assertViewHas('posts', function ($p) use ($catA, $catB) {
             /** @var \Illuminate\Pagination\LengthAwarePaginator $p */
             $categoryIds = $p->pluck('category_id')->unique()->values()->all();
+
             return $p->count() === 2 && $categoryIds === [$catA->id] && !in_array($catB->id, $categoryIds, true);
         });
     }
@@ -50,6 +51,7 @@ class PostFiltersTest extends TestCase
         $response->assertViewHas('posts', function ($p) use ($authorA, $authorB) {
             /** @var \Illuminate\Pagination\LengthAwarePaginator $p */
             $authorIds = $p->pluck('user_id')->unique()->values()->all();
+
             return $p->count() === 2 && $authorIds === [$authorA->id] && !in_array($authorB->id, $authorIds, true);
         });
     }
@@ -82,8 +84,8 @@ class PostFiltersTest extends TestCase
 
     public function test_filter_by_combination(): void
     {
-        $catIncluded = Category::factory()->create(['name' => 'IncludedCat']);
-        $catExcluded = Category::factory()->create(['name' => 'ExcludedCat']);
+        $catIncluded    = Category::factory()->create(['name' => 'IncludedCat']);
+        $catExcluded    = Category::factory()->create(['name' => 'ExcludedCat']);
         $authorIncluded = User::factory()->create(['role' => UserRole::USER, 'name' => 'Target Author']);
         $authorOther    = User::factory()->create(['role' => UserRole::USER, 'name' => 'Other Author']);
 

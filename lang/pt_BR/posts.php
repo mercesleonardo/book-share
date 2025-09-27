@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'title'  => 'Posts',
-    'single' => 'Post',
+    'title'  => 'Publicações',
+    'single' => 'Publicação',
     'fields' => [
         'title'       => 'Título',
         'description' => 'Descrição',
@@ -13,18 +13,18 @@ return [
         'user'        => 'Usuário',
     ],
     'actions' => [
-        'create' => 'Criar Post',
-        'edit'   => 'Editar Post',
-        'delete' => 'Excluir Post',
+        'create' => 'Criar Publicação',
+        'edit'   => 'Editar Publicação',
+        'delete' => 'Excluir Publicação',
         'back'   => 'Voltar',
-        'view'   => 'Ver Post',
+        'view'   => 'Ver Publicação',
     ],
     'messages' => [
-        'created'        => 'Post criado com sucesso.',
-        'updated'        => 'Post atualizado com sucesso.',
-        'deleted'        => 'Post excluído com sucesso.',
-        'not_found'      => 'Nenhum post encontrado.',
-        'confirm_delete' => 'Tem certeza que deseja excluir este post? Esta ação não pode ser desfeita.',
+        'created'        => 'Publicação criada com sucesso.',
+        'updated'        => 'Publicação atualizada com sucesso.',
+        'deleted'        => 'Publicação excluída com sucesso.',
+        'not_found'      => 'Nenhuma publicação encontrada.',
+        'confirm_delete' => 'Tem certeza que deseja excluir esta publicação? Esta ação não pode ser desfeita.',
     ],
     'filters' => [
         'all'       => 'Todos',
