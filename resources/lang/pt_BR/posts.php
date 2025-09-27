@@ -33,4 +33,10 @@ return [
         'search_ph' => 'Título ou autor',
         'search'    => 'Busca',
     ],
+    'meta' => [
+        'info'    => 'Info',
+        'created' => 'Criado',
+        'updated' => 'Atualizado',
+        'status'  => 'Status',
+    ],
 ];
