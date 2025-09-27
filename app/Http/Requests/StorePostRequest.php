@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @mixin \Illuminate\Http\Request
+ */
 class StorePostRequest extends FormRequest
 {
     protected $errorBag = 'store';
@@ -16,11 +19,12 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => ['required', 'string', 'max:255'],
-            'author'      => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
+            // Now optional: fallback to user's name is applied in the controller
+            'author'      => ['sometimes', 'nullable', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
-            'image'       => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'image'       => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }
 }

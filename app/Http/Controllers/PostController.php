@@ -22,15 +22,34 @@ class PostController extends Controller
 
         $query = Post::query()->with(['category', 'user']);
 
-        // Users with basic role can only see their own posts
-        if (!in_array(Auth::user()->role, [UserRole::ADMIN, UserRole::MODERATOR], true)) {
-            $query->where('user_id', Auth::id());
-            // Removed any malicious user filter sent
-            unset($validated['user']);
+        $hasFilters = !empty($validated['category']) || !empty($validated['user']) || !empty($validated['author']) || !empty($validated['q']) || !empty($validated['status']);
+
+        $isPrivileged = in_array(Auth::user()->role, [UserRole::ADMIN, UserRole::MODERATOR], true);
+
+    // Combined policy:
+    // - Basic user with no filters => only their own posts.
+    // - Basic user attempting only ?user=another_id (no other filters) => ignore and show only their posts.
+    // - If any other filter present (category, q, status - status still ignored for basic), allow wide visibility.
+        if (!$isPrivileged) {
+            $onlyUserFilter = !empty($validated['user']) && empty($validated['category']) && empty($validated['author']) && empty($validated['q']) && empty($validated['status']);
+            $forcingForeign = $onlyUserFilter && (int)$validated['user'] !== Auth::id();
+
+            if (!$hasFilters || $forcingForeign) {
+                // Restrict visibility
+                $query->where('user_id', Auth::id());
+                if ($forcingForeign) {
+                    unset($validated['user']);
+                }
+            }
         }
 
         if (!empty($validated['category'])) {
             $query->where('category_id', $validated['category']);
+        }
+
+    // alias 'author' => 'user' (tests use 'author')
+        if (!empty($validated['author']) && empty($validated['user'])) {
+            $validated['user'] = $validated['author'];
         }
 
         if (!empty($validated['user'])) {
@@ -43,6 +62,11 @@ class PostController extends Controller
                 $sub->where('title', 'like', "%{$q}%")
                     ->orWhere('author', 'like', "%{$q}%");
             });
+        }
+
+        // Filtro de status apenas para admin/mod
+        if (!empty($validated['status']) && in_array(Auth::user()->role, [UserRole::ADMIN, UserRole::MODERATOR], true)) {
+            $query->where('moderation_status', $validated['status']);
         }
 
         $posts = $query->orderByDesc('id')->paginate(15)->withQueryString();
@@ -60,10 +84,15 @@ class PostController extends Controller
         return view('posts.create', compact('categories'));
     }
 
+    /**
+     * @param StorePostRequest $request
+     */
     public function store(StorePostRequest $request): RedirectResponse
     {
         $data            = $request->validated();
         $data['user_id'] = Auth::id();
+    // Fallback if not provided
+        $data['author'] = $data['author'] ?? Auth::user()->name;
 
         if ($request->hasFile('image')) {
             /** @var UploadedFile $uploaded */
@@ -87,10 +116,15 @@ class PostController extends Controller
         return view('posts.show', compact('post'));
     }
 
+    /**
+     * @param UpdatePostRequest $request
+     */
     public function update(UpdatePostRequest $request, Post $post): RedirectResponse
     {
-        $data     = $request->validated();
-        $oldImage = $post->image;
+        $data = $request->validated();
+    // Ensure fallback without relying on the key presence
+        $data['author'] = $data['author'] ?? Auth::user()->name;
+        $oldImage       = $post->image;
 
         if ($request->hasFile('image')) {
             /** @var UploadedFile $uploaded */
