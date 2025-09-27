@@ -39,7 +39,7 @@
                     </figure>
                 @endif
 
-                <article class="prose dark:prose-invert max-w-none leading-relaxed">
+                <article class="prose dark:prose-invert max-w-none leading-relaxed text-gray-800 dark:text-gray-200">
                     {!! \App\Support\Markdown::toHtml($post->description) !!}
                 </article>
 
