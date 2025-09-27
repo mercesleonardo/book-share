@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Enums\ModerationStatus;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class () extends Migration {
     public function up(): void
@@ -16,6 +17,7 @@ return new class () extends Migration {
             $table->string('slug')->unique();
             $table->text('description');
             $table->string('image')->nullable();
+            $table->string('moderation_status', 20)->default(ModerationStatus::Pending->value);
             $table->timestamps();
         });
     }
