@@ -29,13 +29,55 @@
             <div class="flex-1 min-w-0 space-y-6">
                 @if($post->image)
                     <figure class="w-full overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/40 shadow">
-                        <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="w-full h-auto object-cover max-h-[480px]">
+                        <img
+                            src="{{ asset('storage/' . $post->image) }}"
+                            alt="{{ $post->title }}"
+                            loading="lazy"
+                            class="w-full h-auto object-cover max-h-[480px]"
+                            sizes="(max-width: 768px) 100vw, 800px"
+                        >
                     </figure>
                 @endif
 
                 <article class="prose dark:prose-invert max-w-none leading-relaxed">
-                    {!! nl2br(e($post->description)) !!}
+                    {!! \App\Support\Markdown::toHtml($post->description) !!}
                 </article>
+
+                <!-- Prev / Next navigation -->
+                <nav class="flex items-center justify-between mt-10 text-sm" aria-label="Post navigation">
+                    <div>
+                        @if($previous)
+                            <a href="{{ route('posts.show', $previous) }}" class="group inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">
+                                <span class="text-xs" aria-hidden="true">&larr;</span>
+                                {{ __('posts.navigation.previous') }}
+                                <span class="truncate max-w-[160px] group-hover:underline font-medium">{{ $previous->title }}</span>
+                            </a>
+                        @endif
+                    </div>
+                    <div class="text-right">
+                        @if($next)
+                            <a href="{{ route('posts.show', $next) }}" class="group inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">
+                                <span class="truncate max-w-[160px] group-hover:underline font-medium">{{ $next->title }}</span>
+                                {{ __('posts.navigation.next') }}
+                                <span class="text-xs" aria-hidden="true">&rarr;</span>
+                            </a>
+                        @endif
+                    </div>
+                </nav>
+
+                <!-- Related posts -->
+                <section class="mt-12">
+                    <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide uppercase mb-4">{{ __('posts.related.title') }}</h2>
+                    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        @forelse($related as $r)
+                            <a href="{{ route('posts.show', $r) }}" class="block p-4 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-400 dark:hover:border-blue-500 transition group">
+                                <div class="text-sm font-medium text-gray-800 dark:text-gray-100 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">{{ $r->title }}</div>
+                            </a>
+                        @empty
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('posts.related.none') }}</p>
+                        @endforelse
+                    </div>
+                </section>
             </div>
 
             <!-- Sidebar meta -->

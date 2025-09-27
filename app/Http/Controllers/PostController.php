@@ -26,10 +26,10 @@ class PostController extends Controller
 
         $isPrivileged = in_array(Auth::user()->role, [UserRole::ADMIN, UserRole::MODERATOR], true);
 
-    // Combined policy:
-    // - Basic user with no filters => only their own posts.
-    // - Basic user attempting only ?user=another_id (no other filters) => ignore and show only their posts.
-    // - If any other filter present (category, q, status - status still ignored for basic), allow wide visibility.
+        // Combined policy:
+        // - Basic user with no filters => only their own posts.
+        // - Basic user attempting only ?user=another_id (no other filters) => ignore and show only their posts.
+        // - If any other filter present (category, q, status - status still ignored for basic), allow wide visibility.
         if (!$isPrivileged) {
             $onlyUserFilter = !empty($validated['user']) && empty($validated['category']) && empty($validated['author']) && empty($validated['q']) && empty($validated['status']);
             $forcingForeign = $onlyUserFilter && (int)$validated['user'] !== Auth::id();
@@ -37,6 +37,7 @@ class PostController extends Controller
             if (!$hasFilters || $forcingForeign) {
                 // Restrict visibility
                 $query->where('user_id', Auth::id());
+
                 if ($forcingForeign) {
                     unset($validated['user']);
                 }
@@ -47,7 +48,7 @@ class PostController extends Controller
             $query->where('category_id', $validated['category']);
         }
 
-    // alias 'author' => 'user' (tests use 'author')
+        // alias 'author' => 'user' (tests use 'author')
         if (!empty($validated['author']) && empty($validated['user'])) {
             $validated['user'] = $validated['author'];
         }
@@ -91,7 +92,7 @@ class PostController extends Controller
     {
         $data            = $request->validated();
         $data['user_id'] = Auth::id();
-    // Fallback if not provided
+        // Fallback if not provided
         $data['author'] = $data['author'] ?? Auth::user()->name;
 
         if ($request->hasFile('image')) {
@@ -113,7 +114,35 @@ class PostController extends Controller
 
     public function show(Post $post): View
     {
-        return view('posts.show', compact('post'));
+        $previous = Post::query()
+            ->select(['id','title','slug'])
+            ->where('id', '<', $post->id)
+            ->orderByDesc('id')
+            ->first();
+
+        $next = Post::query()
+            ->select(['id','title','slug'])
+            ->where('id', '>', $post->id)
+            ->orderBy('id')
+            ->first();
+
+        $related = collect();
+        if ($post->category_id) {
+            $related = Post::query()
+                ->select(['id','title','slug'])
+                ->where('category_id', $post->category_id)
+                ->where('id', '!=', $post->id)
+                ->latest()
+                ->limit(5)
+                ->get();
+        }
+
+        return view('posts.show', [
+            'post'     => $post,
+            'previous' => $previous,
+            'next'     => $next,
+            'related'  => $related,
+        ]);
     }
 
     /**
@@ -122,7 +151,7 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post): RedirectResponse
     {
         $data = $request->validated();
-    // Ensure fallback without relying on the key presence
+        // Ensure fallback without relying on the key presence
         $data['author'] = $data['author'] ?? Auth::user()->name;
         $oldImage       = $post->image;
 

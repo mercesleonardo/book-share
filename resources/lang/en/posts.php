@@ -39,4 +39,12 @@ return [
         'updated' => 'Updated',
         'status'  => 'Status',
     ],
+    'navigation' => [
+        'previous' => 'Previous Post',
+        'next'     => 'Next Post',
+    ],
+    'related' => [
+        'title' => 'Related Posts',
+        'none'  => 'No related posts yet.'
+    ],
 ];

@@ -39,4 +39,12 @@ return [
         'updated' => 'Atualizado',
         'status'  => 'Status',
     ],
+    'navigation' => [
+        'previous' => 'Publicação Anterior',
+        'next'     => 'Próxima Publicação',
+    ],
+    'related' => [
+        'title' => 'Publicações Relacionadas',
+        'none'  => 'Nenhuma publicação relacionada ainda.'
+    ],
 ];
