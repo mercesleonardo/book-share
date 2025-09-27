@@ -88,10 +88,10 @@
                                             <span>{{ $post->user?->name }}</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-wrap gap-2 justify-end">
-                                        <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.show', $post) }}'">{{ __('View') }}</x-secondary-button>
+                                        <div class="flex flex-wrap gap-2 justify-end">
+                                            <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.show', $post) }}'">{{ __('dashboard.actions.view') }}</x-secondary-button>
                                         @can('update', $post)
-                                            <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.edit', $post) }}'">{{ __('Edit') }}</x-secondary-button>
+                                                <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.edit', $post) }}'">{{ __('dashboard.actions.edit') }}</x-secondary-button>
                                             <x-secondary-button
                                                 x-data
                                                 x-on:click="openModal('approve', '{{ $post->title }}', '{{ route('posts.approve', $post) }}')"
@@ -166,9 +166,9 @@
                                     <div class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</div>
                                 </div>
                                 <div class="flex gap-2">
-                                    <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.show', $post) }}'">{{ __('View') }}</x-secondary-button>
+                                    <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.show', $post) }}'">{{ __('dashboard.actions.view') }}</x-secondary-button>
                                     @can('update', $post)
-                                        <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.edit', $post) }}'">{{ __('Edit') }}</x-secondary-button>
+                                        <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.edit', $post) }}'">{{ __('dashboard.actions.edit') }}</x-secondary-button>
                                     @endcan
                                 </div>
                             </li>
