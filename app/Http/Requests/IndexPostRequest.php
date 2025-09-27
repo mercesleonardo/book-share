@@ -17,6 +17,8 @@ class IndexPostRequest extends FormRequest
             'category' => ['nullable', 'integer', 'exists:categories,id'],
             'user'     => ['nullable', 'integer', 'exists:users,id'],
             'q'        => ['nullable', 'string', 'max:255'],
+            'status'   => ['nullable', 'in:pending,approved,rejected,flagged'],
+            'author'   => ['nullable', 'integer', 'exists:users,id'], // alias para user usado nos testes
         ];
     }
 }

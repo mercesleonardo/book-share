@@ -55,13 +55,14 @@
                                         <td class="py-2 px-4 border-b text-sm">{{ $post->author }}</td>
                                         <td class="py-2 px-4 border-b">
                                             <div class="flex flex-wrap gap-2">
+                                                <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('posts.show', $post) }}'">{{ __('posts.actions.view') }}</x-secondary-button>
                                                 @can('update', $post)
                                                     <x-secondary-button x-data=""
-                                                        x-on:click.prevent="window.location.href='{{ route('posts.edit', $post) }}'">{{ __('Edit') }}</x-secondary-button>
+                                                        x-on:click.prevent="window.location.href='{{ route('posts.edit', $post) }}'">{{ __('posts.actions.edit') }}</x-secondary-button>
                                                 @endcan
                                                 @can('delete', $post)
                                                     <x-danger-button x-data=""
-                                                        x-on:click.prevent="$dispatch('open-modal', 'delete-post-{{ $post->id }}')">{{ __('Delete') }}</x-danger-button>
+                                                        x-on:click.prevent="$dispatch('open-modal', 'delete-post-{{ $post->id }}')">{{ __('posts.actions.delete') }}</x-danger-button>
                                                     <x-modal name="delete-post-{{ $post->id }}" :show="false"
                                                         focusable>
                                                         <form method="POST" action="{{ route('posts.destroy', $post) }}"

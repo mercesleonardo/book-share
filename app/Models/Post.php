@@ -19,7 +19,15 @@ class Post extends Model
         'slug',
         'description',
         'image',
+        'moderation_status',
     ];
+
+    public function casts(): array
+    {
+        return [
+            'moderation_status' => \App\Enums\ModerationStatus::class,
+        ];
+    }
 
     /**
      * Usuário autor do post.

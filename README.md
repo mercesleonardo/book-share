@@ -21,6 +21,19 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Post Author Field Behavior
+
+In this application the `author` field on posts is optional when creating or updating via the UI / HTTP requests. If the field is omitted, the backend will automatically set it to the currently authenticated user's `name`.
+
+Key points:
+
+- Validation rule: `author` uses `sometimes|nullable|string|max:255`.
+- On store / update the controller applies a fallback: `author = authenticated user name` when the key is absent or null.
+- Tests cover both creation and update without providing `author` to guarantee this behavior.
+- To explicitly override, send a non-empty `author` value in the request payload.
+
+This ensures faster authoring while still allowing custom attribution when needed.
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.

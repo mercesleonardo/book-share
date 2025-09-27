@@ -71,4 +71,20 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Post::class);
     }
+
+    /**
+     * Whether user has admin role.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === \App\Enums\UserRole::ADMIN;
+    }
+
+    /**
+     * Whether user has moderator role.
+     */
+    public function isModerator(): bool
+    {
+        return $this->role === \App\Enums\UserRole::MODERATOR;
+    }
 }
