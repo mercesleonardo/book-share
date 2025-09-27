@@ -24,7 +24,7 @@ class PostPolicy
 
     public function update(User $user, Post $post): bool
     {
-    // Post owner or Admin/Moderator (required for moderation actions)
+        // Post owner or Admin/Moderator (required for moderation actions)
         return $post->user_id === $user->id || in_array($user->role, [UserRole::ADMIN, UserRole::MODERATOR], true);
     }
 

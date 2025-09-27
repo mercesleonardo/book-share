@@ -45,6 +45,6 @@ return [
     ],
     'related' => [
         'title' => 'Publicações Relacionadas',
-        'none'  => 'Nenhuma publicação relacionada ainda.'
+        'none'  => 'Nenhuma publicação relacionada ainda.',
     ],
 ];

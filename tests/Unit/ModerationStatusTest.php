@@ -25,7 +25,7 @@ class ModerationStatusTest extends TestCase
     public function test_label_translates_in_locales(): void
     {
         $locales = [
-            'en'    => [
+            'en' => [
                 'pending'  => 'Pending',
                 'approved' => 'Approved',
                 'rejected' => 'Rejected',
@@ -41,6 +41,7 @@ class ModerationStatusTest extends TestCase
 
         foreach ($locales as $locale => $expected) {
             \Illuminate\Support\Facades\App::setLocale($locale);
+
             foreach ($expected as $value => $label) {
                 $this->assertSame($label, ModerationStatus::from($value)->label(), "Label mismatch for {$value} in locale {$locale}");
             }

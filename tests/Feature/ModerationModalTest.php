@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\Post; // Assuming Post model exists
-use Tests\TestCase;
+use App\Models\{Post, User};
+// Assuming Post model exists
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ModerationModalTest extends TestCase
 {
@@ -27,10 +27,11 @@ class ModerationModalTest extends TestCase
     {
         // Arrange: create a pending post owned by another user to appear in moderation queue
         $author = User::factory()->create();
+
         // If Post factory not existing, we can skip actual creation - but assuming it exists
         if (class_exists(Post::class)) {
             Post::factory()->create([
-                'user_id' => $author->id,
+                'user_id'           => $author->id,
                 'moderation_status' => 'pending',
             ]);
         }

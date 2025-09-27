@@ -115,21 +115,22 @@ class PostController extends Controller
     public function show(Post $post): View
     {
         $previous = Post::query()
-            ->select(['id','title','slug'])
+            ->select(['id', 'title', 'slug'])
             ->where('id', '<', $post->id)
             ->orderByDesc('id')
             ->first();
 
         $next = Post::query()
-            ->select(['id','title','slug'])
+            ->select(['id', 'title', 'slug'])
             ->where('id', '>', $post->id)
             ->orderBy('id')
             ->first();
 
         $related = collect();
+
         if ($post->category_id) {
             $related = Post::query()
-                ->select(['id','title','slug'])
+                ->select(['id', 'title', 'slug'])
                 ->where('category_id', $post->category_id)
                 ->where('id', '!=', $post->id)
                 ->latest()

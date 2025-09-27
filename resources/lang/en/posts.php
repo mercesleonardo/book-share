@@ -45,6 +45,6 @@ return [
     ],
     'related' => [
         'title' => 'Related Posts',
-        'none'  => 'No related posts yet.'
+        'none'  => 'No related posts yet.',
     ],
 ];

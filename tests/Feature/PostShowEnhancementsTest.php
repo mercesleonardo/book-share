@@ -3,11 +3,9 @@
 namespace Tests\Feature;
 
 use App\Enums\ModerationStatus;
-use App\Models\Post;
-use App\Models\User;
-use App\Models\Category;
-use Tests\TestCase;
+use App\Models\{Category, Post, User};
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class PostShowEnhancementsTest extends TestCase
 {
@@ -15,7 +13,7 @@ class PostShowEnhancementsTest extends TestCase
 
     public function test_show_displays_navigation_and_related(): void
     {
-        $user = User::factory()->create();
+        $user     = User::factory()->create();
         $category = Category::factory()->create();
 
         // Criar posts aprovados na mesma categoria para gerar anterior/próximo e relacionados.
@@ -27,8 +25,8 @@ class PostShowEnhancementsTest extends TestCase
 
         $middle = $posts[1];
 
-    /** @var \App\Models\User $user */
-    $response = $this->actingAs($user)->get(route('posts.show', $middle));
+        /** @var \App\Models\User $user */
+        $response = $this->actingAs($user)->get(route('posts.show', $middle));
         $response->assertStatus(200);
         $response->assertSee(trans('posts.navigation.previous'));
         $response->assertSee(trans('posts.navigation.next'));

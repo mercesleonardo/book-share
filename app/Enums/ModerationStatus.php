@@ -11,9 +11,9 @@ enum ModerationStatus: string
 
     public function label(): string
     {
-    // Uses translation files: resources/lang/{locale}/moderation.php
-    // Fallback: returns the raw value if translation key is missing.
-        $key = 'moderation.' . $this->value;
+        // Uses translation files: resources/lang/{locale}/moderation.php
+        // Fallback: returns the raw value if translation key is missing.
+        $key        = 'moderation.' . $this->value;
         $translated = __($key);
 
         return $translated === $key ? ucfirst($this->value) : $translated;

@@ -42,7 +42,7 @@ return [
         'create_post' => 'Criar Post',
         'cancel'      => 'Cancelar',
         'processing'  => 'Processando...'
-        ,'view'       => 'Ver'
-        ,'edit'       => 'Editar'
+        , 'view'      => 'Ver'
+        , 'edit'      => 'Editar',
     ],
 ];

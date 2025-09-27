@@ -12,7 +12,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-    // Basic personal metrics
+        // Basic personal metrics
         $totalPostsUser = Post::query()->where('user_id', $user->id)->count();
         $last30Days     = Post::query()->where('user_id', $user->id)
             ->where('created_at', '>=', now()->subDays(30))->count();

@@ -6,4 +6,3 @@ return [
     'rejected' => 'Rejected',
     'flagged'  => 'Flagged',
 ];
-
