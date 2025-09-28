@@ -121,7 +121,12 @@ class PostController extends Controller
 
     public function show(Post $post): View
     {
-        $post->loadMissing(['ratings.user']);
+        $post->loadMissing([
+            'ratings.user:id,name',
+            'comments.user:id,name',
+            'category:id,name',
+            'user:id,name',
+        ]);
 
         $previous = Post::select(['id', 'title', 'slug'])
             ->byAuthor($post->user_id)

@@ -100,6 +100,14 @@ class Post extends Model
     }
 
     /**
+     * Comentários do post (mais recentes primeiro)
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
+
+    /**
      * Média das avaliações da comunidade (excluindo o user_rating armazenado no próprio post)
      */
     public function getCommunityAverageRatingAttribute(): ?float

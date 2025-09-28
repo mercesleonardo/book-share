@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    // Store a new comment
+    /**
+     * Armazena um novo comentário
+     */
     public function store(StoreCommentRequest $request): RedirectResponse
     {
         $data = $request->validated();
@@ -22,10 +24,12 @@ class CommentController extends Controller
 
         Comment::query()->create($data);
 
-    return back()->with('status', __('comments.added'));
+        return back()->with('status', __('comments.added'));
     }
 
-    // Delete a comment (only comment owner or post owner could delete - simple authorization)
+    /**
+     * Remove um comentário (autor do comentário ou dono do post)
+     */
     public function destroy(Comment $comment): RedirectResponse
     {
         $user = Auth::user();
@@ -36,6 +40,6 @@ class CommentController extends Controller
 
         $comment->delete();
 
-    return back()->with('status', __('comments.removed'));
+        return back()->with('status', __('comments.removed'));
     }
 }

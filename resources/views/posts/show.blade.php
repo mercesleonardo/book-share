@@ -76,6 +76,9 @@
                         @endforelse
                     </div>
                 </section>
+
+                <!-- Comments -->
+                <x-post-comments :post="$post" />
             </div>
 
             <!-- Sidebar meta -->
