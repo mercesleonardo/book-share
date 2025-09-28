@@ -21,6 +21,8 @@ return [
     ],
     'intro' => [
         'create_hint' => 'Register your favorite book here and share it with the community.',
+        'edit_hint'   => 'Update the details of your shared book below.',
+        'index_hint'  => 'Browse, filter and manage the books shared by the community.',
     ],
     'messages' => [
         'created'        => 'Post created successfully.',

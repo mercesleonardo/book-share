@@ -1,6 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('posts.actions.edit') }}</h2>
+        <div>
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('posts.actions.edit') }}</h2>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('posts.intro.edit_hint') }}</p>
+        </div>
     </x-slot>
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">

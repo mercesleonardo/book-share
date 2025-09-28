@@ -1,8 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('posts.title') }}
-        </h2>
+        <div>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('posts.title') }}
+            </h2>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('posts.intro.index_hint') }}</p>
+        </div>
     </x-slot>
 
     <div class="py-12">
