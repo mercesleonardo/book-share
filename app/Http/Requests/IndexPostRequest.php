@@ -18,8 +18,8 @@ class IndexPostRequest extends FormRequest
             'user'     => ['nullable', 'integer', 'exists:users,id'],
             'q'        => ['nullable', 'string', 'max:255'],
             'status'   => ['nullable', 'in:pending,approved,rejected,flagged'],
-            // 'author' agora representa o nome do autor do livro (campo textual), distinto de 'user' (quem cadastrou)
-            'author'   => ['nullable', 'string', 'max:255'],
+            // 'book_author' representa o nome do autor do livro (campo textual), distinto de 'user' (quem cadastrou)
+            'book_author' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

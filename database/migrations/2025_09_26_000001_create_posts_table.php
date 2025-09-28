@@ -1,9 +1,9 @@
 <?php
 
 use App\Enums\ModerationStatus;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
     public function up(): void
@@ -13,7 +13,7 @@ return new class () extends Migration {
             $table->foreignId('user_id')->index()->constrained('users')->cascadeOnDelete();
             $table->foreignId('category_id')->index()->constrained('categories')->cascadeOnDelete();
             $table->string('title');
-            $table->string('author');
+            $table->string('book_author')->index();
             $table->string('slug')->unique();
             $table->text('description');
             $table->string('image')->nullable();

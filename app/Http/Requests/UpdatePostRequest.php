@@ -20,7 +20,7 @@ class UpdatePostRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             // Optional so updates don't require re-sending this field
-            'author'      => ['sometimes', 'nullable', 'string', 'max:255'],
+            'book_author' => ['sometimes', 'nullable', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
             'image'       => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
