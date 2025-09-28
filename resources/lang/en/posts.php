@@ -8,8 +8,7 @@ return [
         'description'  => 'Description',
         'slug'         => 'Slug',
         'category'     => 'Category',
-        'author'       => 'Author (user)', // legacy internal (if still referenced)
-        'book_author'  => 'Book Author',
+    'author'       => 'Book Author',
         'image'        => 'Image',
         'user'         => 'User',
     ],

@@ -42,7 +42,7 @@
                                     <span>
                                         @switch($key)
                                             @case('q') {{ __('posts.filters.search') }}: {{ $value }} @break
-                                            @case('author') {{ __('posts.fields.book_author') }}: {{ $value }} @break
+                                            @case('author') {{ __('posts.fields.author') }}: {{ $value }} @break
                                             @case('category') {{ __('posts.fields.category') }}: {{ optional($categories->firstWhere('id', (int)$value))->name }} @break
                                             @case('user') {{ __('posts.fields.user') }}: {{ optional($users->firstWhere('id', (int)$value))->name }} @break
                                             @case('status') {{ __('posts.meta.status') }}: {{ ucfirst($value) }} @break
@@ -62,7 +62,7 @@
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.image') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.title') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.category') }}</th>
-                                    <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.book_author') }}</th>
+                                    <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.author') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('Actions') }}</th>
                                 </tr>
                             </thead>
