@@ -48,13 +48,14 @@ class PostController extends Controller
             $query->where('category_id', $validated['category']);
         }
 
-        // alias 'author' => 'user' (tests use 'author')
-        if (!empty($validated['author']) && empty($validated['user'])) {
-            $validated['user'] = $validated['author'];
-        }
-
         if (!empty($validated['user'])) {
             $query->where('user_id', $validated['user']);
+        }
+
+        // Filtro de autor do livro (campo textual 'author') agora separado
+        if (!empty($validated['author'])) {
+            $authorName = $validated['author'];
+            $query->where('author', 'like', "%{$authorName}%");
         }
 
         if (!empty($validated['q'])) {
@@ -114,29 +115,26 @@ class PostController extends Controller
 
     public function show(Post $post): View
     {
-        $previous = Post::query()
-            ->select(['id', 'title', 'slug'])
+        $previous = Post::select(['id', 'title', 'slug'])
+            ->byAuthor($post->user_id)
             ->where('id', '<', $post->id)
             ->orderByDesc('id')
             ->first();
 
-        $next = Post::query()
-            ->select(['id', 'title', 'slug'])
+        $next = Post::select(['id', 'title', 'slug'])
+            ->byAuthor($post->user_id)
             ->where('id', '>', $post->id)
             ->orderBy('id')
             ->first();
 
         $related = collect();
 
-        if ($post->category_id) {
-            $related = Post::query()
-                ->select(['id', 'title', 'slug'])
-                ->where('category_id', $post->category_id)
-                ->where('id', '!=', $post->id)
-                ->latest()
-                ->limit(5)
-                ->get();
-        }
+        $related = Post::select(['id', 'title', 'slug'])
+            ->where('user_id', $post->user_id)
+            ->where('id', '!=', $post->id)
+            ->latest()
+            ->limit(5)
+            ->get();
 
         return view('posts.show', [
             'post'     => $post,

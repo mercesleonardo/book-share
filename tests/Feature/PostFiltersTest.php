@@ -17,7 +17,8 @@ class PostFiltersTest extends TestCase
     {
         parent::setUp();
         // Usuário autenticado necessário para passar pelo authorizeResource.
-        $this->viewer = User::factory()->create(['role' => UserRole::USER]);
+    // Promove para MODERATOR para que os filtros não sejam restringidos à própria autoria
+    $this->viewer = User::factory()->create(['role' => UserRole::MODERATOR]);
         $this->actingAs($this->viewer);
     }
 
@@ -39,14 +40,14 @@ class PostFiltersTest extends TestCase
         });
     }
 
-    public function test_filter_by_author(): void
+    public function test_filter_by_user(): void
     {
         $authorA = User::factory()->create(['role' => UserRole::USER, 'name' => 'Alice Author']);
         $authorB = User::factory()->create(['role' => UserRole::USER, 'name' => 'Bob Writer']);
         Post::factory()->count(2)->create(['user_id' => $authorA->id]);
         Post::factory()->count(2)->create(['user_id' => $authorB->id]);
 
-        $response = $this->get(route('posts.index', ['author' => $authorA->id]));
+        $response = $this->get(route('posts.index', ['user' => $authorA->id]));
         $response->assertOk();
         $response->assertViewHas('posts', function ($p) use ($authorA, $authorB) {
             /** @var \Illuminate\Pagination\LengthAwarePaginator $p */
@@ -82,7 +83,21 @@ class PostFiltersTest extends TestCase
         });
     }
 
-    public function test_filter_by_combination(): void
+    public function test_filter_by_textual_book_author_field(): void
+    {
+        $cat = Category::factory()->create();
+        Post::factory()->create(['title' => 'Alpha', 'author' => 'Isaac Asimov', 'category_id' => $cat->id]);
+        Post::factory()->create(['title' => 'Beta', 'author' => 'Arthur Clarke', 'category_id' => $cat->id]);
+
+        $response = $this->get(route('posts.index', ['author' => 'Asimov']));
+        $response->assertOk();
+        $response->assertViewHas('posts', function ($p) {
+            /** @var \Illuminate\Pagination\LengthAwarePaginator $p */
+            return $p->count() === 1 && $p->first()->author === 'Isaac Asimov';
+        });
+    }
+
+    public function test_filter_by_combination_user_and_text_author(): void
     {
         $catIncluded    = Category::factory()->create(['name' => 'IncludedCat']);
         $catExcluded    = Category::factory()->create(['name' => 'ExcludedCat']);
@@ -103,7 +118,7 @@ class PostFiltersTest extends TestCase
 
         $response = $this->get(route('posts.index', [
             'category' => $catIncluded->id,
-            'author'   => $authorIncluded->id,
+            'user'     => $authorIncluded->id,
             'q'        => 'special',
         ]));
         $response->assertOk();
@@ -123,20 +138,20 @@ class PostFiltersTest extends TestCase
         $response->assertSee(__('posts.messages.not_found'));
     }
 
-    public function test_pagination_preserves_filters(): void
+    public function test_pagination_preserves_user_filter(): void
     {
         $author = User::factory()->create(['role' => UserRole::USER, 'name' => 'Pag Author']);
         // 20 posts for author to ensure pagination (15 per page)
         Post::factory()->count(20)->create(['user_id' => $author->id]);
 
-        $response = $this->get(route('posts.index', ['author' => $author->id]));
+        $response = $this->get(route('posts.index', ['user' => $author->id]));
         $response->assertOk();
         // Verifica que a paginação preserva o parâmetro (ordem ou encoding podem variar)
         $response->assertViewHas('posts', function ($p) {
             /** @var \Illuminate\Pagination\LengthAwarePaginator $p */
             return $p->total() === 20 && $p->perPage() === 15 && $p->currentPage() === 1;
         });
-        $response->assertSee('author=' . $author->id);
+        $response->assertSee('user=' . $author->id);
         $response->assertSee('page=2');
     }
 }
