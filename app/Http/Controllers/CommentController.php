@@ -42,7 +42,11 @@ class CommentController extends Controller
     {
         $user = Auth::user();
 
-        if ($comment->user_id !== $user->id && $comment->post->user_id !== $user->id) {
+        $isOwner      = $comment->user_id === $user->id;
+        $isPostAuthor = $comment->post->user_id === $user->id;
+        $isPrivileged = in_array($user->role->value ?? $user->role, ['admin', 'moderator'], true);
+
+        if (!$isOwner && !$isPostAuthor && !$isPrivileged) {
             abort(403);
         }
 

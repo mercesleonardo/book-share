@@ -119,4 +119,32 @@ class CommentTest extends TestCase
         $response->assertSee('Visible content');
         $response->assertSee($commenter->name);
     }
+
+    public function test_admin_can_delete_any_comment(): void
+    {
+        /** @var User $admin */
+        $admin = User::factory()->create(['role' => \App\Enums\UserRole::ADMIN]);
+        /** @var User $author */
+        $author  = User::factory()->create();
+        $post    = Post::factory()->for($author)->create();
+        $comment = Comment::factory()->for($post)->for($author)->create();
+
+        $response = $this->actingAs($admin, 'web')->delete('/comments/' . $comment->id);
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseMissing('comments', ['id' => $comment->id]);
+    }
+
+    public function test_moderator_can_delete_any_comment(): void
+    {
+        /** @var User $moderator */
+        $moderator = User::factory()->create(['role' => \App\Enums\UserRole::MODERATOR]);
+        /** @var User $author */
+        $author  = User::factory()->create();
+        $post    = Post::factory()->for($author)->create();
+        $comment = Comment::factory()->for($post)->for($author)->create();
+
+        $response = $this->actingAs($moderator, 'web')->delete('/comments/' . $comment->id);
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseMissing('comments', ['id' => $comment->id]);
+    }
 }
