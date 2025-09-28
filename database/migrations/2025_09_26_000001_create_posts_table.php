@@ -16,7 +16,8 @@ return new class () extends Migration {
             $table->string('book_author')->index();
             $table->string('slug')->unique();
             $table->text('description');
-            $table->tinyInteger('user_rating');
+            // Avaliação do autor (pode ser preenchida depois, então nullable)
+            $table->tinyInteger('user_rating')->nullable();
             $table->string('image')->nullable();
             $table->string('moderation_status', 20)->default(ModerationStatus::Pending->value);
             $table->timestamps();

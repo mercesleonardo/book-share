@@ -25,9 +25,10 @@ class PostImageUploadTest extends TestCase
         $file     = UploadedFile::fake()->image('photo.jpg', 640, 480);
         $response = $this->post(route('posts.store'), [
             'title'       => 'With Image',
-            'author'      => 'Tester',
+            'book_author' => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
+            'user_rating' => 5,
             'image'       => $file,
         ]);
 
@@ -48,9 +49,10 @@ class PostImageUploadTest extends TestCase
 
         $response = $this->post(route('posts.store'), [
             'title'       => 'Without Image',
-            'author'      => 'Tester',
+            'book_author' => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
+            'user_rating' => 4,
         ]);
 
         $response->assertRedirect(route('posts.index'));
@@ -69,18 +71,20 @@ class PostImageUploadTest extends TestCase
         /** @var Post $post */
         $post = Post::create([
             'title'       => 'Initial',
-            'author'      => 'Tester',
+            'book_author' => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
             'user_id'     => $user->id,
+            'user_rating' => 3,
         ]);
 
         $file     = UploadedFile::fake()->image('added.png');
         $response = $this->patch(route('posts.update', $post), [
             'title'       => 'Initial',
-            'author'      => 'Tester',
+            'book_author' => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
+            'user_rating' => 3,
             'image'       => $file,
         ]);
 
@@ -101,18 +105,20 @@ class PostImageUploadTest extends TestCase
         /** @var Post $post */
         $post = Post::create([
             'title'       => 'Initial',
-            'author'      => 'Tester',
+            'book_author' => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
             'user_id'     => $user->id,
+            'user_rating' => 4,
         ]);
 
         $first = UploadedFile::fake()->image('first.png');
         $this->patch(route('posts.update', $post), [
             'title'       => 'Initial',
-            'author'      => 'Tester',
+            'book_author' => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
+            'user_rating' => 4,
             'image'       => $first,
         ]);
         $post->refresh();
@@ -122,9 +128,10 @@ class PostImageUploadTest extends TestCase
         $second = UploadedFile::fake()->image('second.png');
         $this->patch(route('posts.update', $post), [
             'title'       => 'Initial',
-            'author'      => 'Tester',
+            'book_author' => 'Tester',
             'description' => 'Body',
             'category_id' => $category->id,
+            'user_rating' => 4,
             'image'       => $second,
         ]);
         $post->refresh();

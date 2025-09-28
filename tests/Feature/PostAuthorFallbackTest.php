@@ -48,6 +48,7 @@ class PostAuthorFallbackTest extends TestCase
             'description' => 'd',
             'category_id' => $category->id,
             'user_id'     => $user->id,
+            'user_rating' => 5,
         ]);
 
         $response = $this->patch(route('posts.update', $post), [

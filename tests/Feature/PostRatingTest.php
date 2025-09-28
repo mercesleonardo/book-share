@@ -101,7 +101,7 @@ class PostRatingTest extends TestCase
 
         $this->actingAs($author)
             ->post(route('posts.ratings.store', $post), ['stars' => 4])
-            ->assertRedirect(); // redirected back with error message
+            ->assertForbidden(); // author is forbidden by policy
 
         $this->assertDatabaseMissing('ratings', [
             'post_id' => $post->id,

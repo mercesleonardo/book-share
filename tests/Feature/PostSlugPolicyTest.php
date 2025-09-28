@@ -21,8 +21,8 @@ class PostSlugPolicyTest extends TestCase
         $category = Category::create(['name' => 'Tech']);
 
         $title = 'My Post Title';
-        Post::create(['title' => $title, 'book_author' => 'Author A', 'description' => 'Desc', 'category_id' => $category->id, 'user_id' => $admin->id]);
-        Post::create(['title' => $title, 'book_author' => 'Author B', 'description' => 'Desc 2', 'category_id' => $category->id, 'user_id' => $admin->id]);
+        Post::create(['title' => $title, 'book_author' => 'Author A', 'description' => 'Desc', 'category_id' => $category->id, 'user_id' => $admin->id, 'user_rating' => 5]);
+        Post::create(['title' => $title, 'book_author' => 'Author B', 'description' => 'Desc 2', 'category_id' => $category->id, 'user_id' => $admin->id, 'user_rating' => 4]);
 
         $slugs = Post::pluck('slug')->toArray();
         $this->assertContains('my-post-title', $slugs);
@@ -38,7 +38,7 @@ class PostSlugPolicyTest extends TestCase
         $category = Category::create(['name' => 'News']);
 
         /** @var Post $post */
-        $post = Post::create(['title' => 'Old Title', 'book_author' => 'Slug Author', 'description' => 'x', 'category_id' => $category->id, 'user_id' => $admin->id]);
+        $post = Post::create(['title' => 'Old Title', 'book_author' => 'Slug Author', 'description' => 'x', 'category_id' => $category->id, 'user_id' => $admin->id, 'user_rating' => 5]);
         $this->assertEquals('old-title', $post->slug);
 
         $post->update(['title' => 'New Title']);
@@ -57,6 +57,7 @@ class PostSlugPolicyTest extends TestCase
             'title'       => 'User Post',
             'description' => 'Body',
             'category_id' => $category->id,
+            'user_rating' => 5,
         ]);
         $response->assertRedirect(route('posts.index'));
         $this->assertDatabaseHas('posts', ['title' => 'User Post', 'user_id' => $user->id]);
@@ -70,7 +71,7 @@ class PostSlugPolicyTest extends TestCase
         /** @var Category $category */
         $category = Category::create(['name' => 'OwnerCat']);
         /** @var Post $post */
-        $post = Post::create(['title' => 'Original', 'book_author' => 'Own Author', 'description' => 'd', 'category_id' => $category->id, 'user_id' => $owner->id]);
+        $post = Post::create(['title' => 'Original', 'book_author' => 'Own Author', 'description' => 'd', 'category_id' => $category->id, 'user_id' => $owner->id, 'user_rating' => 4]);
 
         $update = $this->patch(route('posts.update', $post), [
             'title'       => 'Changed',
@@ -96,7 +97,7 @@ class PostSlugPolicyTest extends TestCase
         /** @var Category $category */
         $category = Category::create(['name' => 'Moderation']);
         /** @var Post $post */
-        $post = Post::create(['title' => 'Moderated', 'book_author' => 'Moderation Author', 'description' => 'd', 'category_id' => $category->id, 'user_id' => $owner->id]);
+        $post = Post::create(['title' => 'Moderated', 'book_author' => 'Moderation Author', 'description' => 'd', 'category_id' => $category->id, 'user_id' => $owner->id, 'user_rating' => 3]);
 
         $this->actingAs($moderator);
         $update = $this->patch(route('posts.update', $post), [
@@ -122,7 +123,7 @@ class PostSlugPolicyTest extends TestCase
         /** @var Category $category */
         $category = Category::create(['name' => 'Others']);
         /** @var Post $post */
-        $post = Post::create(['title' => 'Foreign', 'book_author' => 'Foreign Author', 'description' => 'd', 'category_id' => $category->id, 'user_id' => $owner->id]);
+        $post = Post::create(['title' => 'Foreign', 'book_author' => 'Foreign Author', 'description' => 'd', 'category_id' => $category->id, 'user_id' => $owner->id, 'user_rating' => 2]);
 
         $this->actingAs($other);
         $update = $this->patch(route('posts.update', $post), [

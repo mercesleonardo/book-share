@@ -101,6 +101,11 @@ class PostController extends Controller
         // Fallback if not provided
         $data['book_author'] = $data['book_author'] ?? Auth::user()->name;
 
+        // Se não vier user_rating, define um padrão (ex: 5) ou deixa null
+        if (!array_key_exists('user_rating', $data)) {
+            $data['user_rating'] = null; // autor pode avaliar depois
+        }
+
         /** @var \Illuminate\Http\Request $request */
         if ($request->hasFile('image')) {
             /** @var UploadedFile $uploaded */
@@ -168,7 +173,11 @@ class PostController extends Controller
         $data = $request->validated();
         // Ensure fallback without relying on the key presence
         $data['book_author'] = $data['book_author'] ?? Auth::user()->name;
-        $oldImage            = $post->image;
+
+        if (!array_key_exists('user_rating', $data)) {
+            $data['user_rating'] = $post->user_rating; // mantém existente
+        }
+        $oldImage = $post->image;
 
         /** @var \Illuminate\Http\Request $request */
         if ($request->hasFile('image')) {
