@@ -2,11 +2,15 @@
     'categories' => collect(),
     'users' => collect(),
 ])
-<form method="GET" action="{{ route('posts.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+<form method="GET" action="{{ route('posts.index') }}" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
     <div class="flex flex-col gap-1">
         <x-input-label for="q" :value="__('posts.filters.search')" />
         <x-text-input id="q" name="q" value="{{ request('q') }}"
             placeholder="{{ __('posts.filters.search_ph') }}" />
+    </div>
+    <div class="flex flex-col gap-1">
+        <x-input-label for="author" :value="__('posts.fields.author')" />
+        <x-text-input id="author" name="author" value="{{ request('author') }}" placeholder="{{ __('posts.filters.author_ph') }}" />
     </div>
     <div class="flex flex-col gap-1">
         <x-input-label for="category" :value="__('posts.fields.category')" />

@@ -32,6 +32,7 @@ return [
         'reset'     => 'Reset',
         'search_ph' => 'Title or author',
         'search'    => 'Search',
+        'author_ph' => 'Book author name',
     ],
     'meta' => [
         'info'    => 'Info',
