@@ -11,6 +11,7 @@ return [
         'author'      => 'Book Author',
         'image'       => 'Image',
         'user'        => 'User',
+        'user_rating' => 'Your rating for this book',
     ],
     'actions' => [
         'create' => 'Create Post',
@@ -46,6 +47,13 @@ return [
         'created' => 'Created',
         'updated' => 'Updated',
         'status'  => 'Status',
+        'ratings' => 'Ratings',
+        'author_rating' => 'Author rating',
+        'community_average' => 'Community average',
+        'community_count' => 'Community ratings',
+        'your_rating' => 'Your rating',
+        'rate' => 'Rate',
+        'update_rating' => 'Update rating',
     ],
     'navigation' => [
         'previous' => 'Previous Post',

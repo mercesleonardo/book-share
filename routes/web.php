@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{CategoryController, ModerationController, PostController, ProfileController, UserController};
+use App\Http\Controllers\{CategoryController, ModerationController, PostController, ProfileController, RatingController, UserController};
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('categories', CategoryController::class)->except(['show']);
     Route::resource('posts', PostController::class);
+    Route::post('posts/{post}/ratings', [RatingController::class, 'store'])->name('posts.ratings.store');
     Route::patch('posts/{post}/approve', [ModerationController::class, 'approve'])->middleware('throttle:moderation')->name('posts.approve');
     Route::patch('posts/{post}/reject', [ModerationController::class, 'reject'])->middleware('throttle:moderation')->name('posts.reject');
 });

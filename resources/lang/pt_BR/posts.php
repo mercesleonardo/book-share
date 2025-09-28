@@ -11,6 +11,7 @@ return [
         'author'      => 'Autor do Livro',
         'image'       => 'Imagem',
         'user'        => 'Usuário',
+            'user_rating' => 'Sua avaliação para este livro',
     ],
     'actions' => [
         'create' => 'Criar Publicação',
@@ -46,6 +47,13 @@ return [
         'created' => 'Criado',
         'updated' => 'Atualizado',
         'status'  => 'Status',
+            'ratings' => 'Avaliações',
+            'author_rating' => 'Avaliação do autor',
+            'community_average' => 'Média da comunidade',
+            'community_count' => 'Avaliações da comunidade',
+            'your_rating' => 'Sua avaliação',
+            'rate' => 'Avaliar',
+            'update_rating' => 'Atualizar avaliação',
     ],
     'navigation' => [
         'previous' => 'Publicação Anterior',
