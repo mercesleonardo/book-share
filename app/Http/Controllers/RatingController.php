@@ -25,8 +25,9 @@ class RatingController extends Controller
             ['stars' => $data['stars']]
         );
 
-        // Invalidar cache relacionado às métricas deste post
-        Cache::tags(['post_ratings', 'post_' . $post->id])->flush();
+        // Invalidar cache simples (sem tags) das métricas deste post
+        Cache::forget('post:ratings:avg:' . $post->id);
+        Cache::forget('post:ratings:count:' . $post->id);
 
         $messageKey = $existing ? 'posts.messages.rating_updated' : 'posts.messages.rating_saved';
 

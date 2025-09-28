@@ -110,15 +110,13 @@ class Post extends Model
             return $val !== null ? round((float) $val, 1) : null;
         }
 
-        return cache()->tags(['post_ratings', 'post_' . $this->id])->remember(
-            'post:' . $this->id . ':avg',
-            now()->addMinutes(10),
-            function () {
-                $avg = $this->ratings()->avg('stars');
+        $avgKey = 'post:ratings:avg:' . $this->id;
 
-                return $avg ? round((float) $avg, 1) : null;
-            }
-        );
+        return cache()->remember($avgKey, now()->addMinutes(10), function () {
+            $avg = $this->ratings()->avg('stars');
+
+            return $avg ? round((float) $avg, 1) : null;
+        });
     }
 
     /**
@@ -130,10 +128,8 @@ class Post extends Model
             return (int) $this->attributes['ratings_count'];
         }
 
-        return cache()->tags(['post_ratings', 'post_' . $this->id])->remember(
-            'post:' . $this->id . ':count',
-            now()->addMinutes(10),
-            fn () => (int) $this->ratings()->count()
-        );
+        $countKey = 'post:ratings:count:' . $this->id;
+
+        return cache()->remember($countKey, now()->addMinutes(10), fn () => (int) $this->ratings()->count());
     }
 }
