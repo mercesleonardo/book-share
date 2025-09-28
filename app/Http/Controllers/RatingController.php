@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRatingRequest;
 use App\Models\{Post, Rating};
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\{Auth, Cache};
 
 class RatingController extends Controller
 {
@@ -24,6 +24,9 @@ class RatingController extends Controller
             ['post_id' => $post->id, 'user_id' => Auth::id()],
             ['stars' => $data['stars']]
         );
+
+        // Invalidar cache relacionado às métricas deste post
+        Cache::tags(['post_ratings', 'post_' . $post->id])->flush();
 
         $messageKey = $existing ? 'posts.messages.rating_updated' : 'posts.messages.rating_saved';
 

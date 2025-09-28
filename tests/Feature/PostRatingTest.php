@@ -161,4 +161,49 @@ class PostRatingTest extends TestCase
         $this->assertEquals(4.0, $fresh->community_average_rating);
         $this->assertEquals(3, $fresh->community_ratings_count);
     }
+
+    public function test_average_null_when_no_ratings(): void
+    {
+        /** @var User $author */
+        $author   = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $post = Post::factory()->create([
+            'user_id'     => $author->id,
+            'category_id' => $category->id,
+            'user_rating' => 4,
+        ]);
+
+        $fresh = $post->fresh();
+        $this->assertNull($fresh->community_average_rating);
+        $this->assertEquals(0, $fresh->community_ratings_count);
+    }
+
+    public function test_cache_invalidation_after_rating_change(): void
+    {
+        /** @var User $author */
+        $author = User::factory()->create();
+        /** @var User $other */
+        $other    = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $post = Post::factory()->create([
+            'user_id'     => $author->id,
+            'category_id' => $category->id,
+            'user_rating' => 5,
+        ]);
+
+        // Primeiro acesso popula cache (sem ratings comunidade)
+        $this->assertNull($post->community_average_rating);
+        $this->assertEquals(0, $post->community_ratings_count);
+
+        // Adiciona uma avaliação
+        $this->actingAs($other)
+            ->post(route('posts.ratings.store', $post), ['stars' => 4])
+            ->assertRedirect();
+
+        $fresh = $post->fresh();
+        $this->assertEquals(4.0, $fresh->community_average_rating);
+        $this->assertEquals(1, $fresh->community_ratings_count);
+    }
 }

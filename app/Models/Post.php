@@ -104,15 +104,21 @@ class Post extends Model
      */
     public function getCommunityAverageRatingAttribute(): ?float
     {
-        // Se carregado via withAvg('ratings','stars') usar atributo em cache
         if (array_key_exists('ratings_avg_stars', $this->attributes)) {
             $val = $this->attributes['ratings_avg_stars'];
 
             return $val !== null ? round((float) $val, 1) : null;
         }
-        $avg = $this->ratings()->avg('stars');
 
-        return $avg ? round((float) $avg, 1) : null;
+        return cache()->tags(['post_ratings', 'post_' . $this->id])->remember(
+            'post:' . $this->id . ':avg',
+            now()->addMinutes(10),
+            function () {
+                $avg = $this->ratings()->avg('stars');
+
+                return $avg ? round((float) $avg, 1) : null;
+            }
+        );
     }
 
     /**
@@ -124,6 +130,10 @@ class Post extends Model
             return (int) $this->attributes['ratings_count'];
         }
 
-        return (int) $this->ratings()->count();
+        return cache()->tags(['post_ratings', 'post_' . $this->id])->remember(
+            'post:' . $this->id . ':count',
+            now()->addMinutes(10),
+            fn () => (int) $this->ratings()->count()
+        );
     }
 }
