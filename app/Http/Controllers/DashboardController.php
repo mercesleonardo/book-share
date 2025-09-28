@@ -21,6 +21,11 @@ class DashboardController extends Controller
         $recentPosts = Post::query()->where('user_id', $user->id)
             ->latest()->limit(5)->get(['id', 'title', 'slug', 'created_at']);
 
+        $postsWithCommunityRatings = Post::query()
+            ->whereHas('ratings')
+            ->where('user_id', $user->id)
+            ->count();
+
         $metrics = [
             [
                 'key'   => 'total_posts',
@@ -31,6 +36,11 @@ class DashboardController extends Controller
                 'key'   => 'last_30_days',
                 'label' => __('dashboard.metrics.last_30_days'),
                 'value' => $last30Days,
+            ],
+            [
+                'key'   => 'posts_with_ratings',
+                'label' => __('dashboard.metrics.posts_with_ratings'),
+                'value' => $postsWithCommunityRatings,
             ],
         ];
 
