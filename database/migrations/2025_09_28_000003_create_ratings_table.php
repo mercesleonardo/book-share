@@ -9,8 +9,8 @@ return new class () extends Migration {
     {
         Schema::create('ratings', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('post_id')->constrained('posts')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('post_id')->index()->constrained('posts')->cascadeOnDelete();
+            $table->foreignId('user_id')->index()->constrained('users')->cascadeOnDelete();
             $table->unsignedTinyInteger('stars'); // 1..5
             $table->timestamps();
 
