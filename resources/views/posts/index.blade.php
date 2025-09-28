@@ -25,6 +25,36 @@
                         </div>
                     </div>
 
+                    @php
+                        $activeFilters = collect([
+                            'q' => request('q'),
+                            'author' => request('author'),
+                            'category' => request('category'),
+                            'user' => request('user'),
+                            'status' => request('status'),
+                        ])->filter(fn($v) => filled($v));
+                    @endphp
+
+                    @if($activeFilters->isNotEmpty())
+                        <div class="mb-4 flex flex-wrap gap-2">
+                            @foreach($activeFilters as $key => $value)
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">
+                                    <span>
+                                        @switch($key)
+                                            @case('q') {{ __('posts.filters.search') }}: {{ $value }} @break
+                                            @case('author') {{ __('posts.fields.book_author') }}: {{ $value }} @break
+                                            @case('category') {{ __('posts.fields.category') }}: {{ optional($categories->firstWhere('id', (int)$value))->name }} @break
+                                            @case('user') {{ __('posts.fields.user') }}: {{ optional($users->firstWhere('id', (int)$value))->name }} @break
+                                            @case('status') {{ __('posts.meta.status') }}: {{ ucfirst($value) }} @break
+                                        @endswitch
+                                    </span>
+                                    <a class="hover:text-red-600 dark:hover:text-red-400" href="{{ route('posts.index', request()->except($key)) }}" title="{{ __('posts.filters.remove_filter') }}">&times;</a>
+                                </span>
+                            @endforeach
+                            <a href="{{ route('posts.index') }}" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">{{ __('posts.filters.clear_all') }}</a>
+                        </div>
+                    @endif
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full bg-white dark:bg-gray-700 rounded shadow">
                             <thead>
@@ -32,7 +62,7 @@
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.image') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.title') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.category') }}</th>
-                                    <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.author') }}</th>
+                                    <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.book_author') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('Actions') }}</th>
                                 </tr>
                             </thead>
