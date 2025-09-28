@@ -50,14 +50,12 @@
                             <a href="{{ route('posts.show', $previous) }}" class="group inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">
                                 <span class="text-xs" aria-hidden="true">&larr;</span>
                                 {{ __('posts.navigation.previous') }}
-                                <span class="truncate max-w-[160px] group-hover:underline font-medium">{{ $previous->title }}</span>
                             </a>
                         @endif
                     </div>
                     <div class="text-right">
                         @if($next)
                             <a href="{{ route('posts.show', $next) }}" class="group inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">
-                                <span class="truncate max-w-[160px] group-hover:underline font-medium">{{ $next->title }}</span>
                                 {{ __('posts.navigation.next') }}
                                 <span class="text-xs" aria-hidden="true">&rarr;</span>
                             </a>
