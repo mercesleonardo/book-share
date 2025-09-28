@@ -28,7 +28,7 @@
                     @php
                         $activeFilters = collect([
                             'q' => request('q'),
-                            'author' => request('author'),
+                            'book_author' => request('book_author'),
                             'category' => request('category'),
                             'user' => request('user'),
                             'status' => request('status'),
@@ -42,7 +42,7 @@
                                     <span>
                                         @switch($key)
                                             @case('q') {{ __('posts.filters.search') }}: {{ $value }} @break
-                                            @case('author') {{ __('posts.fields.author') }}: {{ $value }} @break
+                                            @case('book_author') {{ __('posts.fields.author') }}: {{ $value }} @break
                                             @case('category') {{ __('posts.fields.category') }}: {{ optional($categories->firstWhere('id', (int)$value))->name }} @break
                                             @case('user') {{ __('posts.fields.user') }}: {{ optional($users->firstWhere('id', (int)$value))->name }} @break
                                             @case('status') {{ __('posts.meta.status') }}: {{ ucfirst($value) }} @break
@@ -82,7 +82,7 @@
                                         </td>
                                         <td class="py-2 px-4 border-b font-medium">{{ $post->title }}</td>
                                         <td class="py-2 px-4 border-b text-sm">{{ $post->category?->name }}</td>
-                                        <td class="py-2 px-4 border-b text-sm">{{ $post->author }}</td>
+                                        <td class="py-2 px-4 border-b text-sm">{{ $post->book_author }}</td>
                                         <td class="py-2 px-4 border-b">
                                             <div class="flex flex-wrap gap-2">
                                                 <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('posts.show', $post) }}'">{{ __('posts.actions.view') }}</x-secondary-button>

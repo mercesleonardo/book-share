@@ -87,7 +87,7 @@
                     <dl class="text-xs space-y-3">
                         <div class="flex justify-between gap-3">
                             <dt class="text-gray-500 dark:text-gray-400">{{ __('posts.fields.author') }}</dt>
-                            <dd class="text-gray-800 dark:text-gray-200 font-medium">{{ $post->author }}</dd>
+                            <dd class="text-gray-800 dark:text-gray-200 font-medium">{{ $post->book_author }}</dd>
                         </div>
                         @if($post->category)
                             <div class="flex justify-between gap-3">

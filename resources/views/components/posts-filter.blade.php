@@ -9,8 +9,8 @@
             placeholder="{{ __('posts.filters.search_ph') }}" />
     </div>
     <div class="flex flex-col gap-1">
-        <x-input-label for="author" :value="__('posts.fields.author')" />
-        <x-text-input id="author" name="author" value="{{ request('author') }}" placeholder="{{ __('posts.filters.author_ph') }}" />
+        <x-input-label for="book_author" :value="__('posts.fields.author')" />
+        <x-text-input id="book_author" name="book_author" value="{{ request('book_author') }}" placeholder="{{ __('posts.filters.author_ph') }}" />
     </div>
     <div class="flex flex-col gap-1">
         <x-input-label for="category" :value="__('posts.fields.category')" />

@@ -17,9 +17,9 @@
                         <x-input-error :messages="$errors->update->get('title')" />
                     </div>
                     <div class="flex flex-col gap-1">
-                        <x-input-label for="author" :value="__('posts.fields.author')" />
-                        <x-text-input id="author" name="author" class="w-full" value="{{ old('author', $post->author) }}" required />
-                        <x-input-error :messages="$errors->update->get('author')" />
+                        <x-input-label for="book_author" :value="__('posts.fields.author')" />
+                        <x-text-input id="book_author" name="book_author" class="w-full" value="{{ old('book_author', $post->book_author) }}" />
+                        <x-input-error :messages="$errors->update->get('book_author')" />
                     </div>
                     <div class="flex flex-col gap-1">
                         <x-input-label for="category_id" :value="__('posts.fields.category')" />

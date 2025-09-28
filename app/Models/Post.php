@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ModerationStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ class Post extends Model
         'user_id',
         'category_id',
         'title',
-        'author',
+        'book_author',
         'slug',
         'description',
         'image',
@@ -77,5 +78,15 @@ class Post extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function scopeByAuthor($q, $userId): mixed
+    {
+        return $q->where('user_id', $userId);
+    }
+
+    public function scopeApproved($q): mixed
+    {
+        return $q->where('moderation_status', ModerationStatus::Approved);
     }
 }

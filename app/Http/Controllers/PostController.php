@@ -22,7 +22,7 @@ class PostController extends Controller
 
         $query = Post::query()->with(['category', 'user']);
 
-        $hasFilters = !empty($validated['category']) || !empty($validated['user']) || !empty($validated['author']) || !empty($validated['q']) || !empty($validated['status']);
+        $hasFilters = !empty($validated['category']) || !empty($validated['user']) || !empty($validated['book_author']) || !empty($validated['q']) || !empty($validated['status']);
 
         $isPrivileged = in_array(Auth::user()->role, [UserRole::ADMIN, UserRole::MODERATOR], true);
 
@@ -31,7 +31,7 @@ class PostController extends Controller
         // - Basic user attempting only ?user=another_id (no other filters) => ignore and show only their posts.
         // - If any other filter present (category, q, status - status still ignored for basic), allow wide visibility.
         if (!$isPrivileged) {
-            $onlyUserFilter = !empty($validated['user']) && empty($validated['category']) && empty($validated['author']) && empty($validated['q']) && empty($validated['status']);
+            $onlyUserFilter = !empty($validated['user']) && empty($validated['category']) && empty($validated['book_author']) && empty($validated['q']) && empty($validated['status']);
             $forcingForeign = $onlyUserFilter && (int)$validated['user'] !== Auth::id();
 
             if (!$hasFilters || $forcingForeign) {
@@ -52,17 +52,17 @@ class PostController extends Controller
             $query->where('user_id', $validated['user']);
         }
 
-        // Filtro de autor do livro (campo textual 'author') agora separado
-        if (!empty($validated['author'])) {
-            $authorName = $validated['author'];
-            $query->where('author', 'like', "%{$authorName}%");
+        // Filtro de autor do livro (campo textual 'book_author')
+        if (!empty($validated['book_author'])) {
+            $authorName = $validated['book_author'];
+            $query->where('book_author', 'like', "%{$authorName}%");
         }
 
         if (!empty($validated['q'])) {
             $q = $validated['q'];
             $query->where(function ($sub) use ($q) {
                 $sub->where('title', 'like', "%{$q}%")
-                    ->orWhere('author', 'like', "%{$q}%");
+                    ->orWhere('book_author', 'like', "%{$q}%");
             });
         }
 
@@ -94,7 +94,7 @@ class PostController extends Controller
         $data            = $request->validated();
         $data['user_id'] = Auth::id();
         // Fallback if not provided
-        $data['author'] = $data['author'] ?? Auth::user()->name;
+        $data['book_author'] = $data['book_author'] ?? Auth::user()->name;
 
         if ($request->hasFile('image')) {
             /** @var UploadedFile $uploaded */
@@ -151,8 +151,8 @@ class PostController extends Controller
     {
         $data = $request->validated();
         // Ensure fallback without relying on the key presence
-        $data['author'] = $data['author'] ?? Auth::user()->name;
-        $oldImage       = $post->image;
+        $data['book_author'] = $data['book_author'] ?? Auth::user()->name;
+        $oldImage            = $post->image;
 
         if ($request->hasFile('image')) {
             /** @var UploadedFile $uploaded */

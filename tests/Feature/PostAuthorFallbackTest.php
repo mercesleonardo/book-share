@@ -28,9 +28,9 @@ class PostAuthorFallbackTest extends TestCase
 
         $response->assertRedirect(route('posts.index'));
         $this->assertDatabaseHas('posts', [
-            'title'   => 'No Author Title',
-            'author'  => 'Fallback User',
-            'user_id' => $user->id,
+            'title'       => 'No Author Title',
+            'book_author' => 'Fallback User',
+            'user_id'     => $user->id,
         ]);
     }
 
@@ -44,7 +44,7 @@ class PostAuthorFallbackTest extends TestCase
         /** @var Post $post */
         $post = Post::create([
             'title'       => 'Original',
-            'author'      => 'Custom Author',
+            'book_author' => 'Custom Author',
             'description' => 'd',
             'category_id' => $category->id,
             'user_id'     => $user->id,
@@ -59,9 +59,9 @@ class PostAuthorFallbackTest extends TestCase
 
         $response->assertRedirect(route('posts.index'));
         $this->assertDatabaseHas('posts', [
-            'id'     => $post->id,
-            'title'  => 'Changed Title',
-            'author' => 'Fallback Updater', // updated to fallback (since we replaced with current user when missing)
+            'id'          => $post->id,
+            'title'       => 'Changed Title',
+            'book_author' => 'Fallback Updater', // updated to fallback (since we replaced with current user when missing)
         ]);
     }
 }

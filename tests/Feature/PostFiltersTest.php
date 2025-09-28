@@ -17,8 +17,8 @@ class PostFiltersTest extends TestCase
     {
         parent::setUp();
         // Usuário autenticado necessário para passar pelo authorizeResource.
-    // Promove para MODERATOR para que os filtros não sejam restringidos à própria autoria
-    $this->viewer = User::factory()->create(['role' => UserRole::MODERATOR]);
+        // Promove para MODERATOR para que os filtros não sejam restringidos à própria autoria
+        $this->viewer = User::factory()->create(['role' => UserRole::MODERATOR]);
         $this->actingAs($this->viewer);
     }
 
@@ -69,31 +69,31 @@ class PostFiltersTest extends TestCase
         $response->assertDontSee('Symfony Tricks');
     }
 
-    public function test_filter_by_query_in_author(): void
+    public function test_filter_by_query_in_book_author(): void
     {
         $cat = Category::factory()->create();
-        Post::factory()->create(['title' => 'First Title', 'author' => 'Maria Clara', 'category_id' => $cat->id]);
-        Post::factory()->create(['title' => 'Second Title', 'author' => 'Joao Silva', 'category_id' => $cat->id]);
+        Post::factory()->create(['title' => 'First Title', 'book_author' => 'Maria Clara', 'category_id' => $cat->id]);
+        Post::factory()->create(['title' => 'Second Title', 'book_author' => 'Joao Silva', 'category_id' => $cat->id]);
 
         $response = $this->get(route('posts.index', ['q' => 'maria']));
         $response->assertOk();
         $response->assertViewHas('posts', function ($p) {
             /** @var \Illuminate\Pagination\LengthAwarePaginator $p */
-            return $p->count() === 1 && $p->first()->author === 'Maria Clara';
+            return $p->count() === 1 && $p->first()->book_author === 'Maria Clara';
         });
     }
 
     public function test_filter_by_textual_book_author_field(): void
     {
         $cat = Category::factory()->create();
-        Post::factory()->create(['title' => 'Alpha', 'author' => 'Isaac Asimov', 'category_id' => $cat->id]);
-        Post::factory()->create(['title' => 'Beta', 'author' => 'Arthur Clarke', 'category_id' => $cat->id]);
+        Post::factory()->create(['title' => 'Alpha', 'book_author' => 'Isaac Asimov', 'category_id' => $cat->id]);
+        Post::factory()->create(['title' => 'Beta', 'book_author' => 'Arthur Clarke', 'category_id' => $cat->id]);
 
-        $response = $this->get(route('posts.index', ['author' => 'Asimov']));
+        $response = $this->get(route('posts.index', ['book_author' => 'Asimov']));
         $response->assertOk();
         $response->assertViewHas('posts', function ($p) {
             /** @var \Illuminate\Pagination\LengthAwarePaginator $p */
-            return $p->count() === 1 && $p->first()->author === 'Isaac Asimov';
+            return $p->count() === 1 && $p->first()->book_author === 'Isaac Asimov';
         });
     }
 
@@ -107,14 +107,14 @@ class PostFiltersTest extends TestCase
         // Matching post (token no título e autor correspondente)
         Post::factory()->create([
             'title'       => 'Special Match Post',
-            'author'      => 'Token Author',
+            'book_author' => 'Token Author',
             'category_id' => $catIncluded->id,
             'user_id'     => $authorIncluded->id,
         ]);
         // Noise posts
-        Post::factory()->create(['title' => 'Wrong Cat', 'author' => 'Token Author', 'category_id' => $catExcluded->id, 'user_id' => $authorIncluded->id]);
-        Post::factory()->create(['title' => 'Wrong Author', 'author' => 'Another Person', 'category_id' => $catIncluded->id, 'user_id' => $authorOther->id]);
-        Post::factory()->create(['title' => 'Wrong Query', 'author' => 'Irrelevant', 'category_id' => $catIncluded->id, 'user_id' => $authorIncluded->id]);
+        Post::factory()->create(['title' => 'Wrong Cat', 'book_author' => 'Token Author', 'category_id' => $catExcluded->id, 'user_id' => $authorIncluded->id]);
+        Post::factory()->create(['title' => 'Wrong Author', 'book_author' => 'Another Person', 'category_id' => $catIncluded->id, 'user_id' => $authorOther->id]);
+        Post::factory()->create(['title' => 'Wrong Query', 'book_author' => 'Irrelevant', 'category_id' => $catIncluded->id, 'user_id' => $authorIncluded->id]);
 
         $response = $this->get(route('posts.index', [
             'category' => $catIncluded->id,
