@@ -41,5 +41,10 @@
     <div class="md:col-span-1 flex items-end gap-2">
         <x-primary-button>{{ __('posts.filters.filter') }}</x-primary-button>
         <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('posts.index') }}'">{{ __('posts.filters.reset') }}</x-secondary-button>
+        @if($activeFilters->isNotEmpty())
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">
+                {{ $activeFilters->count() }}
+            </span>
+        @endif
     </div>
 </form>

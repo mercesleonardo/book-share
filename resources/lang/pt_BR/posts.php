@@ -22,7 +22,7 @@ return [
     'intro' => [
         'create_hint' => 'Cadastre aqui o seu livro preferido e compartilhe com a comunidade.',
         'edit_hint'   => 'Atualize os detalhes do livro que você compartilhou abaixo.',
-        'index_hint'  => 'Navegue, filtre e gerencie os livros compartilhados pela comunidade.',
+        'index_hint'  => 'Navegue, filtre e gerencie seus livros.',
     ],
     'messages' => [
         'created'        => 'Publicação criada com sucesso.',
