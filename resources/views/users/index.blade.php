@@ -34,23 +34,7 @@
                         </div>
                     </div>
 
-                    @if($activeFilters->isNotEmpty())
-                        <div class="mb-4 flex flex-wrap gap-2">
-                            @foreach($activeFilters as $key => $value)
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">
-                                    <span>
-                                        @switch($key)
-                                            @case('name') {{ __('Name') }}: {{ $value }} @break
-                                            @case('role') {{ __('Role') }}: {{ ucfirst($value) }} @break
-                                            @case('only_trashed') {{ __('Removed') }} @break
-                                        @endswitch
-                                    </span>
-                                    <a class="hover:text-red-600 dark:hover:text-red-400" href="{{ route('users.index', request()->except($key)) }}" title="{{ __('posts.filters.remove_filter') }}">&times;</a>
-                                </span>
-                            @endforeach
-                            <a href="{{ route('users.index') }}" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">{{ __('posts.filters.clear_all') }}</a>
-                        </div>
-                    @endif
+                    <x-active-filters :filters="$activeFilters" route="users.index" />
                     <div class="overflow-x-auto">
                         <table class="min-w-full bg-white dark:bg-gray-700 rounded shadow">
                             <thead>
