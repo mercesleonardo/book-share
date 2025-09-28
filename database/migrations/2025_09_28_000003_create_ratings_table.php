@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class () extends Migration {
     public function up(): void
     {
         Schema::create('ratings', function (Blueprint $table): void {
@@ -15,10 +15,6 @@ return new class extends Migration {
             $table->timestamps();
 
             $table->unique(['post_id', 'user_id']);
-            // Para bancos que suportam check; se SQLite em testes ignora
-            if (config('database.default') !== 'sqlite') {
-                $table->check('stars >= 1 and stars <= 5');
-            }
         });
     }
 

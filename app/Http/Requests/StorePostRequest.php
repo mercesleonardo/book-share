@@ -24,6 +24,7 @@ class StorePostRequest extends FormRequest
             'book_author' => ['sometimes', 'nullable', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
+            'user_rating' => ['required', 'integer', 'between:1,5'],
             'image'       => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }

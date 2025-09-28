@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +20,7 @@ return new class () extends Migration {
             $table->timestamp('password_set_at')->nullable();
             $table->string('profile_photo')->nullable();
             $table->text('description')->nullable();
-            $table->string('role')->default('user');
+            $table->string('role')->default(UserRole::USER->value);
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
