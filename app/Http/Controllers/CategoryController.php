@@ -25,9 +25,20 @@ class CategoryController extends Controller
             $query->where('id', $validated['category']);
         }
 
+        if (!empty($validated['q'])) {
+            $search = $validated['q'];
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('slug', 'like', "%{$search}%");
+            });
+        }
+
         $categories = $query->orderBy('name')->paginate(15)->withQueryString();
 
-        return view('categories.index', compact('categories'));
+        // Always provide the full list for the select so options are not restricted by filters
+        $allCategories = Category::orderBy('name')->get(['id', 'name']);
+
+        return view('categories.index', compact('categories', 'allCategories'));
     }
 
     public function create(): View

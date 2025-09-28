@@ -22,7 +22,7 @@
                         ])->filter(fn($v) => filled($v));
                     @endphp
                     <div class="mb-6 flex flex-col gap-4">
-                        <x-category-filter :categories="$categories" :active-filters="$activeFilters" />
+                        <x-category-filter :categories="$allCategories ?? $categories" :active-filters="$activeFilters" />
                         <div class="flex justify-between items-center">
                             <x-create-button x-data=""
                                 x-on:click.prevent="window.location.href='{{ route('categories.create') }}'">
