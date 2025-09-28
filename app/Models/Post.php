@@ -6,6 +6,7 @@ use App\Enums\ModerationStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Post extends Model
@@ -21,12 +22,13 @@ class Post extends Model
         'description',
         'image',
         'moderation_status',
+        'user_rating',
     ];
 
     public function casts(): array
     {
         return [
-            'moderation_status' => \App\Enums\ModerationStatus::class,
+            'moderation_status' => ModerationStatus::class,
         ];
     }
 
@@ -88,5 +90,30 @@ class Post extends Model
     public function scopeApproved($q): mixed
     {
         return $q->where('moderation_status', ModerationStatus::Approved);
+    }
+
+    /**
+     * Todas as avaliações (inclui possivelmente a do autor se também gravada em ratings futuramente)
+     */
+    public function ratings(): HasMany
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    /**
+     * Média das avaliações da comunidade (excluindo o user_rating armazenado no próprio post)
+     */
+    public function getCommunityAverageRatingAttribute(): ?float
+    {
+        $avg = $this->ratings()->avg('stars');
+        return $avg ? round((float)$avg, 1) : null;
+    }
+
+    /**
+     * Quantidade de avaliações da comunidade
+     */
+    public function getCommunityRatingsCountAttribute(): int
+    {
+        return (int) $this->ratings()->count();
     }
 }
