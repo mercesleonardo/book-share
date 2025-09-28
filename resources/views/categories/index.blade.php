@@ -18,6 +18,7 @@
                     @php
                         $activeFilters = collect([
                             'q' => request('q'),
+                            'category' => request('category'),
                         ])->filter(fn($v) => filled($v));
                     @endphp
                     <div class="mb-6 flex flex-col gap-4">
@@ -37,6 +38,7 @@
                                     <span>
                                         @switch($key)
                                             @case('q') {{ __('posts.filters.search') }}: {{ $value }} @break
+                                            @case('category') {{ __('categories.single') }}: {{ optional($categories->firstWhere('id', (int)$value))->name }} @break
                                         @endswitch
                                     </span>
                                     <a class="hover:text-red-600 dark:hover:text-red-400" href="{{ route('categories.index', request()->except($key)) }}" title="{{ __('posts.filters.remove_filter') }}">&times;</a>
