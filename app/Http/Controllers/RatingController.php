@@ -11,6 +11,8 @@ class RatingController extends Controller
 {
     public function store(StoreRatingRequest $request, Post $post): RedirectResponse
     {
+        $this->authorize('rate', $post);
+
         // Impedir autor de usar este endpoint
         if ($post->user_id === Auth::id()) {
             return redirect()->back()->with('error', __('posts.messages.rating_self_forbidden'));

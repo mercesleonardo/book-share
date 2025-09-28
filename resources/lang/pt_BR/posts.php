@@ -55,6 +55,7 @@ return [
         'community_average' => 'Média da comunidade',
         'community_count'   => 'Avaliações da comunidade',
         'your_rating'       => 'Sua avaliação',
+        'comments'          => 'Comentários',
         'rate'              => 'Avaliar',
         'update_rating'     => 'Atualizar avaliação',
     ],

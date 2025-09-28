@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCommentRequest;
 use App\Models\{Comment, Post};
+use App\Notifications\NewCommentNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,7 +23,14 @@ class CommentController extends Controller
         /** @var Post $post */
         $post = Post::query()->findOrFail($data['post_id']);
 
-        Comment::query()->create($data);
+        $this->authorize('comment', $post);
+
+        $comment = Comment::query()->create($data);
+
+        // Notificar autor do post, exceto se ele mesmo comentou
+        if ($post->user_id !== $comment->user_id) {
+            $post->user->notify(new NewCommentNotification($comment));
+        }
 
         return back()->with('status', __('comments.added'));
     }

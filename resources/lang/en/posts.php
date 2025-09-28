@@ -55,6 +55,7 @@ return [
         'community_average' => 'Community average',
         'community_count'   => 'Community ratings',
         'your_rating'       => 'Your rating',
+        'comments'          => 'Comments',
         'rate'              => 'Rate',
         'update_rating'     => 'Update rating',
     ],

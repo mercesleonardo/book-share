@@ -33,4 +33,16 @@ class PostPolicy
         // Post owner, Admin or Moderator
         return $post->user_id === $user->id || in_array($user->role, [UserRole::ADMIN, UserRole::MODERATOR], true);
     }
+
+    public function comment(User $user, Post $post): bool
+    {
+        // Any authenticated user can comment (including author)
+        return true;
+    }
+
+    public function rate(User $user, Post $post): bool
+    {
+        // Any authenticated user except the author can rate via community ratings
+        return $post->user_id !== $user->id;
+    }
 }
