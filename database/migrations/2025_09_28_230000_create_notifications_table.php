@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class () extends Migration {
     public function up(): void
     {
+        // Defensive: in test runs (sqlite file) the table may persist between attempts.
+        if (Schema::hasTable('notifications')) {
+            return;
+        }
+
         Schema::create('notifications', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('type');

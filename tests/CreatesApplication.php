@@ -10,6 +10,9 @@ trait CreatesApplication
     {
         $app = require __DIR__ . '/../bootstrap/app.php';
 
+        // Run console kernel bootstrap so facades/resolving works in unit tests
+        $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+
         return $app;
     }
 }
