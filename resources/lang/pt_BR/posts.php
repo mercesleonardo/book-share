@@ -4,13 +4,13 @@ return [
     'title'  => 'Publicações',
     'single' => 'Publicação',
     'fields' => [
-        'title'        => 'Título',
-        'description'  => 'Descrição',
-        'slug'         => 'Slug',
-        'category'     => 'Categoria',
-    'author'       => 'Autor do Livro',
-        'image'        => 'Imagem',
-        'user'         => 'Usuário',
+        'title'       => 'Título',
+        'description' => 'Descrição',
+        'slug'        => 'Slug',
+        'category'    => 'Categoria',
+        'author'      => 'Autor do Livro',
+        'image'       => 'Imagem',
+        'user'        => 'Usuário',
     ],
     'actions' => [
         'create' => 'Criar Publicação',
@@ -18,6 +18,9 @@ return [
         'delete' => 'Excluir',
         'back'   => 'Voltar',
         'view'   => 'Ver',
+    ],
+    'intro' => [
+        'create_hint' => 'Cadastre aqui o seu livro preferido e compartilhe com a comunidade.',
     ],
     'messages' => [
         'created'        => 'Publicação criada com sucesso.',

@@ -4,13 +4,13 @@ return [
     'title'  => 'Posts',
     'single' => 'Post',
     'fields' => [
-        'title'        => 'Title',
-        'description'  => 'Description',
-        'slug'         => 'Slug',
-        'category'     => 'Category',
-    'author'       => 'Book Author',
-        'image'        => 'Image',
-        'user'         => 'User',
+        'title'       => 'Title',
+        'description' => 'Description',
+        'slug'        => 'Slug',
+        'category'    => 'Category',
+        'author'      => 'Book Author',
+        'image'       => 'Image',
+        'user'        => 'User',
     ],
     'actions' => [
         'create' => 'Create Post',
@@ -18,6 +18,9 @@ return [
         'delete' => 'Delete Post',
         'back'   => 'Back',
         'view'   => 'View Post',
+    ],
+    'intro' => [
+        'create_hint' => 'Register your favorite book here and share it with the community.',
     ],
     'messages' => [
         'created'        => 'Post created successfully.',
