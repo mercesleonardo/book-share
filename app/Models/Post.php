@@ -111,8 +111,9 @@ class Post extends Model
         }
 
         $avgKey = 'post:ratings:avg:' . $this->id;
+        $ttl    = config('ratings.cache_ttl', 600);
 
-        return cache()->remember($avgKey, now()->addMinutes(10), function () {
+        return cache()->remember($avgKey, $ttl, function () {
             $avg = $this->ratings()->avg('stars');
 
             return $avg ? round((float) $avg, 1) : null;
@@ -129,7 +130,8 @@ class Post extends Model
         }
 
         $countKey = 'post:ratings:count:' . $this->id;
+        $ttl      = config('ratings.cache_ttl', 600);
 
-        return cache()->remember($countKey, now()->addMinutes(10), fn () => (int) $this->ratings()->count());
+        return cache()->remember($countKey, $ttl, fn () => (int) $this->ratings()->count());
     }
 }

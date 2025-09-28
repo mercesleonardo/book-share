@@ -47,6 +47,8 @@
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.title') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.category') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.author') }}</th>
+                                    <th class="py-2 px-4 border-b text-left">{{ __('posts.meta.community_average') }}</th>
+                                    <th class="py-2 px-4 border-b text-left">{{ __('posts.meta.community_count') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('Actions') }}</th>
                                 </tr>
                             </thead>
@@ -67,6 +69,15 @@
                                         <td class="py-2 px-4 border-b font-medium">{{ $post->title }}</td>
                                         <td class="py-2 px-4 border-b text-sm">{{ $post->category?->name }}</td>
                                         <td class="py-2 px-4 border-b text-sm">{{ $post->book_author }}</td>
+                                        <td class="py-2 px-4 border-b text-sm">
+                                            @php($avg = $post->community_average_rating)
+                                            @if($avg !== null)
+                                                <x-star-rating-display :value="$avg" :show-value="false" />
+                                            @else
+                                                <span class="text-gray-400">—</span>
+                                            @endif
+                                        </td>
+                                        <td class="py-2 px-4 border-b text-sm">{{ $post->community_ratings_count }}</td>
                                         <td class="py-2 px-4 border-b">
                                             <div class="flex flex-wrap gap-2">
                                                 <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('posts.show', $post) }}'">{{ __('posts.actions.view') }}</x-secondary-button>
@@ -102,7 +113,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="py-4 text-center text-gray-500">
+                                        <td colspan="7" class="py-4 text-center text-gray-500">
                                             {{ __('posts.messages.not_found') }}</td>
                                     </tr>
                                 @endforelse
