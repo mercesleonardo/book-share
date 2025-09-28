@@ -20,7 +20,10 @@ class PostController extends Controller
     {
         $validated = $request->validated();
 
-        $query = Post::query()->with(['category', 'user']);
+        $query = Post::query()
+            ->with(['category', 'user'])
+            ->withAvg('ratings', 'stars')
+            ->withCount('ratings');
 
         $hasFilters = !empty($validated['category']) || !empty($validated['user']) || !empty($validated['book_author']) || !empty($validated['q']) || !empty($validated['status']);
 
@@ -87,6 +90,8 @@ class PostController extends Controller
     }
 
     /**
+     * Store a newly created Post.
+     *
      * @param StorePostRequest $request
      */
     public function store(StorePostRequest $request): RedirectResponse
@@ -96,6 +101,7 @@ class PostController extends Controller
         // Fallback if not provided
         $data['book_author'] = $data['book_author'] ?? Auth::user()->name;
 
+        /** @var \Illuminate\Http\Request $request */
         if ($request->hasFile('image')) {
             /** @var UploadedFile $uploaded */
             $uploaded      = $request->file('image');
@@ -147,7 +153,10 @@ class PostController extends Controller
     }
 
     /**
+     * Update the specified Post.
+     *
      * @param UpdatePostRequest $request
+     * @param Post $post
      */
     public function update(UpdatePostRequest $request, Post $post): RedirectResponse
     {
@@ -156,6 +165,7 @@ class PostController extends Controller
         $data['book_author'] = $data['book_author'] ?? Auth::user()->name;
         $oldImage            = $post->image;
 
+        /** @var \Illuminate\Http\Request $request */
         if ($request->hasFile('image')) {
             /** @var UploadedFile $uploaded */
             $uploaded      = $request->file('image');

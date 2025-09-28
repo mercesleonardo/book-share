@@ -113,20 +113,20 @@
                 <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-5 shadow-sm space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide uppercase">{{ __('posts.meta.ratings') }}</h2>
                     <div class="text-xs flex flex-col gap-2">
-                        <div class="flex justify-between gap-3">
+                        <div class="flex justify-between gap-3 items-center">
                             <span class="text-gray-500 dark:text-gray-400">{{ __('posts.meta.author_rating') }}</span>
-                            <span class="font-medium text-gray-800 dark:text-gray-200 flex items-center gap-1">
-                                {{ $post->user_rating }}/5
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-yellow-400" viewBox="0 0 24 24" fill="currentColor"><path d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"/></svg>
-                            </span>
+                            <x-star-rating-display :value="$post->user_rating" :precision="1" />
                         </div>
-                        <div class="flex justify-between gap-3">
+                        <div class="flex justify-between gap-3 items-center">
                             <span class="text-gray-500 dark:text-gray-400">{{ __('posts.meta.community_average') }}</span>
-                            <span class="font-medium text-gray-800 dark:text-gray-200 flex items-center gap-1">
-                                @php($avg = $post->community_average_rating)
-                                {{ $avg !== null ? number_format($avg, 1, ',', '.') : '—' }}
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-yellow-400" viewBox="0 0 24 24" fill="currentColor"><path d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"/></svg>
-                            </span>
+                            @php($avg = $post->community_average_rating)
+                            <div>
+                                @if($avg !== null)
+                                    <x-star-rating-display :value="$avg" :precision="1" />
+                                @else
+                                    <span class="text-xs text-gray-400 dark:text-gray-600">—</span>
+                                @endif
+                            </div>
                         </div>
                         <div class="flex justify-between gap-3">
                             <span class="text-gray-500 dark:text-gray-400">{{ __('posts.meta.community_count') }}</span>

@@ -108,4 +108,57 @@ class PostRatingTest extends TestCase
             'user_id' => $author->id,
         ]);
     }
+
+    public function test_stars_validation_out_of_range_returns_422(): void
+    {
+        /** @var User $author */
+        $author = User::factory()->create();
+        /** @var User $other */
+        $other    = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $post = Post::factory()->create([
+            'user_id'     => $author->id,
+            'category_id' => $category->id,
+            'user_rating' => 5,
+        ]);
+
+        $this->actingAs($other)
+            ->post(route('posts.ratings.store', $post), ['stars' => 0])
+            ->assertStatus(302) // FormRequest redirects back
+            ->assertSessionHasErrors('stars');
+
+        $this->actingAs($other)
+            ->post(route('posts.ratings.store', $post), ['stars' => 6])
+            ->assertStatus(302)
+            ->assertSessionHasErrors('stars');
+    }
+
+    public function test_average_with_multiple_users_rounds_one_decimal(): void
+    {
+        /** @var User $author */
+        $author   = User::factory()->create();
+        $category = Category::factory()->create();
+        /** @var \Illuminate\Database\Eloquent\Collection<int,User> $raters */
+        $raters = User::factory()->count(3)->create(); // 3 usuários
+
+        $post = Post::factory()->create([
+            'user_id'     => $author->id,
+            'category_id' => $category->id,
+            'user_rating' => 4,
+        ]);
+
+        $stars = [3, 4, 5]; // média = 4.0
+
+        foreach ($raters as $idx => $user) {
+            /** @var User $user */
+            $this->actingAs($user)
+                ->post(route('posts.ratings.store', $post), ['stars' => $stars[$idx]])
+                ->assertRedirect();
+        }
+
+        $fresh = $post->fresh();
+        $this->assertEquals(4.0, $fresh->community_average_rating);
+        $this->assertEquals(3, $fresh->community_ratings_count);
+    }
 }

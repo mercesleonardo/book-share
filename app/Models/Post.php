@@ -5,8 +5,7 @@ namespace App\Models;
 use App\Enums\ModerationStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Support\Str;
 
 class Post extends Model
@@ -105,8 +104,15 @@ class Post extends Model
      */
     public function getCommunityAverageRatingAttribute(): ?float
     {
+        // Se carregado via withAvg('ratings','stars') usar atributo em cache
+        if (array_key_exists('ratings_avg_stars', $this->attributes)) {
+            $val = $this->attributes['ratings_avg_stars'];
+
+            return $val !== null ? round((float) $val, 1) : null;
+        }
         $avg = $this->ratings()->avg('stars');
-        return $avg ? round((float)$avg, 1) : null;
+
+        return $avg ? round((float) $avg, 1) : null;
     }
 
     /**
@@ -114,6 +120,10 @@ class Post extends Model
      */
     public function getCommunityRatingsCountAttribute(): int
     {
+        if (array_key_exists('ratings_count', $this->attributes)) {
+            return (int) $this->attributes['ratings_count'];
+        }
+
         return (int) $this->ratings()->count();
     }
 }
