@@ -40,15 +40,7 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment): RedirectResponse
     {
-        $user = Auth::user();
-
-        $isOwner      = $comment->user_id === $user->id;
-        $isPostAuthor = $comment->post->user_id === $user->id;
-        $isPrivileged = in_array($user->role->value ?? $user->role, ['admin', 'moderator'], true);
-
-        if (!$isOwner && !$isPostAuthor && !$isPrivileged) {
-            abort(403);
-        }
+        $this->authorize('delete', $comment);
 
         $comment->delete();
 
