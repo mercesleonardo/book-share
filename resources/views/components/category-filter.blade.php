@@ -14,10 +14,6 @@
             @endforeach
         </select>
     </div>
-    <div class="flex flex-col gap-1">
-        <x-input-label for="q" value="{{ __('posts.filters.search') }}" />
-        <x-text-input id="q" name="q" value="{{ request('q') }}" placeholder="{{ __('posts.filters.search_ph') }}" />
-    </div>
     <div class="md:col-span-1 flex items-end gap-2">
         <x-primary-button>{{ __('categories.filters.filter') }}</x-primary-button>
         <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('categories.index') }}'">{{ __('categories.filters.reset') }}</x-secondary-button>
