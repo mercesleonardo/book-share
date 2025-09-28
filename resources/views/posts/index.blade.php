@@ -18,16 +18,6 @@
                         </div>
                     @endif
 
-                    <div class="mb-6 flex flex-col gap-4">
-                        <x-posts-filter :categories="$categories" :users="$users" />
-                        <div class="flex justify-between items-center">
-                            <x-create-button x-data=""
-                                x-on:click.prevent="window.location.href='{{ route('posts.create') }}'">
-                                {{ __('posts.actions.create') }}
-                            </x-create-button>
-                        </div>
-                    </div>
-
                     @php
                         $activeFilters = collect([
                             'q' => request('q'),
@@ -37,6 +27,15 @@
                             'status' => request('status'),
                         ])->filter(fn($v) => filled($v));
                     @endphp
+                    <div class="mb-6 flex flex-col gap-4">
+                        <x-posts-filter :categories="$categories" :users="$users" :active-filters="$activeFilters" />
+                        <div class="flex justify-between items-center">
+                            <x-create-button x-data=""
+                                x-on:click.prevent="window.location.href='{{ route('posts.create') }}'">
+                                {{ __('posts.actions.create') }}
+                            </x-create-button>
+                        </div>
+                    </div>
 
                     @if($activeFilters->isNotEmpty())
                         <div class="mb-4 flex flex-wrap gap-2">
