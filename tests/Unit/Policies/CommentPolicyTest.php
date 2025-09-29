@@ -29,14 +29,14 @@ class CommentPolicyTest extends TestCase
         $this->assertTrue($this->policy->delete($user, $comment));
     }
 
-    public function test_post_author_can_delete_comment_from_other_user(): void
+    public function test_post_author_cannot_delete_foreign_comment_anymore(): void
     {
         $author  = User::factory()->create();
         $other   = User::factory()->create();
         $post    = Post::factory()->for($author)->create();
         $comment = Comment::factory()->for($post)->for($other)->create();
 
-        $this->assertTrue($this->policy->delete($author, $comment));
+        $this->assertFalse($this->policy->delete($author, $comment));
     }
 
     public function test_admin_can_delete_any_comment(): void

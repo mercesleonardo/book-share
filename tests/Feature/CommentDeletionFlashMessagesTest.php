@@ -28,23 +28,6 @@ class CommentDeletionFlashMessagesTest extends TestCase
     }
 
     /**
-     * Dono do post remove comentário de outra pessoa.
-     */
-    public function test_post_owner_gets_removed_as_post_owner_message(): void
-    {
-        $owner   = User::factory()->create();
-        $other   = User::factory()->create();
-        $post    = Post::factory()->for($owner)->create();
-        $comment = Comment::factory()->for($post)->for($other)->create();
-
-        /** @var \App\Models\User $owner */
-        $response = $this->actingAs($owner)->delete(route('comments.destroy', $comment));
-
-        $response->assertRedirect();
-        $response->assertSessionHas('status', __('comments.removed_as_post_owner'));
-    }
-
-    /**
      * Moderador remove comentário de outro usuário não sendo dono nem autor.
      */
     public function test_moderator_gets_removed_as_moderator_message(): void
