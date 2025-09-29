@@ -31,7 +31,7 @@
                 </header>
             @endisset
 
-            <x-flash-messages />
+            <x-flash-messages variant="floating" position="top-right" size="compact" class="px-2" />
 
             <!-- Page Content -->
             <main>

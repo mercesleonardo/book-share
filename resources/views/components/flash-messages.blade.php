@@ -1,8 +1,12 @@
 @props([
     'class' => '',
     'timeout' => 5000,
-    // variant: 'inline' (fluxo normal) ou 'floating' (fixado topo)
+    // variant: 'inline' ou 'floating'
     'variant' => 'inline',
+    // position somente para floating: top-right | top-left | top-center
+    'position' => 'top-right',
+    // size: normal | compact
+    'size' => 'normal',
 ])
 
 @php
@@ -21,9 +25,16 @@
 @endphp
 
 @php
-    $wrapperBase = $variant === 'floating'
-        ? 'pointer-events-none fixed top-4 inset-x-0 z-50 flex flex-col items-center space-y-3'
-        : 'space-y-3';
+    if ($variant === 'floating') {
+        $pos = match($position) {
+            'top-left' => 'top-4 left-4 items-start',
+            'top-center' => 'top-4 inset-x-0 items-center',
+            default => 'top-4 right-4 items-end', // top-right
+        };
+        $wrapperBase = 'pointer-events-none fixed z-50 flex flex-col space-y-2 '.$pos;
+    } else {
+        $wrapperBase = 'space-y-3';
+    }
     $wrapperClasses = $wrapperBase.' '.$class;
 
     $groups = [
@@ -43,6 +54,10 @@
             'icon' => '<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.721-1.36 3.486 0l6.518 11.59c.75 1.334-.213 2.987-1.742 2.987H3.48c-1.53 0-2.492-1.653-1.742-2.988l6.52-11.589zM11 13a1 1 0 10-2 0 1 1 0 002 0zm-.25-6.25a.75.75 0 00-1.5 0v3.5a.75.75 0 001.5 0v-3.5z" clip-rule="evenodd" /></svg>',
         ],
     ];
+
+    // Tamanho
+    $padding = $size === 'compact' ? 'pl-3 pr-8 py-1.5 text-xs' : 'pl-4 pr-10 py-2 text-sm';
+    $iconSizeReplace = $size === 'compact' ? ['h-5 w-5' => 'h-4 w-4'] : [];
 @endphp
 
 <div {{ $attributes->class($wrapperClasses) }}>
@@ -52,17 +67,18 @@
                 x-data="{show:true}"
                 x-init="setTimeout(()=>show=false, {{ (int)$timeout }})"
                 x-show="show"
-                x-transition.opacity.duration.200ms
+                x-transition:enter="transform ease-out duration-200"
+                x-transition:enter-start="opacity-0 -translate-y-2"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transform ease-in duration-150"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 -translate-y-2"
                 role="alert"
                 aria-live="assertive"
-                class="pointer-events-auto relative w-full max-w-xl rounded-md border border-{{ $group['color'] }}-300/50 bg-{{ $group['color'] }}-50 dark:bg-{{ $group['color'] }}-500/10 pl-4 pr-10 py-2 text-sm text-{{ $group['color'] }}-700 dark:text-{{ $group['color'] }}-300 shadow-sm backdrop-blur">
-                <div class="flex items-start gap-2">
-                    <span class="mt-0.5 text-{{ $group['color'] }}-500 dark:text-{{ $group['color'] }}-300" aria-hidden="true">{!! $group['icon'] !!}</span>
-                    <div class="flex-1 leading-relaxed">{{ $msg }}</div>
-                </div>
-                <button type="button" @click="show=false" class="absolute top-1.5 right-1.5 text-{{ $group['color'] }}-500 hover:text-{{ $group['color'] }}-700 dark:text-{{ $group['color'] }}-300 dark:hover:text-{{ $group['color'] }}-100" aria-label="{{ __('Close') }}">
-                    &times;
-                </button>
+                class="pointer-events-auto relative w-full max-w-sm sm:max-w-md rounded-md border border-{{ $group['color'] }}-300/50 bg-{{ $group['color'] }}-50 dark:bg-{{ $group['color'] }}-500/10 {{ $padding }} text-{{ $group['color'] }}-700 dark:text-{{ $group['color'] }}-300 shadow-sm backdrop-blur flex items-start gap-2">
+                <span class="mt-0.5 shrink-0 text-{{ $group['color'] }}-500 dark:text-{{ $group['color'] }}-300" aria-hidden="true">{!! $group['icon'] !!}</span>
+                <div class="flex-1 leading-relaxed">{{ $msg }}</div>
+                <button type="button" @click="show=false" class="absolute top-1.5 right-1.5 text-{{ $group['color'] }}-500 hover:text-{{ $group['color'] }}-700 dark:text-{{ $group['color'] }}-300 dark:hover:text-{{ $group['color'] }}-100" aria-label="{{ __('Close') }}">&times;</button>
             </div>
         @endforeach
     @endforeach
@@ -71,13 +87,18 @@
         <div
             x-data="{show:true}"
             x-show="show"
-            x-transition.opacity.duration.200ms
+            x-transition:enter="transform ease-out duration-200"
+            x-transition:enter-start="opacity-0 -translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transform ease-in duration-150"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-2"
             role="alert"
             aria-live="assertive"
-            class="pointer-events-auto relative w-full max-w-xl rounded-md border border-red-300/50 bg-red-50 dark:bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300 space-y-1 shadow-sm backdrop-blur">
+            class="pointer-events-auto relative w-full max-w-sm sm:max-w-md rounded-md border border-red-300/50 bg-red-50 dark:bg-red-500/10 {{ $size === 'compact' ? 'px-3 py-2 text-xs' : 'px-4 py-3 text-sm' }} text-red-700 dark:text-red-300 space-y-1 shadow-sm backdrop-blur">
             <button type="button" @click="show=false" class="absolute top-1.5 right-1.5 text-red-600 hover:text-red-800 dark:text-red-300 dark:hover:text-red-100" aria-label="{{ __('Close') }}">&times;</button>
             <div class="flex items-start gap-2">
-                <span class="mt-0.5 text-red-500 dark:text-red-300" aria-hidden="true"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.721-1.36 3.486 0l6.518 11.59c.75 1.334-.213 2.987-1.742 2.987H3.48c-1.53 0-2.492-1.653-1.742-2.988l6.52-11.589zM11 13a1 1 0 10-2 0 1 1 0 002 0zm-.25-6.25a.75.75 0 00-1.5 0v3.5a.75.75 0 001.5 0v-3.5z" clip-rule="evenodd" /></svg></span>
+                <span class="mt-0.5 text-red-500 dark:text-red-300" aria-hidden="true"><svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.721-1.36 3.486 0l6.518 11.59c.75 1.334-.213 2.987-1.742 2.987H3.48c-1.53 0-2.492-1.653-1.742-2.988l6.52-11.589zM11 13a1 1 0 10-2 0 1 1 0 002 0zm-.25-6.25a.75.75 0 00-1.5 0v3.5a.75.75 0 001.5 0v-3.5z" clip-rule="evenodd" /></svg></span>
                 <div class="flex-1">
                     <div class="font-semibold">{{ __('validation.errors_title') }}</div>
                     <ul class="mt-1 list-disc ml-5 space-y-0.5">
