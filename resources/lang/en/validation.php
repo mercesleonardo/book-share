@@ -196,4 +196,7 @@ return [
 
     'attributes' => [],
 
+    // Custom additions
+    'errors_title' => 'Validation errors',
+
 ];

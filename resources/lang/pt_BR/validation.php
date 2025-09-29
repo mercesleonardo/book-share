@@ -238,4 +238,6 @@ return [
         'birth_date'            => 'data de nascimento',
     ],
 
+    'errors_title' => 'Erros de validação',
+
 ];
