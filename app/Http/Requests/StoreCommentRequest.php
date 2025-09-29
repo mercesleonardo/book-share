@@ -23,8 +23,16 @@ class StoreCommentRequest extends FormRequest
     {
         return [
             'post_id' => ['required', 'exists:posts,id'],
-            'user_id' => ['required', 'exists:users,id'],
+            // user_id é forçado no controller, não deve ser enviado
+            'user_id' => ['prohibited'],
             'content' => ['required', 'string', 'max:1000'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'user_id.prohibited' => 'Você não deve enviar o campo user_id.',
         ];
     }
 }
