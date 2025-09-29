@@ -24,7 +24,7 @@ class CommentDeletionFlashMessagesTest extends TestCase
         $response = $this->actingAs($user)->delete(route('comments.destroy', $comment));
 
         $response->assertRedirect();
-        $response->assertSessionHas('status', __('comments.removed_self'));
+        $response->assertSessionHas('success', __('comments.removed_self'));
     }
 
     /**
@@ -42,7 +42,7 @@ class CommentDeletionFlashMessagesTest extends TestCase
         $response = $this->actingAs($moderator)->delete(route('comments.destroy', $comment));
 
         $response->assertRedirect();
-        $response->assertSessionHas('status', __('comments.removed_as_moderator'));
+        $response->assertSessionHas('success', __('comments.removed_as_moderator'));
     }
 
     /**
@@ -61,6 +61,6 @@ class CommentDeletionFlashMessagesTest extends TestCase
 
         // Admin usa mesma chave de moderador (removido por privilégios)
         $response->assertRedirect();
-        $response->assertSessionHas('status', __('comments.removed_as_moderator'));
+        $response->assertSessionHas('success', __('comments.removed_as_moderator'));
     }
 }

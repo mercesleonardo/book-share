@@ -20,7 +20,6 @@ class CommentTest extends TestCase
 
         $response = $this->actingAs($user, 'web')->post('/comments', [
             'post_id' => $post->id,
-            'user_id' => $user->id, // will be overridden but fine for validation
             'content' => 'Nice book!',
         ]);
 
@@ -40,7 +39,6 @@ class CommentTest extends TestCase
 
         $response = $this->actingAs($user, 'web')->post('/comments', [
             'post_id' => $post->id,
-            'user_id' => $user->id,
             'content' => '',
         ]);
 
@@ -71,19 +69,7 @@ class CommentTest extends TestCase
         $this->assertDatabaseHas('comments', ['id' => $comment->id]);
     }
 
-    public function test_post_author_can_delete_foreign_comment_on_own_post(): void
-    {
-        /** @var User $author */
-        $author = User::factory()->create();
-        /** @var User $commenter */
-        $commenter = User::factory()->create();
-        $post      = Post::factory()->for($author)->create();
-        $comment   = Comment::factory()->for($post)->for($commenter)->create();
-
-        $response = $this->actingAs($author, 'web')->delete('/comments/' . $comment->id);
-        $response->assertSessionHasNoErrors();
-        $this->assertDatabaseMissing('comments', ['id' => $comment->id]);
-    }
+    // Removed test for post author deleting foreign comment: policy no longer allows this.
 
     public function test_new_comment_triggers_notification_to_post_author(): void
     {
@@ -97,7 +83,6 @@ class CommentTest extends TestCase
 
         $response = $this->actingAs($commenter, 'web')->post('/comments', [
             'post_id' => $post->id,
-            'user_id' => $commenter->id,
             'content' => 'Great book.',
         ]);
 

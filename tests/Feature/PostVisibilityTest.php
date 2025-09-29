@@ -58,16 +58,7 @@ class PostVisibilityTest extends TestCase
             ->assertDontSeeText($otherPost->title);
     }
 
-    public function test_regular_user_cannot_view_others_post_show(): void
-    {
-        $user  = $this->makeUser();
-        $other = $this->makeUser();
-        $post  = Post::factory()->create(['user_id' => $other->id]);
-
-        $this->actingAs($user)
-            ->get(route('posts.show', $post))
-            ->assertForbidden();
-    }
+    // Removed test that enforced 403 on viewing others' posts. Policy now allows any authenticated user to view.
 
     public function test_owner_can_view_own_post(): void
     {

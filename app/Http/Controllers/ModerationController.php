@@ -28,7 +28,7 @@ class ModerationController extends Controller
         Cache::forget('dashboard.trend_14_days');
         Cache::forget('dashboard.top_categories');
 
-        return back()->with('status', __('Post approved'));
+        return back()->with('success', __('Post approved'));
     }
 
     public function reject(Post $post): RedirectResponse
@@ -49,6 +49,6 @@ class ModerationController extends Controller
         Cache::forget('dashboard.trend_14_days');
         Cache::forget('dashboard.top_categories');
 
-        return back()->with('status', __('Post rejected'));
+        return back()->with('success', __('Post rejected'));
     }
 }

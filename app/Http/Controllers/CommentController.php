@@ -32,7 +32,7 @@ class CommentController extends Controller
             $post->user->notify(new NewCommentNotification($comment));
         }
 
-        return back()->with('status', __('comments.added'));
+        return back()->with('success', __('comments.added'));
     }
 
     /**
@@ -61,6 +61,6 @@ class CommentController extends Controller
             $message = __('comments.removed_as_moderator');
         }
 
-        return back()->with('status', $message);
+        return back()->with('success', $message);
     }
 }
