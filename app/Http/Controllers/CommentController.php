@@ -40,6 +40,8 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment): RedirectResponse
     {
+        // Garantir que a relação post esteja carregada para evitar lazy loading na policy
+        $comment->loadMissing('post');
         $this->authorize('delete', $comment);
 
         $acting       = Auth::user();
