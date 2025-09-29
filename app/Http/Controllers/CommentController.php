@@ -42,8 +42,23 @@ class CommentController extends Controller
     {
         $this->authorize('delete', $comment);
 
+        $acting       = Auth::user();
+        $isSelf       = $comment->user_id === $acting->id;
+        $isPostOwner  = $comment->post->user_id === $acting->id && !$isSelf;
+        $isPrivileged = in_array($acting->role, [\App\Enums\UserRole::ADMIN, \App\Enums\UserRole::MODERATOR], true) && !$isSelf && !$isPostOwner;
+
         $comment->delete();
 
-        return back()->with('status', __('comments.removed'));
+        $message = __('comments.removed');
+
+        if ($isSelf) {
+            $message = __('comments.removed_self');
+        } elseif ($isPostOwner) {
+            $message = __('comments.removed_as_post_owner');
+        } elseif ($isPrivileged) {
+            $message = __('comments.removed_as_moderator');
+        }
+
+        return back()->with('status', $message);
     }
 }
