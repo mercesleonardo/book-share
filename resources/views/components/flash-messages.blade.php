@@ -56,7 +56,8 @@
     ];
 
     // Tamanho
-    $padding = $size === 'compact' ? 'pl-3 pr-8 py-1.5 text-xs' : 'pl-4 pr-10 py-2 text-sm';
+    // Compact agora com um pouco mais de altura (py-2 ao invés de py-1.5)
+    $padding = $size === 'compact' ? 'pl-3 pr-8 py-2 text-xs' : 'pl-4 pr-10 py-2 text-sm';
     $iconSizeReplace = $size === 'compact' ? ['h-5 w-5' => 'h-4 w-4'] : [];
 @endphp
 
