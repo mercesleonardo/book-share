@@ -14,7 +14,9 @@ class PostPolicy
 
     public function view(User $user, Post $post): bool
     {
-        return $post->user_id === $user->id || in_array($user->role, [UserRole::ADMIN, UserRole::MODERATOR], true);
+        // Qualquer usuário autenticado pode visualizar o post.
+        // Regras mais restritivas (ex: moderação) podem ser aplicadas futuramente se necessário.
+        return true;
     }
 
     public function create(User $user): bool
