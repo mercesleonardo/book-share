@@ -225,5 +225,19 @@
   "Categories": "Categorias",
   "Posts": "Publicações",
   "Delete Post": "Deletar Publicação",
-  "All": "-- Todos --"
+  "All": "-- Todos --",
+  "Previous": "Anterior",
+  "Next": "Próximo",
+  "Related Posts": "Posts Relacionados",
+  "Book Author": "Autor do livro",
+  "Breadcrumb": "Breadcrumb",
+  "Post navigation": "Navegação do post",
+  "Discover and share great books!": "Descubra e compartilhe ótimos livros!",
+  "Books Shared by the Community": "Livros Compartilhados pela Comunidade",
+  "Explore a diverse collection of books recommended by our users. Find your next read or share your favorite books.": "Explore uma coleção diversificada de livros recomendados pelos nossos usuários. Encontre sua próxima leitura ou compartilhe seus livros favoritos.",
+  "Go to Dashboard": "Ir para o Dashboard",
+  "Share Book": "Compartilhar Livro",
+  "Register to Share": "Registre-se para Compartilhar",
+  "No books shared yet": "Nenhum livro compartilhado ainda",
+  "Be the first to share": "Seja o primeiro a compartilhar"
 }

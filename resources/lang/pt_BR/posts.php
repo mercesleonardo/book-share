@@ -51,7 +51,7 @@ return [
         'updated'           => 'Atualizado',
         'status'            => 'Status',
         'ratings'           => 'Avaliações',
-        'author_rating'     => 'Avaliação do autor',
+        'author_rating'     => 'Avaliação do usuário',
         'community_average' => 'Média da comunidade',
         'community_count'   => 'Avaliações da comunidade',
         'your_rating'       => 'Sua avaliação',

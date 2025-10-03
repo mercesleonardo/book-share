@@ -44,7 +44,7 @@
                 </article>
 
                 <!-- Prev / Next navigation -->
-                <nav class="flex items-center justify-between mt-10 text-sm" aria-label="Post navigation">
+                <nav class="flex items-center justify-between mt-10 text-sm" aria-label="{{ __('posts.navigation.post_navigation') }}">
                     <div>
                         @if($previous)
                             <a href="{{ route('admin.posts.show', $previous) }}" class="group inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">

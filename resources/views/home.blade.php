@@ -6,7 +6,7 @@
                     {{ config('app.name', 'BookShare') }}
                 </h2>
                 <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Descubra e compartilhe suas leituras favoritas
+                    {{ __('Discover and share great books!') }}
                 </p>
             </div>
             @auth
@@ -32,11 +32,10 @@
                 <!-- Hero Section -->
                 <div class="mb-8 text-center">
                     <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-                        Livros Compartilhados pela Comunidade
+                        {{ __('Books Shared by the Community') }}
                     </h1>
                     <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                        Explore uma coleção diversificada de livros recomendados pelos nossos usuários.
-                        Encontre sua próxima leitura ou compartilhe seus livros favoritos.
+                        {{ __('Explore a diverse collection of books recommended by our users. Find your next read or share your favorite books.') }}
                     </p>
                 </div>
 
@@ -64,18 +63,18 @@
                             Nenhum livro compartilhado ainda
                         </h3>
                         <p class="mt-2 text-gray-600 dark:text-gray-400">
-                            Seja o primeiro a compartilhar um livro com a comunidade!
+                            Seja o primeiro a compartilhar
                         </p>
                         @auth
                             <div class="mt-6">
                                 <x-primary-button x-data x-on:click.prevent="window.location.href='{{ route('admin.posts.create') }}'">
-                                    Compartilhar Livro
+                                    {{ __('Share Book') }}
                                 </x-primary-button>
                             </div>
                         @else
                             <div class="mt-6">
                                 <x-primary-button x-data x-on:click.prevent="window.location.href='{{ route('register') }}'">
-                                    Registre-se para Compartilhar
+                                    {{ __('Register to Share') }}
                                 </x-primary-button>
                             </div>
                         @endauth

@@ -2,8 +2,8 @@
     <x-slot name="header">
         <div class="flex flex-col gap-2">
             <!-- Breadcrumbs -->
-            <nav class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1" aria-label="Breadcrumb">
-                <a href="{{ url('/') }}" class="hover:text-gray-700 dark:hover:text-gray-200">Home</a>
+            <nav class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1" aria-label="{{ __('Breadcrumb') }}">
+                <a href="{{ url('/') }}" class="hover:text-gray-700 dark:hover:text-gray-200">{{ __('Home') }}</a>
                 <span>/</span>
                 <span class="text-gray-700 dark:text-gray-300 truncate max-w-[180px]" title="{{ $post->title }}">{{ $post->title }}</span>
             </nav>
@@ -37,7 +37,7 @@
                 <!-- Book author info -->
                 @if($post->book_author)
                     <div class="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50 dark:bg-blue-900/20">
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Autor do livro</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('posts.fields.author') }}</p>
                         <p class="font-medium text-gray-900 dark:text-gray-100">{{ $post->book_author }}</p>
                     </div>
                 @endif
@@ -47,19 +47,19 @@
                 </article>
 
                 <!-- Prev / Next navigation -->
-                <nav class="flex items-center justify-between mt-10 text-sm" aria-label="Post navigation">
+                <nav class="flex items-center justify-between mt-10 text-sm" aria-label="{{ __('Post navigation') }}">
                     <div>
                         @if($previous)
                             <a href="{{ route('posts.show', $previous) }}" class="group inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">
                                 <span class="text-xs" aria-hidden="true">&larr;</span>
-                                Anterior
+                                {{ __('Previous') }}
                             </a>
                         @endif
                     </div>
                     <div class="text-right">
                         @if($next)
                             <a href="{{ route('posts.show', $next) }}" class="group inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">
-                                Próximo
+                                {{ __('Next') }}
                                 <span class="text-xs" aria-hidden="true">&rarr;</span>
                             </a>
                         @endif
@@ -69,7 +69,7 @@
                 <!-- Related posts -->
                 @if($related->count() > 0)
                     <section class="mt-12">
-                        <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide uppercase mb-4">Posts Relacionados</h2>
+                        <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide uppercase mb-4">{{ __('Related Posts') }}</h2>
                         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             @foreach($related as $relatedPost)
                                 <a href="{{ route('posts.show', $relatedPost) }}" class="block p-4 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-400 dark:hover:border-blue-500 transition group">
@@ -96,7 +96,7 @@
                 <x-post-ratings-summary :post="$post" />
 
                 <div class="flex flex-wrap gap-3">
-                    <a href="{{ url('/') }}" class="inline-flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">&larr; Voltar para Home</a>
+                    <a href="{{ url('/') }}" class="inline-flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">&larr; {{ __('posts.actions.back') }}</a>
                 </div>
             </aside>
         </div>
