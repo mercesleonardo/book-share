@@ -10,7 +10,7 @@ class IndexCategoryRequest extends FormRequest
     {
         return [
             'category' => ['nullable', 'integer', 'exists:categories,id'],
-            'q' => ['nullable', 'string', 'max:100'],
+            'q'        => ['nullable', 'string', 'max:100'],
         ];
     }
 }

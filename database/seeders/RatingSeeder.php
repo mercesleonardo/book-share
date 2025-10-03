@@ -10,6 +10,7 @@ class RatingSeeder extends Seeder
     public function run(): void
     {
         $users = User::all();
+
         if ($users->count() < 2) {
             return; // need multiple users for community ratings
         }
@@ -17,6 +18,7 @@ class RatingSeeder extends Seeder
         Post::query()->inRandomOrder()->take(40)->get()->each(function (Post $post) use ($users): void {
             // pick between 2 e 6 distinct users different from author
             $raters = $users->where('id', '!=', $post->user_id)->shuffle()->take(rand(2, 6));
+
             foreach ($raters as $user) {
                 // avoid duplicate by unique constraint
                 Rating::query()->firstOrCreate([

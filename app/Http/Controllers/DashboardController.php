@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
-use App\Models\{Post, User};
 use App\Enums\ModerationStatus;
+use App\Models\{Post, User};
 use Illuminate\Support\Facades\{Auth, Cache};
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {

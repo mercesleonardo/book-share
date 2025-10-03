@@ -4,9 +4,8 @@ namespace Database\Seeders;
 
 use App\Enums\UserRole;
 use App\Models\{Category, Post, User};
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{Hash};
 
 class DatabaseSeeder extends Seeder
 {

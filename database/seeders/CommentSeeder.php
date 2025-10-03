@@ -10,6 +10,7 @@ class CommentSeeder extends Seeder
     public function run(): void
     {
         $users = User::all();
+
         if ($users->isEmpty()) {
             return;
         }
@@ -17,6 +18,7 @@ class CommentSeeder extends Seeder
         Post::query()->with('user')->inRandomOrder()->take(60)->get()->each(function (Post $post) use ($users): void {
             // each selected post receives between 1 and 5 comments
             $count = rand(1, 5);
+
             for ($i = 0; $i < $count; $i++) {
                 $author = $users->random();
                 Comment::factory()->create([
