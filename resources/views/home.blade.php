@@ -28,6 +28,10 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Carousel Últimas Postagens -->
+            <div class="mb-10">
+                <x-latest-posts-carousel />
+            </div>
             @if($posts->count() > 0)
                 <!-- Hero Section -->
                 <div class="mb-8 text-center">
