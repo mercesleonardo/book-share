@@ -1,74 +1,115 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Book Share
 
-## About Laravel
+Descubra, avalie e compartilhe ótimos livros com a comunidade.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+</div>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🎯 Objetivo do Projeto
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Este projeto foi criado como portfólio para demonstrar domínio prático de Laravel moderno (v12), boas práticas de arquitetura, front-end com Blade + Tailwind + Alpine, testes automatizados e uma UX cuidadosa. A aplicação simula uma plataforma de compartilhamento e curadoria de livros, com foco em qualidade de código, acessibilidade e experiência do usuário.
 
-## Post Author Field Behavior
+## 📚 Descrição Detalhada
 
-In this application the `author` field on posts is optional when creating or updating via the UI / HTTP requests. If the field is omitted, the backend will automatically set it to the currently authenticated user's `name`.
+O Book Share permite que usuários:
 
-Key points:
+- Cadastrem postagens sobre livros (título, autor do livro, descrição, imagem, etc.).
+- Organizem conteúdo por categorias.
+- Recebam moderação (aprovado/rejeitado) antes da publicação pública.
+- Avaliem os livros (ratings) e comentem nas postagens.
+- Acompanhem atualizações e notificações relevantes.
+- Acessem um painel administrativo protegido para gerenciar usuários, categorias, postagens, comentários e moderação.
 
-- Validation rule: `author` uses `sometimes|nullable|string|max:255`.
-- On store / update the controller applies a fallback: `author = authenticated user name` when the key is absent or null.
-- Tests cover both creation and update without providing `author` to guarantee this behavior.
-- To explicitly override, send a non-empty `author` value in the request payload.
+Destaques de UX/Frontend:
 
-This ensures faster authoring while still allowing custom attribution when needed.
+- Componente de destaques na home com slides automáticos das 5 últimas postagens aprovadas, construído em Blade + Alpine.js, com autoplay, pausa no hover, navegação por teclado, indicadores, e atributos de acessibilidade (ARIA) – priorizando uma experiência fluida e inclusiva.
+- Layout responsivo com Tailwind CSS (suporte a dark mode).
+- Componentização de elementos de interface (ex.: cards de livros, botões, navegação).
 
-## Learning Laravel
+Boas práticas e arquitetura:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Estrutura do Laravel 12 (bootstrap/app.php centraliza config de middleware/rotas, sem Kernel tradicional).
+- Eloquent e relacionamentos com escopos úteis (`approved`, `byAuthor`).
+- Enum para status de moderação (`App\Enums\ModerationStatus`).
+- Policies para autorização, Form Requests para validação e Resources quando necessário.
+- Testes de feature para fluxos críticos (ex.: exibição de últimos posts no carousel, filtros por status).
+- Cache pontual e estratégias leves de otimização (eager loading nas consultas de listagem).
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## ✨ Principais Funcionalidades
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Autenticação e registro de usuários (Laravel Breeze).
+- CRUD de categorias e postagens (com slug único, geração automática e atualização reativa ao título).
+- Moderação de postagens com histórico de logs.
+- Comentários e avaliações (ratings) por postagem.
+- Página inicial pública com grid de livros e um carousel de destaques das últimas postagens aprovadas.
+- Painel administrativo (área `/admin`) protegido para gestão de conteúdo.
+- Notificações por eventos importantes.
 
-## Laravel Sponsors
+## 🧰 Tecnologias & Ferramentas
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- Backend
+	- PHP 8.3
+	- Laravel 12
+	- Eloquent ORM, Migrations, Seeders e Factories
+	- Laravel Breeze (autenticação)
+	- Policies, Gates e Form Requests
 
-### Premium Partners
+- Frontend
+	- Blade
+	- Tailwind CSS 3
+	- Alpine.js 3
+	- Vite
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- Qualidade & DX
+	- PHPUnit 11 (testes)
+	- Laravel Pint (formatação de código)
+	- Laravel Sail (opcional para ambiente Docker)
 
-## Contributing
+## 🏗️ Estrutura e Padrões
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- `app/Models` – Modelos Eloquent (ex.: `Post`, `Category`, `Rating`, `Comment`).
+- `app/Enums` – Enums de domínio (ex.: `ModerationStatus`).
+- `app/Http/Controllers` – Controladores HTTP públicos e administrativos.
+- `app/Policies` – Autorização por recurso.
+- `resources/views` – Views Blade, componentes e layout.
+- `database/factories` e `database/seeders` – Geração de dados consistente para desenvolvimento e testes.
 
-## Code of Conduct
+## 🚀 Executando Localmente (resumo)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Pré-requisitos (sem Docker): PHP 8.3+, Composer, Node 18+ e um banco compatível (ex.: MySQL ou SQLite).
 
-## Security Vulnerabilities
+1. Instalar dependências PHP e JS.
+2. Copiar `.env` e configurar banco/queue/mail.
+3. Gerar key, migrar e (opcional) popular dados com seeders.
+4. Subir o servidor e o build do front (dev ou build de produção).
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Alternativa com Docker: utilizar Laravel Sail para subir serviços e app de forma padronizada.
 
-## License
+> Observação: caso os assets não apareçam no navegador, rode o processo do Vite para compilar Tailwind/JS.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🧪 Testes
+
+- Testes focados em features principais (ex.: exibição das 5 últimas postagens aprovadas na home).
+- Utilize filtros para rodar somente os testes relevantes durante o desenvolvimento.
+
+## 🧹 Qualidade de Código
+
+- Padronização com Laravel Pint. Recomenda-se rodar o formatador antes de commitar alterações.
+
+## 🗺️ Roadmap (ideias futuras)
+
+- Busca avançada por título/autor/categoria.
+- Perfis públicos de usuários e página de autor com suas postagens.
+- Upload/transformação de imagens com otimização (thumbs/responsive).
+- Filtragem/ordenação na home e paginação infinita.
+- A/B testing de layout do carousel e métricas de engajamento.
+
+## 📄 Licença
+
+Projeto desenvolvido para fins de portfólio. A licença poderá ser definida futuramente.
+
+## 👤 Autor
+
+Feito por Leonardo Merces como parte do portfólio profissional. Entre em contato para feedbacks, sugestões ou oportunidades.
+
