@@ -6,6 +6,8 @@
 <div
     x-data="latestPostsCarousel({ interval: 6000 })"
     x-init="init()"
+    x-cloak
+    tabindex="0"
     class="relative w-full overflow-hidden rounded-xl bg-gradient-to-br from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 shadow ring-1 ring-black/5 dark:ring-white/5"
     aria-roledescription="carousel"
 >
@@ -113,12 +115,18 @@
             paused: false,
             init() {
                 if (this.total > 1) {
-                    this.start();
+                    // respeita preferências do usuário
+                    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                    if (!reduceMotion) { this.start(); }
                     this.$el.addEventListener('mouseenter', () => { this.paused = true; this.stop(); });
                     this.$el.addEventListener('mouseleave', () => { this.paused = false; this.start(); });
                     this.$el.addEventListener('keydown', (e) => {
                         if (e.key === 'ArrowRight') { this.next(); }
                         if (e.key === 'ArrowLeft') { this.prev(); }
+                    });
+                    document.addEventListener('visibilitychange', () => {
+                        if (document.hidden) { this.stop(); }
+                        else if (!this.paused && !reduceMotion) { this.start(); }
                     });
                 }
             },

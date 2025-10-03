@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRatingRequest;
-use App\Models\{Post, Rating};
+use App\Models\Post;
+use App\Services\Rating\RatingService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\{Auth, Cache};
+use Illuminate\Support\Facades\Auth;
 
 class RatingController extends Controller
 {
-    public function store(StoreRatingRequest $request, Post $post): RedirectResponse
+    public function store(StoreRatingRequest $request, Post $post, RatingService $ratings): RedirectResponse
     {
         $this->authorize('rate', $post);
 
@@ -18,19 +19,8 @@ class RatingController extends Controller
             return redirect()->back()->with('error', __('posts.messages.rating_self_forbidden'));
         }
 
-        $data = $request->validated();
-
-        $existing = Rating::where('post_id', $post->id)->where('user_id', Auth::id())->first();
-
-        Rating::updateOrCreate(
-            ['post_id' => $post->id, 'user_id' => Auth::id()],
-            ['stars' => $data['stars']]
-        );
-
-        // Invalidar cache simples (sem tags) das métricas deste post
-        Cache::forget('post:ratings:avg:' . $post->id);
-        Cache::forget('post:ratings:count:' . $post->id);
-
+        $data       = $request->validated();
+        $existing   = $ratings->set($post, Auth::id(), (int) $data['stars']);
         $messageKey = $existing ? 'posts.messages.rating_updated' : 'posts.messages.rating_saved';
 
         return redirect()->back()->with('success', __($messageKey));
