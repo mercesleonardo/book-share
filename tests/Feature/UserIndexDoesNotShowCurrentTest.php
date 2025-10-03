@@ -19,7 +19,7 @@ class UserIndexDoesNotShowCurrentTest extends TestCase
 
         $this->actingAs($admin);
 
-        $response = $this->get(route('users.index', absolute: false));
+        $response = $this->get(route('admin.users.index', absolute: false));
 
         $response->assertStatus(200);
         $response->assertSee('Other Person');

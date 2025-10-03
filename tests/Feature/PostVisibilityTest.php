@@ -24,7 +24,7 @@ class PostVisibilityTest extends TestCase
         Post::factory()->count(3)->create(['user_id' => $other->id]);
 
         $this->actingAs($user)
-            ->get(route('posts.index'))
+            ->get(route('admin.posts.index'))
             ->assertOk()
             ->assertSee($mine[0]->title)
             ->assertSee($mine[1]->title)
@@ -38,7 +38,7 @@ class PostVisibilityTest extends TestCase
         $posts = Post::factory()->count(2)->create(['user_id' => $user->id]);
 
         $this->actingAs($admin)
-            ->get(route('posts.index'))
+            ->get(route('admin.posts.index'))
             ->assertOk()
             ->assertSee($posts[0]->title)
             ->assertSee($posts[1]->title);
@@ -52,7 +52,7 @@ class PostVisibilityTest extends TestCase
         $otherPost = Post::factory()->create(['user_id' => $other->id]);
 
         $this->actingAs($user)
-            ->get(route('posts.index', ['user' => $other->id]))
+            ->get(route('admin.posts.index', ['user' => $other->id]))
             ->assertOk()
             ->assertSee($mine->title)
             ->assertDontSeeText($otherPost->title);

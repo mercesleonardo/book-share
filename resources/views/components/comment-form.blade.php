@@ -1,7 +1,7 @@
 @props(['post'])
 
 @auth
-<form method="POST" action="{{ route('comments.store') }}" class="space-y-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm">
+<form method="POST" action="{{ route('admin.comments.store') }}" class="space-y-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm">
     @csrf
     <input type="hidden" name="post_id" value="{{ $post->id }}">
     <div>

@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="p-6 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <form method="POST" action="{{ route('posts.update', $post) }}" enctype="multipart/form-data"
+                <form method="POST" action="{{ route('admin.posts.update', $post) }}" enctype="multipart/form-data"
                     class="space-y-6">
                     @csrf
                     @method('PATCH')
@@ -54,7 +54,7 @@
                         <x-input-error :messages="$errors->update->get('image')" />
                     </div>
                     <div class="flex items-center justify-end gap-4 md:gap-6 md:col-span-2">
-                        <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('posts.index') }}'">{{ __('Cancel') }}</x-secondary-button>
+                        <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('admin.posts.index') }}'">{{ __('Cancel') }}</x-secondary-button>
                         <x-primary-button>{{ __('Update') }}</x-primary-button>
                     </div>
                 </form>

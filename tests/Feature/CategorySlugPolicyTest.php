@@ -50,7 +50,7 @@ class CategorySlugPolicyTest extends TestCase
         $user = User::factory()->create(['role' => UserRole::USER]);
         $this->actingAs($user);
 
-        $response = $this->post(route('categories.store'), ['name' => 'Test']);
+        $response = $this->post(route('admin.categories.store'), ['name' => 'Test']);
         $response->assertForbidden();
     }
 
@@ -60,8 +60,8 @@ class CategorySlugPolicyTest extends TestCase
         $admin = User::factory()->create(['role' => UserRole::ADMIN]);
         $this->actingAs($admin);
 
-        $response = $this->post(route('categories.store'), ['name' => 'Allowed']);
-        $response->assertRedirect(route('categories.index'));
+        $response = $this->post(route('admin.categories.store'), ['name' => 'Allowed']);
+        $response->assertRedirect(route('admin.categories.index'));
         $this->assertDatabaseHas('categories', ['name' => 'Allowed']);
     }
 }

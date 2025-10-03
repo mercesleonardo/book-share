@@ -35,7 +35,7 @@ class AdvancedModerationTest extends TestCase
         Cache::put('dashboard.top_categories', ['dummy'], 60);
 
         $this->actingAs($moderator)
-            ->patch(route('posts.approve', $post))
+            ->patch(route('admin.posts.approve', $post))
             ->assertRedirect();
 
         $post->refresh();
@@ -60,7 +60,7 @@ class AdvancedModerationTest extends TestCase
         $rejected  = Post::factory()->create(['moderation_status' => ModerationStatus::Rejected]);
 
         $this->actingAs($moderator)
-            ->get(route('posts.index', ['status' => 'approved']))
+            ->get(route('admin.posts.index', ['status' => 'approved']))
             ->assertOk()
             ->assertSee($approved->title)
             ->assertDontSee($rejected->title);
@@ -74,11 +74,11 @@ class AdvancedModerationTest extends TestCase
         // Simular exceder limite (20/min) rapidamente
         for ($i = 0; $i < 20; $i++) {
             $target = Post::factory()->create();
-            $this->actingAs($moderator)->patch(route('posts.approve', $target));
+            $this->actingAs($moderator)->patch(route('admin.posts.approve', $target));
         }
 
         $extra    = Post::factory()->create();
-        $response = $this->actingAs($moderator)->patch(route('posts.approve', $extra));
+        $response = $this->actingAs($moderator)->patch(route('admin.posts.approve', $extra));
         $this->assertTrue(in_array($response->getStatusCode(), [200, 302, 429]), 'Unexpected status: ' . $response->getStatusCode());
         // Se 429, confirmou rate limit; se não, pelo menos não deve falhar. Opcional: reforçar cenário congelando tempo para consistência.
     }

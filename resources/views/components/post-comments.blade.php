@@ -25,7 +25,7 @@
                                 <time datetime="{{ $comment->created_at }}" title="{{ $comment->created_at }}">{{ $comment->created_at->diffForHumans() }}</time>
                             </div>
                             @can('delete', $comment)
-                                <form method="POST" action="{{ route('comments.destroy', $comment) }}" onsubmit="return confirm('{{ __('comments.form.delete_confirm') }}');" class="ml-2">
+                                <form method="POST" action="{{ route('admin.comments.destroy', $comment) }}" onsubmit="return confirm('{{ __('comments.form.delete_confirm') }}');" class="ml-2">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-xs text-red-600 dark:text-red-400 hover:underline opacity-70 group-hover:opacity-100 transition">{{ __('comments.form.delete') }}</button>

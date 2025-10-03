@@ -18,7 +18,7 @@ class UserFiltersTest extends TestCase
         $noMatch = User::factory()->create(['name' => 'Bob Smith']);
 
         $response = $this->actingAs($admin)
-            ->get(route('users.index', ['name' => 'Alice']));
+            ->get(route('admin.users.index', ['name' => 'Alice']));
 
         $response->assertOk();
         $response->assertSee($match->name);
@@ -32,7 +32,7 @@ class UserFiltersTest extends TestCase
         $user      = User::factory()->create(['role' => UserRole::USER]);
 
         $response = $this->actingAs($admin)
-            ->get(route('users.index', ['role' => UserRole::MODERATOR->value]));
+            ->get(route('admin.users.index', ['role' => UserRole::MODERATOR->value]));
 
         $response->assertOk();
         $response->assertSee($moderator->email);

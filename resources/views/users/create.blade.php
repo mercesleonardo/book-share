@@ -20,7 +20,7 @@
                 </x-alert>
             @endif
             <div class="p-6 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data"
+                <form action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data"
                     class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     @csrf
                     <!-- Name -->
@@ -59,7 +59,7 @@
                     <!-- Buttons -->
                     <div class="flex justify-end gap-2 md:col-span-2 pt-2">
                         <x-secondary-button x-data=""
-                            x-on:click.prevent="window.location.href='{{ route('users.index') }}'">
+                            x-on:click.prevent="window.location.href='{{ route('admin.users.index') }}'">
                             {{ __('Cancel') }}
                         </x-secondary-button>
                         <x-primary-button>{{ __('Create') }}</x-primary-button>

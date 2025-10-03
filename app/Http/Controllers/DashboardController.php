@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Post, User};
-use Illuminate\Support\Facades\{Auth, Cache};
 use Illuminate\View\View;
+use App\Models\{Post, User};
+use App\Enums\ModerationStatus;
+use Illuminate\Support\Facades\{Auth, Cache};
 
 class DashboardController extends Controller
 {
@@ -94,7 +95,7 @@ class DashboardController extends Controller
             // Moderation queue: posts with pending status
             $moderationQueue = Post::query()
                 ->with('user:id,name')
-                ->where('moderation_status', \App\Enums\ModerationStatus::Pending)
+                ->where('moderation_status', ModerationStatus::Pending)
                 ->latest()
                 ->limit(10)
                 ->get(['id', 'title', 'slug', 'created_at', 'user_id', 'moderation_status']);

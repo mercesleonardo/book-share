@@ -114,7 +114,7 @@ class PostController extends Controller
         }
         Post::create($data);
 
-        return redirect()->route('posts.index')->with('success', __('posts.messages.created'));
+        return redirect()->route('admin.posts.index')->with('success', __('posts.messages.created'));
     }
 
     public function edit(Post $post): View
@@ -192,7 +192,7 @@ class PostController extends Controller
             Storage::disk('public')->delete($oldImage);
         }
 
-        return redirect()->route('posts.index')->with('success', __('posts.messages.updated'));
+        return redirect()->route('admin.posts.index')->with('success', __('posts.messages.updated'));
     }
 
     public function destroy(Post $post): RedirectResponse
@@ -203,6 +203,6 @@ class PostController extends Controller
             Storage::disk('public')->delete($post->image);
         }
 
-        return redirect()->route('posts.index')->with('success', __('posts.messages.deleted'));
+        return redirect()->route('admin.posts.index')->with('success', __('posts.messages.deleted'));
     }
 }

@@ -3,9 +3,9 @@
         <div class="flex flex-col gap-2">
             <!-- Breadcrumbs -->
             <nav class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1" aria-label="Breadcrumb">
-                <a href="{{ route('dashboard') }}" class="hover:text-gray-700 dark:hover:text-gray-200">{{ __('Dashboard') }}</a>
+                <a href="{{ route('admin.dashboard') }}" class="hover:text-gray-700 dark:hover:text-gray-200">{{ __('Dashboard') }}</a>
                 <span>/</span>
-                <a href="{{ route('posts.index') }}" class="hover:text-gray-700 dark:hover:text-gray-200">{{ __('posts.title') }}</a>
+                <a href="{{ route('admin.posts.index') }}" class="hover:text-gray-700 dark:hover:text-gray-200">{{ __('posts.title') }}</a>
                 <span>/</span>
                 <span class="text-gray-700 dark:text-gray-300 truncate max-w-[180px]" title="{{ $post->title }}">{{ $post->title }}</span>
             </nav>
@@ -47,7 +47,7 @@
                 <nav class="flex items-center justify-between mt-10 text-sm" aria-label="Post navigation">
                     <div>
                         @if($previous)
-                            <a href="{{ route('posts.show', $previous) }}" class="group inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">
+                            <a href="{{ route('admin.posts.show', $previous) }}" class="group inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">
                                 <span class="text-xs" aria-hidden="true">&larr;</span>
                                 {{ __('posts.navigation.previous') }}
                             </a>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="text-right">
                         @if($next)
-                            <a href="{{ route('posts.show', $next) }}" class="group inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">
+                            <a href="{{ route('admin.posts.show', $next) }}" class="group inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">
                                 {{ __('posts.navigation.next') }}
                                 <span class="text-xs" aria-hidden="true">&rarr;</span>
                             </a>
@@ -68,7 +68,7 @@
                     <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide uppercase mb-4">{{ __('posts.related.title') }}</h2>
                     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         @forelse($related as $r)
-                            <a href="{{ route('posts.show', $r) }}" class="block p-4 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-400 dark:hover:border-blue-500 transition group">
+                            <a href="{{ route('admin.posts.show', $r) }}" class="block p-4 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-400 dark:hover:border-blue-500 transition group">
                                 <div class="text-sm font-medium text-gray-800 dark:text-gray-100 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">{{ $r->title }}</div>
                             </a>
                         @empty
@@ -87,9 +87,9 @@
                 <x-post-ratings-summary :post="$post" />
 
                 <div class="flex flex-wrap gap-3">
-                    <a href="{{ route('posts.index') }}" class="inline-flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">&larr; {{ __('posts.actions.back') }}</a>
+                    <a href="{{ route('admin.posts.index') }}" class="inline-flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">&larr; {{ __('posts.actions.back') }}</a>
                     @can('update', $post)
-                        <a href="{{ route('posts.edit', $post) }}" class="inline-flex items-center px-3 py-1.5 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">{{ __('posts.actions.edit') }}</a>
+                        <a href="{{ route('admin.posts.edit', $post) }}" class="inline-flex items-center px-3 py-1.5 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">{{ __('posts.actions.edit') }}</a>
                     @endcan
                 </div>
             </aside>

@@ -31,7 +31,7 @@ class NewCommentNotification extends Notification implements ShouldQueue
             ->greeting(__('Hello :name', ['name' => $notifiable->name]))
             ->line(__('Your post ":title" received a new comment.', ['title' => $post->title]))
             ->line($this->comment->content)
-            ->action(__('View post'), route('posts.show', $post))
+            ->action(__('View post'), route('admin.posts.show', $post))
             ->line(__('Thank you for using our application!'));
     }
 

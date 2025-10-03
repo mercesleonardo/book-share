@@ -73,7 +73,7 @@ class UserController extends Controller
         // Send notification to set initial password
         $user->notify(new InitialPasswordSetupNotification($token));
 
-        return redirect()->route('users.index')->with('success', __('users.created'));
+        return redirect()->route('admin.users.index')->with('success', __('users.created'));
     }
 
     /**
@@ -99,7 +99,7 @@ class UserController extends Controller
         $validated['role'] = UserRole::from($validated['role']);
         $user->update($validated);
 
-        return redirect()->route('users.index')->with('success', __('users.updated'));
+        return redirect()->route('admin.users.index')->with('success', __('users.updated'));
     }
 
     /**
@@ -110,7 +110,7 @@ class UserController extends Controller
         $this->authorize('restore', $user);
         $user->restore();
 
-        return redirect()->route('users.index')->with('success', __('users.restored'));
+        return redirect()->route('admin.users.index')->with('success', __('users.restored'));
     }
 
     /**
@@ -126,6 +126,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', __('users.deleted'));
+        return redirect()->route('admin.users.index')->with('success', __('users.deleted'));
     }
 }

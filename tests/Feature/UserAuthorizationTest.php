@@ -42,7 +42,7 @@ class UserAuthorizationTest extends TestCase
 
         $this->actingAs($user);
 
-        $this->get(route('users.create', absolute: false))->assertForbidden();
+        $this->get(route('admin.users.create', absolute: false))->assertForbidden();
 
         $payload = [
             'name'  => 'John Doe',
@@ -50,7 +50,7 @@ class UserAuthorizationTest extends TestCase
             'role'  => UserRole::USER->value,
         ];
 
-        $this->post(route('users.store', absolute: false), $payload)->assertForbidden();
+        $this->post(route('admin.users.store', absolute: false), $payload)->assertForbidden();
     }
 
     public function test_regular_user_cannot_edit_update_destroy(): void
@@ -62,15 +62,15 @@ class UserAuthorizationTest extends TestCase
 
         $this->actingAs($user);
 
-        $this->get(route('users.edit', ['user' => $target->id], absolute: false))->assertForbidden();
+        $this->get(route('admin.users.edit', ['user' => $target->id], absolute: false))->assertForbidden();
 
         $update = [
             'name'  => 'New Name',
             'email' => $target->email,
             'role'  => UserRole::USER->value,
         ];
-        $this->patch(route('users.update', ['user' => $target->id], absolute: false), $update)->assertForbidden();
+        $this->patch(route('admin.users.update', ['user' => $target->id], absolute: false), $update)->assertForbidden();
 
-        $this->delete(route('users.destroy', ['user' => $target->id], absolute: false))->assertForbidden();
+        $this->delete(route('admin.users.destroy', ['user' => $target->id], absolute: false))->assertForbidden();
     }
 }

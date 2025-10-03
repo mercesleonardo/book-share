@@ -18,7 +18,7 @@ class CommentOwnerForbiddenDeletionTest extends TestCase
         $comment = Comment::factory()->for($post)->for($other)->create();
 
         /** @var User $owner */
-        $response = $this->actingAs($owner)->delete(route('comments.destroy', $comment));
+        $response = $this->actingAs($owner)->delete(route('admin.comments.destroy', $comment));
         $response->assertStatus(403);
 
         $this->assertDatabaseHas('comments', [

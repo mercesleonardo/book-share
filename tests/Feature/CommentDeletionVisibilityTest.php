@@ -19,7 +19,7 @@ class CommentDeletionVisibilityTest extends TestCase
         $post    = Post::factory()->for($author)->create();
         $comment = Comment::factory()->for($post)->for($author)->create();
 
-        $response = $this->actingAs($admin)->get(route('posts.show', $post));
+        $response = $this->actingAs($admin)->get(route('admin.posts.show', $post));
         $response->assertStatus(200);
         $response->assertSee(__('comments.form.delete'));
     }
@@ -32,7 +32,7 @@ class CommentDeletionVisibilityTest extends TestCase
         $post      = Post::factory()->for($author)->create();
         $comment   = Comment::factory()->for($post)->for($author)->create();
 
-        $response = $this->actingAs($moderator)->get(route('posts.show', $post));
+        $response = $this->actingAs($moderator)->get(route('admin.posts.show', $post));
         $response->assertStatus(200);
         $response->assertSee(__('comments.form.delete'));
     }
@@ -48,7 +48,7 @@ class CommentDeletionVisibilityTest extends TestCase
         $post    = Post::factory()->for($owner)->create();
         $comment = Comment::factory()->for($post)->for($other)->create();
 
-        $response = $this->actingAs($viewer)->get(route('posts.show', $post));
+        $response = $this->actingAs($viewer)->get(route('admin.posts.show', $post));
         $response->assertStatus(200);
         $response->assertDontSee(__('comments.form.delete'));
     }
@@ -61,7 +61,7 @@ class CommentDeletionVisibilityTest extends TestCase
         $post    = Post::factory()->for($owner)->create();
         $comment = Comment::factory()->for($post)->for($other)->create();
 
-        $response = $this->actingAs($owner)->get(route('posts.show', $post));
+        $response = $this->actingAs($owner)->get(route('admin.posts.show', $post));
         $response->assertStatus(200);
         $response->assertDontSee(__('comments.form.delete'));
     }

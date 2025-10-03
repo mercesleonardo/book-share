@@ -29,7 +29,7 @@ class PostFiltersTest extends TestCase
         Post::factory()->count(2)->create(['category_id' => $catA->id]);
         Post::factory()->count(3)->create(['category_id' => $catB->id]);
 
-        $response = $this->get(route('posts.index', ['category' => $catA->id]));
+        $response = $this->get(route('admin.posts.index', ['category' => $catA->id]));
         $response->assertOk();
         // Garante que somente categoria A aparece nos resultados (não confia no <select> que lista todas as categorias)
         $response->assertViewHas('posts', function ($p) use ($catA, $catB) {

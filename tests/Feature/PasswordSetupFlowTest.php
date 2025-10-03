@@ -21,11 +21,11 @@ class PasswordSetupFlowTest extends TestCase
         $admin = User::factory()->create(['role' => UserRole::ADMIN]);
         $this->actingAs($admin);
 
-        $this->post(route('users.store', absolute: false), [
+        $this->post(route('admin.users.store', absolute: false), [
             'name'  => 'Managed User',
             'email' => 'managed2@example.com',
             'role'  => UserRole::USER->value,
-        ])->assertRedirect(route('users.index', absolute: false));
+        ])->assertRedirect(route('admin.users.index', absolute: false));
 
         $user = User::whereEmail('managed2@example.com')->first();
         $this->assertNotNull($user);
@@ -66,7 +66,7 @@ class PasswordSetupFlowTest extends TestCase
             'email'                 => 'public@example.com',
             'password'              => 'password1234',
             'password_confirmation' => 'password1234',
-        ])->assertRedirect(route('dashboard', absolute: false));
+        ])->assertRedirect(route('admin.dashboard', absolute: false));
 
         $user = User::whereEmail('public@example.com')->first();
         $this->assertNotNull($user);

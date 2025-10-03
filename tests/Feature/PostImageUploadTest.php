@@ -79,7 +79,7 @@ class PostImageUploadTest extends TestCase
         ]);
 
         $file     = UploadedFile::fake()->image('added.png');
-        $response = $this->patch(route('posts.update', $post), [
+        $response = $this->patch(route('admin.posts.update', $post), [
             'title'       => 'Initial',
             'book_author' => 'Tester',
             'description' => 'Body',
@@ -113,7 +113,7 @@ class PostImageUploadTest extends TestCase
         ]);
 
         $first = UploadedFile::fake()->image('first.png');
-        $this->patch(route('posts.update', $post), [
+        $this->patch(route('admin.posts.update', $post), [
             'title'       => 'Initial',
             'book_author' => 'Tester',
             'description' => 'Body',
@@ -126,7 +126,7 @@ class PostImageUploadTest extends TestCase
         $this->assertTrue(Storage::disk('public')->exists($oldPath));
 
         $second = UploadedFile::fake()->image('second.png');
-        $this->patch(route('posts.update', $post), [
+        $this->patch(route('admin.posts.update', $post), [
             'title'       => 'Initial',
             'book_author' => 'Tester',
             'description' => 'Body',

@@ -19,7 +19,7 @@ class PostAuthorFallbackTest extends TestCase
         /** @var Category $category */
         $category = Category::create(['name' => 'Gen']);
 
-        $response = $this->post(route('posts.store'), [
+        $response = $this->post(route('admin.posts.store'), [
             'title'       => 'No Author Title',
             'description' => 'Body',
             'category_id' => $category->id,
@@ -51,7 +51,7 @@ class PostAuthorFallbackTest extends TestCase
             'user_rating' => 5,
         ]);
 
-        $response = $this->patch(route('posts.update', $post), [
+        $response = $this->patch(route('admin.posts.update', $post), [
             'title'       => 'Changed Title',
             'description' => 'd2',
             'category_id' => $category->id,

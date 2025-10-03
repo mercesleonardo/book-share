@@ -17,7 +17,7 @@ class PostRatingTest extends TestCase
         $category = Category::factory()->create();
 
         $this->actingAs($user)
-            ->post(route('posts.store'), [
+            ->post(route('admin.posts.store'), [
                 'title'       => 'Sample',
                 'book_author' => 'Someone',
                 'description' => 'Desc',
@@ -47,7 +47,7 @@ class PostRatingTest extends TestCase
         ]);
 
         $this->actingAs($other)
-            ->post(route('posts.ratings.store', $post), [
+            ->post(route('admin.posts.ratings.store', $post), [
                 'stars' => 3,
             ])->assertRedirect();
 
@@ -76,11 +76,11 @@ class PostRatingTest extends TestCase
         ]);
 
         $this->actingAs($other)
-            ->post(route('posts.ratings.store', $post), ['stars' => 2])
+            ->post(route('admin.posts.ratings.store', $post), ['stars' => 2])
             ->assertRedirect();
 
         $this->actingAs($other)
-            ->post(route('posts.ratings.store', $post), ['stars' => 5])
+            ->post(route('admin.posts.ratings.store', $post), ['stars' => 5])
             ->assertRedirect();
 
         $this->assertEquals(5.0, $post->fresh()->community_average_rating);
@@ -100,7 +100,7 @@ class PostRatingTest extends TestCase
         ]);
 
         $this->actingAs($author)
-            ->post(route('posts.ratings.store', $post), ['stars' => 4])
+            ->post(route('admin.posts.ratings.store', $post), ['stars' => 4])
             ->assertForbidden(); // author is forbidden by policy
 
         $this->assertDatabaseMissing('ratings', [
@@ -124,12 +124,12 @@ class PostRatingTest extends TestCase
         ]);
 
         $this->actingAs($other)
-            ->post(route('posts.ratings.store', $post), ['stars' => 0])
+            ->post(route('admin.posts.ratings.store', $post), ['stars' => 0])
             ->assertStatus(302) // FormRequest redirects back
             ->assertSessionHasErrors('stars');
 
         $this->actingAs($other)
-            ->post(route('posts.ratings.store', $post), ['stars' => 6])
+            ->post(route('admin.posts.ratings.store', $post), ['stars' => 6])
             ->assertStatus(302)
             ->assertSessionHasErrors('stars');
     }
@@ -153,7 +153,7 @@ class PostRatingTest extends TestCase
         foreach ($raters as $idx => $user) {
             /** @var User $user */
             $this->actingAs($user)
-                ->post(route('posts.ratings.store', $post), ['stars' => $stars[$idx]])
+                ->post(route('admin.posts.ratings.store', $post), ['stars' => $stars[$idx]])
                 ->assertRedirect();
         }
 
@@ -199,7 +199,7 @@ class PostRatingTest extends TestCase
 
         // Adiciona uma avaliação
         $this->actingAs($other)
-            ->post(route('posts.ratings.store', $post), ['stars' => 4])
+            ->post(route('admin.posts.ratings.store', $post), ['stars' => 4])
             ->assertRedirect();
 
         $fresh = $post->fresh();

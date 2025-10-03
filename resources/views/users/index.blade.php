@@ -20,13 +20,13 @@
                         <x-users-filter :roles="$roles" :name="request('name')" :role="request('role')" :active-filters="$activeFilters" />
 
                         <div class="flex justify-between items-center">
-                            <x-create-button x-data="" x-on:click.prevent="window.location.href='{{ route('users.create') }}'">
+                            <x-create-button x-data="" x-on:click.prevent="window.location.href='{{ route('admin.users.create') }}'">
                                 {{ __('Create User') }}
                             </x-create-button>
                         </div>
                     </div>
 
-                    <x-active-filters :filters="$activeFilters" route="users.index" />
+                    <x-active-filters :filters="$activeFilters" route="admin.users.index" />
                     <div class="overflow-x-auto">
                         <table class="min-w-full bg-white dark:bg-gray-700 rounded shadow">
                             <thead>
@@ -51,19 +51,19 @@
                                         <td class="py-2 px-4 border-b">
                                             <div class="flex flex-wrap gap-2">
                                             @if ($user->trashed())
-                                                <form method="POST" action="{{ route('users.restore', $user->id) }}" class="inline">
+                                                <form method="POST" action="{{ route('admin.users.restore', $user->id) }}" class="inline">
                                                     @csrf
                                                     @method('PATCH')
                                                     <x-primary-button>{{ __('Restore') }}</x-primary-button>
                                                 </form>
                                             @else
                                                 @can('update', $user)
-                                                    <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('users.edit', $user->id) }}'">{{ __('Edit') }}</x-secondary-button>
+                                                    <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('admin.users.edit', $user->id) }}'">{{ __('Edit') }}</x-secondary-button>
                                                 @endcan
                                                 @can('delete', $user)
                                                     <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'delete-user-{{ $user->id }}')">{{ __('Delete') }}</x-danger-button>
                                                     <x-modal name="delete-user-{{ $user->id }}" :show="false" focusable>
-                                                        <form method="POST" action="{{ route('users.destroy', $user->id) }}" class="p-6">
+                                                        <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}" class="p-6">
                                                             @csrf
                                                             @method('DELETE')
                                                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('Delete User') }}</h2>

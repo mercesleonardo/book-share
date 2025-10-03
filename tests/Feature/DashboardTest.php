@@ -29,7 +29,7 @@ class DashboardTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->get(route('dashboard'))
+            ->get(route('admin.dashboard'))
             ->assertOk()
             ->assertSee(__('dashboard.metrics.total_posts'))
             ->assertSee(__('dashboard.metrics.last_30_days'))
@@ -49,7 +49,7 @@ class DashboardTest extends TestCase
         ]);
 
         $this->actingAs($admin)
-            ->get(route('dashboard'))
+            ->get(route('admin.dashboard'))
             ->assertOk()
             ->assertSee(__('dashboard.metrics.global_total_posts'))
             ->assertSee(__('dashboard.metrics.total_users'))
@@ -71,7 +71,7 @@ class DashboardTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->get(route('dashboard'))
+            ->get(route('admin.dashboard'))
             ->assertOk()
             ->assertDontSee(__('dashboard.metrics.global_total_posts'))
             ->assertDontSee(__('dashboard.metrics.total_users'))
@@ -87,7 +87,7 @@ class DashboardTest extends TestCase
         Post::factory()->count(3)->create(['user_id' => $admin->id, 'category_id' => $categoryA->id, 'description' => str_repeat('a', 60)]);
         Post::factory()->count(2)->create(['user_id' => $admin->id, 'category_id' => $categoryB->id, 'description' => str_repeat('b', 60)]);
         $this->actingAs($admin)
-            ->get(route('dashboard'))
+            ->get(route('admin.dashboard'))
             ->assertOk()
             ->assertSee(trans('dashboard.sections.trend_14_days'))
             ->assertSee(trans('dashboard.sections.top_categories'))
@@ -103,11 +103,11 @@ class DashboardTest extends TestCase
         Post::factory()->count(5)->create(['user_id' => $admin->id, 'category_id' => $category->id, 'description' => str_repeat('x', 60)]);
 
         DB::enableQueryLog();
-        $this->actingAs($admin)->get(route('dashboard'))->assertOk();
+        $this->actingAs($admin)->get(route('admin.dashboard'))->assertOk();
         $first = collect(DB::getQueryLog())->count();
 
         DB::flushQueryLog();
-        $this->actingAs($admin)->get(route('dashboard'))->assertOk();
+        $this->actingAs($admin)->get(route('admin.dashboard'))->assertOk();
         $second = collect(DB::getQueryLog())->count();
 
         // Espera menos ou igual (nunca mais) e pelo menos 1 consulta de redução típica

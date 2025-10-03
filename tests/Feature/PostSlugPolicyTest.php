@@ -53,13 +53,13 @@ class PostSlugPolicyTest extends TestCase
         /** @var Category $category */
         $category = Category::create(['name' => 'General']);
 
-        $response = $this->post(route('posts.store'), [
+        $response = $this->post(route('admin.posts.store'), [
             'title'       => 'User Post',
             'description' => 'Body',
             'category_id' => $category->id,
             'user_rating' => 5,
         ]);
-        $response->assertRedirect(route('posts.index'));
+        $response->assertRedirect(route('admin.posts.index'));
         $this->assertDatabaseHas('posts', ['title' => 'User Post', 'user_id' => $user->id]);
     }
 
@@ -100,17 +100,17 @@ class PostSlugPolicyTest extends TestCase
         $post = Post::create(['title' => 'Moderated', 'book_author' => 'Moderation Author', 'description' => 'd', 'category_id' => $category->id, 'user_id' => $owner->id, 'user_rating' => 3]);
 
         $this->actingAs($moderator);
-        $update = $this->patch(route('posts.update', $post), [
+        $update = $this->patch(route('admin.posts.update', $post), [
             'title'       => 'Moderated Updated',
             'description' => 'd2',
             'category_id' => $category->id,
         ]);
-        $update->assertRedirect(route('posts.index'));
+        $update->assertRedirect(route('admin.posts.index'));
         $this->assertDatabaseHas('posts', ['id' => $post->id, 'title' => 'Moderated Updated']);
 
         $post->refresh();
-        $delete = $this->delete(route('posts.destroy', $post));
-        $delete->assertRedirect(route('posts.index'));
+        $delete = $this->delete(route('admin.posts.destroy', $post));
+        $delete->assertRedirect(route('admin.posts.index'));
         $this->assertDatabaseMissing('posts', ['id' => $post->id]);
     }
 

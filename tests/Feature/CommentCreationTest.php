@@ -16,7 +16,7 @@ class CommentCreationTest extends TestCase
         $post = Post::factory()->for($user)->create();
 
         /** @var \App\Models\User $user */
-        $response = $this->actingAs($user)->post(route('comments.store'), [
+        $response = $this->actingAs($user)->post(route('admin.comments.store'), [
             'post_id' => $post->id,
             'content' => 'Meu comentário simples.',
         ]);
@@ -35,7 +35,7 @@ class CommentCreationTest extends TestCase
         $post = Post::factory()->for($user)->create();
 
         /** @var \App\Models\User $user */
-        $response = $this->actingAs($user)->post(route('comments.store'), [
+        $response = $this->actingAs($user)->post(route('admin.comments.store'), [
             'post_id' => $post->id,
             'user_id' => 9999,
             'content' => 'Outro comentário.',

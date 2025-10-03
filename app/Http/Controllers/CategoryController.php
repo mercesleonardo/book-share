@@ -50,7 +50,7 @@ class CategoryController extends Controller
     {
         $category = Category::create($request->validated());
 
-        return redirect()->route('categories.index')->with('success', __('categories.messages.created'));
+        return redirect()->route('admin.categories.index')->with('success', __('categories.messages.created'));
     }
 
     public function edit(Category $category): View
@@ -62,13 +62,13 @@ class CategoryController extends Controller
     {
         $category->update($request->validated());
 
-        return redirect()->route('categories.index')->with('success', __('categories.messages.updated'));
+        return redirect()->route('admin.categories.index')->with('success', __('categories.messages.updated'));
     }
 
     public function destroy(Category $category): RedirectResponse
     {
         $category->delete();
 
-        return redirect()->route('categories.index')->with('success', __('categories.messages.deleted'));
+        return redirect()->route('admin.categories.index')->with('success', __('categories.messages.deleted'));
     }
 }

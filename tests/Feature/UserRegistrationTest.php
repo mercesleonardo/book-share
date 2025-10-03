@@ -26,7 +26,7 @@ class UserRegistrationTest extends TestCase
             'role'                  => 'user',
         ]);
 
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(route('admin.dashboard', absolute: false));
         $this->assertAuthenticated();
 
         $user = User::where('email', 'testuser@example.com')->first();
@@ -45,7 +45,7 @@ class UserRegistrationTest extends TestCase
             'role'                  => 'user',
         ]);
 
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(route('admin.dashboard', absolute: false));
         $this->assertAuthenticated();
 
         $user = User::where('email', 'nophoto@example.com')->first();

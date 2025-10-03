@@ -3,7 +3,7 @@
     'activeFilters' => collect(),
 ])
 
-<form method="GET" action="{{ route('categories.index') }}" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+<form method="GET" action="{{ route('admin.categories.index') }}" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
     <div class="flex flex-col gap-1">
         <x-input-label for="category" :value="__('posts.fields.category')" />
         <select id="category" name="category"
@@ -16,7 +16,7 @@
     </div>
     <div class="md:col-span-1 flex items-end gap-2">
         <x-primary-button>{{ __('categories.filters.filter') }}</x-primary-button>
-        <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('categories.index') }}'">{{ __('categories.filters.reset') }}</x-secondary-button>
+        <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('admin.categories.index') }}'">{{ __('categories.filters.reset') }}</x-secondary-button>
         @if($activeFilters->isNotEmpty())
             <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">
                 {{ $activeFilters->count() }}

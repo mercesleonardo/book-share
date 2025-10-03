@@ -20,7 +20,7 @@
                 </x-alert>
             @endif
             <div class="p-6 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data"
+                <form action="{{ route('admin.users.update', $user->id) }}" method="POST" enctype="multipart/form-data"
                     class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     @csrf
                     @method('PATCH')
@@ -60,7 +60,7 @@
 
                     <!-- Buttons -->
                     <div class="flex items-center justify-end gap-4 md:gap-6 md:col-span-2">
-                        <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('users.index') }}'">
+                        <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('admin.users.index') }}'">
                             {{ __('Cancel') }}
                         </x-secondary-button>
                         <x-primary-button>{{ __('Update') }}</x-primary-button>

@@ -24,9 +24,9 @@ class UserRestoreTest extends TestCase
 
         $this->actingAs($admin);
 
-        $response = $this->patch(route('users.restore', ['user' => $target->id], absolute: false));
+        $response = $this->patch(route('admin.users.restore', ['user' => $target->id], absolute: false));
 
-        $response->assertRedirect(route('users.index', absolute: false));
+        $response->assertRedirect(route('admin.users.index', absolute: false));
         $this->assertNull($target->fresh()->deleted_at);
     }
 
@@ -42,7 +42,7 @@ class UserRestoreTest extends TestCase
 
         $this->actingAs($user);
 
-        $this->patch(route('users.restore', ['user' => $target->id], absolute: false))
+        $this->patch(route('admin.users.restore', ['user' => $target->id], absolute: false))
             ->assertForbidden();
 
         // Ensure still soft-deleted

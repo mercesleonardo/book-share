@@ -26,7 +26,7 @@ class PostShowEnhancementsTest extends TestCase
         $middle = $posts[1];
 
         /** @var \App\Models\User $user */
-        $response = $this->actingAs($user)->get(route('posts.show', $middle));
+        $response = $this->actingAs($user)->get(route('admin.posts.show', $middle));
         $response->assertStatus(200);
         $response->assertSee(trans('posts.navigation.previous'));
         $response->assertSee(trans('posts.navigation.next'));

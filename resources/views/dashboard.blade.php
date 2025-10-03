@@ -28,11 +28,11 @@
                     @if($latestUserPost)
                         <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
                             {{ __('dashboard.sections.latest_post') }}:
-                            <a href="{{ route('posts.show', $latestUserPost) }}" class="underline">{{ $latestUserPost->title }}</a>
+                            <a href="{{ route('admin.posts.show', $latestUserPost) }}" class="underline">{{ $latestUserPost->title }}</a>
                         </p>
                     @endif
                 </div>
-                <x-primary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.create') }}'">
+                <x-primary-button x-data x-on:click.prevent="window.location.href='{{ route('admin.posts.create') }}'">
                     {{ __('dashboard.actions.create_post') }}
                 </x-primary-button>
             </div>
@@ -89,18 +89,18 @@
                                         </div>
                                     </div>
                                         <div class="flex flex-wrap gap-2 justify-end">
-                                            <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.show', $post) }}'">{{ __('dashboard.actions.view') }}</x-secondary-button>
+                                            <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('admin.posts.show', $post) }}'">{{ __('dashboard.actions.view') }}</x-secondary-button>
                                         @can('update', $post)
-                                                <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.edit', $post) }}'">{{ __('dashboard.actions.edit') }}</x-secondary-button>
+                                                <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('admin.posts.edit', $post) }}'">{{ __('dashboard.actions.edit') }}</x-secondary-button>
                                             <x-secondary-button
                                                 x-data
-                                                x-on:click="openModal('approve', '{{ $post->title }}', '{{ route('posts.approve', $post) }}')"
+                                                x-on:click="openModal('approve', '{{ $post->title }}', '{{ route('admin.posts.approve', $post) }}')"
                                             >{{ __('dashboard.moderation.approve') }}</x-secondary-button>
 
                                             <x-secondary-button
                                                 x-data
                                                 class="!text-red-600"
-                                                x-on:click="openModal('reject', '{{ $post->title }}', '{{ route('posts.reject', $post) }}')"
+                                                x-on:click="openModal('reject', '{{ $post->title }}', '{{ route('admin.posts.reject', $post) }}')"
                                             >{{ __('dashboard.moderation.reject') }}</x-secondary-button>
                                         @endcan
                                     </div>
@@ -151,7 +151,7 @@
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-semibold text-lg text-gray-800 dark:text-gray-100">{{ __('dashboard.sections.recent_posts') }}</h3>
-                        <a href="{{ route('posts.index') }}" class="text-sm text-blue-600 hover:underline">{{ __('dashboard.actions.view_all') }}</a>
+                        <a href="{{ route('admin.posts.index') }}" class="text-sm text-blue-600 hover:underline">{{ __('dashboard.actions.view_all') }}</a>
                     </div>
                     <ul class="divide-y divide-gray-200 dark:divide-gray-700">
                         @forelse($recentPosts as $post)
@@ -166,9 +166,9 @@
                                     <div class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</div>
                                 </div>
                                 <div class="flex gap-2">
-                                    <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.show', $post) }}'">{{ __('dashboard.actions.view') }}</x-secondary-button>
+                                    <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('admin.posts.show', $post) }}'">{{ __('dashboard.actions.view') }}</x-secondary-button>
                                     @can('update', $post)
-                                        <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('posts.edit', $post) }}'">{{ __('dashboard.actions.edit') }}</x-secondary-button>
+                                        <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('admin.posts.edit', $post) }}'">{{ __('dashboard.actions.edit') }}</x-secondary-button>
                                     @endcan
                                 </div>
                             </li>

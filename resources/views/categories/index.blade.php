@@ -19,13 +19,13 @@
                         <x-category-filter :categories="$allCategories ?? $categories" :active-filters="$activeFilters" />
                         <div class="flex justify-between items-center">
                             <x-create-button x-data=""
-                                x-on:click.prevent="window.location.href='{{ route('categories.create') }}'">
+                                x-on:click.prevent="window.location.href='{{ route('admin.categories.create') }}'">
                                 {{ __('categories.actions.create') }}
                             </x-create-button>
                         </div>
                     </div>
 
-                    <x-active-filters :filters="$activeFilters" route="categories.index" :categories="$allCategories ?? $categories" />
+                    <x-active-filters :filters="$activeFilters" route="admin.categories.index" :categories="$allCategories ?? $categories" />
 
                     <div class="overflow-x-auto">
                         <table class="min-w-full bg-white dark:bg-gray-700 rounded shadow">
@@ -44,12 +44,12 @@
                                         <td class="py-2 px-4 border-b">
                                             <div class="flex flex-wrap gap-2">
                                             @can('update', $category)
-                                                <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('categories.edit', $category) }}'">{{ __('Edit') }}</x-secondary-button>
+                                                <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('admin.categories.edit', $category) }}'">{{ __('Edit') }}</x-secondary-button>
                                             @endcan
                                             @can('delete', $category)
                                                 <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'delete-category-{{ $category->id }}')">{{ __('Delete') }}</x-danger-button>
                                                 <x-modal name="delete-category-{{ $category->id }}" :show="false" focusable>
-                                                    <form method="POST" action="{{ route('categories.destroy', $category) }}" class="p-6">
+                                                    <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" class="p-6">
                                                         @csrf
                                                         @method('DELETE')
                                                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('categories.actions.delete') }}</h2>

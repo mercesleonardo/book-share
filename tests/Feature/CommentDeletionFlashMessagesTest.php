@@ -21,7 +21,7 @@ class CommentDeletionFlashMessagesTest extends TestCase
         $comment = Comment::factory()->for($post)->for($user)->create();
 
         /** @var \App\Models\User $user */
-        $response = $this->actingAs($user)->delete(route('comments.destroy', $comment));
+        $response = $this->actingAs($user)->delete(route('admin.comments.destroy', $comment));
 
         $response->assertRedirect();
         $response->assertSessionHas('success', __('comments.removed_self'));
@@ -39,7 +39,7 @@ class CommentDeletionFlashMessagesTest extends TestCase
         $comment   = Comment::factory()->for($post)->for($commenter)->create();
 
         /** @var \App\Models\User $moderator */
-        $response = $this->actingAs($moderator)->delete(route('comments.destroy', $comment));
+        $response = $this->actingAs($moderator)->delete(route('admin.comments.destroy', $comment));
 
         $response->assertRedirect();
         $response->assertSessionHas('success', __('comments.removed_as_moderator'));
@@ -57,7 +57,7 @@ class CommentDeletionFlashMessagesTest extends TestCase
         $comment = Comment::factory()->for($post)->for($user)->create();
 
         /** @var \App\Models\User $admin */
-        $response = $this->actingAs($admin)->delete(route('comments.destroy', $comment));
+        $response = $this->actingAs($admin)->delete(route('admin.comments.destroy', $comment));
 
         // Admin usa mesma chave de moderador (removido por privilégios)
         $response->assertRedirect();

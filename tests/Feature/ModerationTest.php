@@ -39,13 +39,13 @@ class ModerationTest extends TestCase
         $post      = Post::factory()->create();
 
         $this->actingAs($moderator)
-            ->patch(route('posts.approve', $post))
+            ->patch(route('admin.posts.approve', $post))
             ->assertRedirect();
 
         $this->assertEquals(ModerationStatus::Approved, $post->fresh()->moderation_status);
 
         $this->actingAs($moderator)
-            ->get(route('dashboard'))
+            ->get(route('admin.dashboard'))
             ->assertOk()
             ->assertDontSee($post->title);
     }
@@ -56,13 +56,13 @@ class ModerationTest extends TestCase
         $post      = Post::factory()->create();
 
         $this->actingAs($moderator)
-            ->patch(route('posts.reject', $post))
+            ->patch(route('admin.posts.reject', $post))
             ->assertRedirect();
 
         $this->assertEquals(ModerationStatus::Rejected, $post->fresh()->moderation_status);
 
         $this->actingAs($moderator)
-            ->get(route('dashboard'))
+            ->get(route('admin.dashboard'))
             ->assertOk()
             ->assertDontSee($post->title);
     }
@@ -74,7 +74,7 @@ class ModerationTest extends TestCase
         $post = Post::factory()->create();
 
         $this->actingAs($user)
-            ->patch(route('posts.approve', $post))
+            ->patch(route('admin.posts.approve', $post))
             ->assertForbidden();
     }
 }

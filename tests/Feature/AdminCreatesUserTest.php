@@ -23,13 +23,13 @@ class AdminCreatesUserTest extends TestCase
 
         $this->actingAs($admin);
 
-        $response = $this->post(route('users.store', absolute: false), [
+        $response = $this->post(route('admin.users.store', absolute: false), [
             'name'  => 'New Managed User',
             'email' => 'managed@example.com',
             'role'  => UserRole::USER->value,
         ]);
 
-        $response->assertRedirect(route('users.index', absolute: false));
+        $response->assertRedirect(route('admin.users.index', absolute: false));
 
         $this->assertDatabaseHas('users', [
             'email' => 'managed@example.com',
