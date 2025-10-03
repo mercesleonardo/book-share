@@ -18,7 +18,7 @@ class UserAuthorizationTest extends TestCase
 
         $this->actingAs($admin);
 
-        $response = $this->get(route('users.index', absolute: false));
+        $response = $this->get(route('admin.users.index', absolute: false));
 
         $response->assertOk();
     }
@@ -30,7 +30,7 @@ class UserAuthorizationTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->get(route('users.index', absolute: false));
+        $response = $this->get(route('admin.users.index', absolute: false));
 
         $response->assertForbidden();
     }

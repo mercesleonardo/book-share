@@ -28,7 +28,7 @@ class ModerationTest extends TestCase
         $post      = Post::factory()->create(); // default pending
 
         $this->actingAs($moderator)
-            ->get(route('dashboard'))
+            ->get(route('admin.dashboard'))
             ->assertOk()
             ->assertSee($post->title);
     }

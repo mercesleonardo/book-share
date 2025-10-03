@@ -23,7 +23,7 @@ class PostImageUploadTest extends TestCase
         $category = Category::create(['name' => 'Images']);
 
         $file     = UploadedFile::fake()->image('photo.jpg', 640, 480);
-        $response = $this->post(route('posts.store'), [
+        $response = $this->post(route('admin.posts.store'), [
             'title'       => 'With Image',
             'book_author' => 'Tester',
             'description' => 'Body',
@@ -32,7 +32,7 @@ class PostImageUploadTest extends TestCase
             'image'       => $file,
         ]);
 
-        $response->assertRedirect(route('posts.index'));
+        $response->assertRedirect(route('admin.posts.index'));
         $post = Post::first();
         $this->assertNotNull($post->image);
         $this->assertTrue(Storage::disk('public')->exists($post->image));
@@ -47,7 +47,7 @@ class PostImageUploadTest extends TestCase
         /** @var Category $category */
         $category = Category::create(['name' => 'NoImage']);
 
-        $response = $this->post(route('posts.store'), [
+        $response = $this->post(route('admin.posts.store'), [
             'title'       => 'Without Image',
             'book_author' => 'Tester',
             'description' => 'Body',
@@ -55,7 +55,7 @@ class PostImageUploadTest extends TestCase
             'user_rating' => 4,
         ]);
 
-        $response->assertRedirect(route('posts.index'));
+        $response->assertRedirect(route('admin.posts.index'));
         $post = Post::first();
         $this->assertNull($post->image);
     }
@@ -88,7 +88,7 @@ class PostImageUploadTest extends TestCase
             'image'       => $file,
         ]);
 
-        $response->assertRedirect(route('posts.index'));
+        $response->assertRedirect(route('admin.posts.index'));
         $post->refresh();
         $this->assertNotNull($post->image);
         $this->assertTrue(Storage::disk('public')->exists($post->image));

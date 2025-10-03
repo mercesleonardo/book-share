@@ -47,7 +47,7 @@ class PostFiltersTest extends TestCase
         Post::factory()->count(2)->create(['user_id' => $authorA->id]);
         Post::factory()->count(2)->create(['user_id' => $authorB->id]);
 
-        $response = $this->get(route('posts.index', ['user' => $authorA->id]));
+        $response = $this->get(route('admin.posts.index', ['user' => $authorA->id]));
         $response->assertOk();
         $response->assertViewHas('posts', function ($p) use ($authorA, $authorB) {
             /** @var \Illuminate\Pagination\LengthAwarePaginator $p */
@@ -63,7 +63,7 @@ class PostFiltersTest extends TestCase
         Post::factory()->create(['title' => 'Laravel Tips', 'category_id' => $cat->id]);
         Post::factory()->create(['title' => 'Symfony Tricks', 'category_id' => $cat->id]);
 
-        $response = $this->get(route('posts.index', ['q' => 'laravel']));
+        $response = $this->get(route('admin.posts.index', ['q' => 'laravel']));
         $response->assertOk();
         $response->assertSee('Laravel Tips');
         $response->assertDontSee('Symfony Tricks');
@@ -75,7 +75,7 @@ class PostFiltersTest extends TestCase
         Post::factory()->create(['title' => 'First Title', 'book_author' => 'Maria Clara', 'category_id' => $cat->id]);
         Post::factory()->create(['title' => 'Second Title', 'book_author' => 'Joao Silva', 'category_id' => $cat->id]);
 
-        $response = $this->get(route('posts.index', ['q' => 'maria']));
+        $response = $this->get(route('admin.posts.index', ['q' => 'maria']));
         $response->assertOk();
         $response->assertViewHas('posts', function ($p) {
             /** @var \Illuminate\Pagination\LengthAwarePaginator $p */
@@ -89,7 +89,7 @@ class PostFiltersTest extends TestCase
         Post::factory()->create(['title' => 'Alpha', 'book_author' => 'Isaac Asimov', 'category_id' => $cat->id]);
         Post::factory()->create(['title' => 'Beta', 'book_author' => 'Arthur Clarke', 'category_id' => $cat->id]);
 
-        $response = $this->get(route('posts.index', ['book_author' => 'Asimov']));
+        $response = $this->get(route('admin.posts.index', ['book_author' => 'Asimov']));
         $response->assertOk();
         $response->assertViewHas('posts', function ($p) {
             /** @var \Illuminate\Pagination\LengthAwarePaginator $p */
@@ -116,7 +116,7 @@ class PostFiltersTest extends TestCase
         Post::factory()->create(['title' => 'Wrong Author', 'book_author' => 'Another Person', 'category_id' => $catIncluded->id, 'user_id' => $authorOther->id]);
         Post::factory()->create(['title' => 'Wrong Query', 'book_author' => 'Irrelevant', 'category_id' => $catIncluded->id, 'user_id' => $authorIncluded->id]);
 
-        $response = $this->get(route('posts.index', [
+        $response = $this->get(route('admin.posts.index', [
             'category' => $catIncluded->id,
             'user'     => $authorIncluded->id,
             'q'        => 'special',
@@ -133,7 +133,7 @@ class PostFiltersTest extends TestCase
         Category::factory()->create();
         Post::factory()->count(3)->create();
 
-        $response = $this->get(route('posts.index', ['q' => 'stringthatdoesnotexist']));
+        $response = $this->get(route('admin.posts.index', ['q' => 'stringthatdoesnotexist']));
         $response->assertOk();
         $response->assertSee(__('posts.messages.not_found'));
     }
@@ -144,7 +144,7 @@ class PostFiltersTest extends TestCase
         // 20 posts for author to ensure pagination (15 per page)
         Post::factory()->count(20)->create(['user_id' => $author->id]);
 
-        $response = $this->get(route('posts.index', ['user' => $author->id]));
+        $response = $this->get(route('admin.posts.index', ['user' => $author->id]));
         $response->assertOk();
         // Verifica que a paginação preserva o parâmetro (ordem ou encoding podem variar)
         $response->assertViewHas('posts', function ($p) {

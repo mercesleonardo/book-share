@@ -66,7 +66,7 @@ class PostVisibilityTest extends TestCase
         $post = Post::factory()->create(['user_id' => $user->id]);
 
         $this->actingAs($user)
-            ->get(route('posts.show', $post))
+            ->get(route('admin.posts.show', $post))
             ->assertOk()
             ->assertSee($post->title);
     }
@@ -77,8 +77,8 @@ class PostVisibilityTest extends TestCase
         $post = Post::factory()->create(['user_id' => $user->id]);
 
         $this->actingAs($user)
-            ->get(route('posts.index'))
+            ->get(route('admin.posts.index'))
             ->assertOk()
-            ->assertSee(route('posts.show', $post), false);
+            ->assertSee(route('admin.posts.show', $post), false);
     }
 }

@@ -18,7 +18,7 @@ class CommentTest extends TestCase
         $user = User::factory()->create();
         $post = Post::factory()->create();
 
-        $response = $this->actingAs($user, 'web')->post('/comments', [
+        $response = $this->actingAs($user, 'web')->post(route('admin.comments.store'), [
             'post_id' => $post->id,
             'content' => 'Nice book!',
         ]);
@@ -37,7 +37,7 @@ class CommentTest extends TestCase
         $user = User::factory()->create();
         $post = Post::factory()->create();
 
-        $response = $this->actingAs($user, 'web')->post('/comments', [
+        $response = $this->actingAs($user, 'web')->post(route('admin.comments.store'), [
             'post_id' => $post->id,
             'content' => '',
         ]);
@@ -51,7 +51,7 @@ class CommentTest extends TestCase
         $user    = User::factory()->create();
         $comment = Comment::factory()->for(Post::factory())->for($user)->create();
 
-        $response = $this->actingAs($user, 'web')->delete('/comments/' . $comment->id);
+        $response = $this->actingAs($user, 'web')->delete(route('admin.comments.destroy', $comment));
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseMissing('comments', ['id' => $comment->id]);
     }
@@ -64,7 +64,7 @@ class CommentTest extends TestCase
         $other   = User::factory()->create();
         $comment = Comment::factory()->for(Post::factory()->for($owner))->for($owner)->create();
 
-        $response = $this->actingAs($other, 'web')->delete('/comments/' . $comment->id);
+        $response = $this->actingAs($other, 'web')->delete(route('admin.comments.destroy', $comment));
         $response->assertStatus(403);
         $this->assertDatabaseHas('comments', ['id' => $comment->id]);
     }
@@ -81,7 +81,7 @@ class CommentTest extends TestCase
 
         Notification::fake();
 
-        $response = $this->actingAs($commenter, 'web')->post('/comments', [
+        $response = $this->actingAs($commenter, 'web')->post(route('admin.comments.store'), [
             'post_id' => $post->id,
             'content' => 'Great book.',
         ]);
@@ -100,7 +100,7 @@ class CommentTest extends TestCase
         $post      = Post::factory()->for($author)->create();
         $comment   = Comment::factory()->for($post)->for($commenter)->create(['content' => 'Visible content']);
 
-        $response = $this->actingAs($author, 'web')->get('/posts/' . $post->slug);
+        $response = $this->actingAs($author, 'web')->get(route('admin.posts.show', $post));
         $response->assertSee('Visible content');
         $response->assertSee($commenter->name);
     }
@@ -114,7 +114,7 @@ class CommentTest extends TestCase
         $post    = Post::factory()->for($author)->create();
         $comment = Comment::factory()->for($post)->for($author)->create();
 
-        $response = $this->actingAs($admin, 'web')->delete('/comments/' . $comment->id);
+        $response = $this->actingAs($admin, 'web')->delete(route('admin.comments.destroy', $comment));
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseMissing('comments', ['id' => $comment->id]);
     }
@@ -128,7 +128,7 @@ class CommentTest extends TestCase
         $post    = Post::factory()->for($author)->create();
         $comment = Comment::factory()->for($post)->for($author)->create();
 
-        $response = $this->actingAs($moderator, 'web')->delete('/comments/' . $comment->id);
+        $response = $this->actingAs($moderator, 'web')->delete(route('admin.comments.destroy', $comment));
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseMissing('comments', ['id' => $comment->id]);
     }

@@ -14,7 +14,7 @@ class FlashMessagesComponentTest extends TestCase
     {
         $user = User::factory()->create();
         /** @var User $user */
-        $response = $this->actingAs($user)->withSession(['success' => 'Saved OK'])->get('/dashboard');
+        $response = $this->actingAs($user)->withSession(['success' => 'Saved OK'])->get(route('admin.dashboard'));
         $response->assertSee('Saved OK');
     }
 
@@ -24,7 +24,7 @@ class FlashMessagesComponentTest extends TestCase
         /** @var User $user */
         $response = $this->actingAs($user)->withSession([
             'error' => ['First error', 'Second error'],
-        ])->get('/dashboard');
+        ])->get(route('admin.dashboard'));
 
         $response->assertSee('First error');
         $response->assertSee('Second error');
@@ -42,7 +42,7 @@ class FlashMessagesComponentTest extends TestCase
                 ]);
                 $bag->put('default', $messageBag);
             }),
-        ])->get('/dashboard');
+        ])->get(route('admin.dashboard'));
 
         $response->assertSee(__('validation.errors_title'));
         $response->assertSee('Campo inválido');
@@ -52,7 +52,7 @@ class FlashMessagesComponentTest extends TestCase
     {
         $user = User::factory()->create();
         /** @var User $user */
-        $response = $this->actingAs($user)->withSession(['status' => 'Info message'])->get('/dashboard');
+        $response = $this->actingAs($user)->withSession(['status' => 'Info message'])->get(route('admin.dashboard'));
         $response->assertSee('Info message');
     }
 }

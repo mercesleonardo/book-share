@@ -26,7 +26,7 @@ class PostAuthorFallbackTest extends TestCase
             // intentionally no author
         ]);
 
-        $response->assertRedirect(route('posts.index'));
+        $response->assertRedirect(route('admin.posts.index'));
         $this->assertDatabaseHas('posts', [
             'title'       => 'No Author Title',
             'book_author' => 'Fallback User',
@@ -58,7 +58,7 @@ class PostAuthorFallbackTest extends TestCase
             // no author provided
         ]);
 
-        $response->assertRedirect(route('posts.index'));
+        $response->assertRedirect(route('admin.posts.index'));
         $this->assertDatabaseHas('posts', [
             'id'          => $post->id,
             'title'       => 'Changed Title',

@@ -37,7 +37,7 @@ class ModerationModalTest extends TestCase
         }
 
         // Act
-        $response = $this->actingAs($this->user)->get('/dashboard');
+        $response = $this->actingAs($this->user)->get(route('admin.dashboard'));
 
         // Assert core modal markup & translation keys
         $response->assertStatus(200);

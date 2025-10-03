@@ -73,18 +73,18 @@ class PostSlugPolicyTest extends TestCase
         /** @var Post $post */
         $post = Post::create(['title' => 'Original', 'book_author' => 'Own Author', 'description' => 'd', 'category_id' => $category->id, 'user_id' => $owner->id, 'user_rating' => 4]);
 
-        $update = $this->patch(route('posts.update', $post), [
+        $update = $this->patch(route('admin.posts.update', $post), [
             'title'       => 'Changed',
             'description' => 'd2',
             'category_id' => $category->id,
         ]);
-        $update->assertRedirect(route('posts.index'));
+        $update->assertRedirect(route('admin.posts.index'));
         $this->assertDatabaseHas('posts', ['id' => $post->id, 'title' => 'Changed']);
 
         // Após atualização o slug muda; recarrega o modelo para obter o novo slug.
         $post->refresh();
-        $delete = $this->delete(route('posts.destroy', $post));
-        $delete->assertRedirect(route('posts.index'));
+        $delete = $this->delete(route('admin.posts.destroy', $post));
+        $delete->assertRedirect(route('admin.posts.index'));
         $this->assertDatabaseMissing('posts', ['id' => $post->id]);
     }
 
@@ -126,14 +126,14 @@ class PostSlugPolicyTest extends TestCase
         $post = Post::create(['title' => 'Foreign', 'book_author' => 'Foreign Author', 'description' => 'd', 'category_id' => $category->id, 'user_id' => $owner->id, 'user_rating' => 2]);
 
         $this->actingAs($other);
-        $update = $this->patch(route('posts.update', $post), [
+        $update = $this->patch(route('admin.posts.update', $post), [
             'title'       => 'Attempt',
             'description' => 'd2',
             'category_id' => $category->id,
         ]);
         $update->assertForbidden();
 
-        $delete = $this->delete(route('posts.destroy', $post));
+        $delete = $this->delete(route('admin.posts.destroy', $post));
         $delete->assertForbidden();
         $this->assertDatabaseHas('posts', ['id' => $post->id]);
     }
