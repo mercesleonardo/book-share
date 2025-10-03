@@ -24,9 +24,9 @@ class PostModerationStatusChanged extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->subject(__('dashboard.moderation.log.changed', ['from' => $this->from, 'to' => $this->to]))
-            ->line(__('dashboard.moderation.log.changed', ['from' => $this->from, 'to' => $this->to]))
-            ->action(__('View'), route('admin.posts.show', $this->post));
+            ->subject(__('notifications.moderation.changed_subject', ['from' => $this->from, 'to' => $this->to]))
+            ->line(__('notifications.moderation.changed_line', ['from' => $this->from, 'to' => $this->to]))
+            ->action(__('notifications.view'), route('admin.posts.show', $this->post));
     }
 
     public function toArray(object $notifiable): array

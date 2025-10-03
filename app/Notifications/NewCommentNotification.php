@@ -27,12 +27,12 @@ class NewCommentNotification extends Notification implements ShouldQueue
         $post = $this->comment->post;
 
         return (new MailMessage())
-            ->subject(__('New comment on your post'))
-            ->greeting(__('Hello :name', ['name' => $notifiable->name]))
-            ->line(__('Your post ":title" received a new comment.', ['title' => $post->title]))
+            ->subject(__('notifications.comments.new_subject'))
+            ->greeting(__('notifications.greeting', ['name' => $notifiable->name]))
+            ->line(__('notifications.comments.new_line', ['title' => $post->title]))
             ->line($this->comment->content)
-            ->action(__('View post'), route('admin.posts.show', $post))
-            ->line(__('Thank you for using our application!'));
+            ->action(__('notifications.view_post'), route('admin.posts.show', $post))
+            ->line(__('notifications.thanks'));
     }
 
     public function toArray(object $notifiable): array

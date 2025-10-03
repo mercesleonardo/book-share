@@ -15,9 +15,9 @@ class InitialPasswordSetupNotification extends BaseResetPassword
         $url = $this->resetUrl($notifiable);
 
         return (new MailMessage())
-            ->subject(__('Set up your account password'))
-            ->line(__('An administrator created an account for you. Click the button below to define your password and activate access.'))
-            ->action(__('Define Password'), $url)
-            ->line(__('If you did not expect this email, you can ignore it.'));
+            ->subject(__('notifications.password.setup_subject'))
+            ->line(__('notifications.password.setup_line'))
+            ->action(__('notifications.password.setup_action'), $url)
+            ->line(__('notifications.password.ignore'));
     }
 }
