@@ -17,4 +17,12 @@ return [
         'title'       => 'Nenhum livro compartilhado ainda',
         'description' => 'Seja o primeiro a compartilhar um livro com a comunidade!',
     ],
+    'filters' => [
+        'category'     => 'Categoria',
+        'all'          => 'Todas',
+        'search_label' => 'Buscar por título ou autor',
+        'search_ph'    => 'Ex.: Clean Code, Asimov...',
+        'apply'        => 'Filtrar',
+        'reset'        => 'Limpar',
+    ],
 ];

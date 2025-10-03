@@ -9,6 +9,7 @@
                     {{ __('Discover and share great books!') }}
                 </p>
             </div>
+
             @auth
                 <x-primary-button x-data x-on:click.prevent="window.location.href='{{ route('admin.dashboard') }}'">
                     Ir para Dashboard
@@ -32,6 +33,22 @@
             <div class="mb-10">
                 <x-latest-posts-carousel />
             </div>
+            <!-- Filtros reutilizáveis -->
+            @php
+                $activeFilters = collect([
+                    'q' => request('q'),
+                    'category' => request('category'),
+                ])->filter(fn($v) => filled($v));
+            @endphp
+            <div class="mb-8">
+                <x-posts-filter :categories="$categories"
+                                 :users="collect()"
+                                 :active-filters="$activeFilters"
+                                 :action="route('home')"
+                                 :reset-url="route('home')"
+                                 :show-author="false"
+                                 :show-user="false" />
+            </div>
             @if($posts->count() > 0)
                 <!-- Hero Section -->
                 <div class="mb-8 text-center">
@@ -53,7 +70,7 @@
                 <!-- Pagination -->
                 @if($posts->hasPages())
                     <div class="flex justify-center">
-                        {{ $posts->links() }}
+                        {{ $posts->appends(request()->only('category','q'))->links() }}
                     </div>
                 @endif
             @else

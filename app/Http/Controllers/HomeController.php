@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
+use App\Models\{Category, Post};
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -13,11 +13,24 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request): View
     {
-        $posts = Post::with(['user:id,name', 'category:id,name'])
-            ->approved()
-            ->latest()
-            ->paginate(12);
+        $query = Post::with(['user:id,name', 'category:id,name'])
+            ->approved();
 
-        return view('home', compact('posts'));
+        if ($request->filled('category')) {
+            $query->where('category_id', (int) $request->input('category'));
+        }
+
+        if ($request->filled('q')) {
+            $term = trim((string) $request->input('q'));
+            $query->where(function ($q) use ($term) {
+                $q->where('title', 'like', "%{$term}%")
+                    ->orWhere('book_author', 'like', "%{$term}%");
+            });
+        }
+
+        $posts      = $query->latest()->paginate(12)->withQueryString();
+        $categories = Category::orderBy('name')->get(['id', 'name']);
+
+        return view('home', compact('posts', 'categories'));
     }
 }
