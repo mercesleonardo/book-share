@@ -88,19 +88,24 @@
                                             <span>{{ $post->user?->name }}</span>
                                         </div>
                                     </div>
-                                        <div class="flex flex-wrap gap-2 justify-end">
-                                            <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('admin.posts.show', $post) }}'">{{ __('dashboard.actions.view') }}</x-secondary-button>
+                                    <div class="flex flex-wrap gap-2 justify-end">
+                                        <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('admin.posts.show', $post) }}'">{{ __('dashboard.actions.view') }}</x-secondary-button>
                                         @can('update', $post)
-                                                <x-secondary-button x-data x-on:click.prevent="window.location.href='{{ route('admin.posts.edit', $post) }}'">{{ __('dashboard.actions.edit') }}</x-secondary-button>
+                                            @php
+                                                $approveUrl = route('admin.posts.approve', $post);
+                                                $rejectUrl = route('admin.posts.reject', $post);
+                                                $postTitleJs = json_encode($post->title);
+                                            @endphp
+
                                             <x-secondary-button
                                                 x-data
-                                                x-on:click="openModal('approve', '{{ $post->title }}', '{{ route('admin.posts.approve', $post) }}')"
+                                                x-on:click="openModal('approve', {{ $postTitleJs }}, '{{ $approveUrl }}')"
                                             >{{ __('dashboard.moderation.approve') }}</x-secondary-button>
 
                                             <x-secondary-button
                                                 x-data
                                                 class="!text-red-600"
-                                                x-on:click="openModal('reject', '{{ $post->title }}', '{{ route('admin.posts.reject', $post) }}')"
+                                                x-on:click="openModal('reject', {{ $postTitleJs }}, '{{ $rejectUrl }}')"
                                             >{{ __('dashboard.moderation.reject') }}</x-secondary-button>
                                         @endcan
                                     </div>
