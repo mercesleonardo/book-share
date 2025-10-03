@@ -25,6 +25,23 @@
                 </div>
             @endauth
         </div>
+
+        @php
+            $activeFilters = collect([
+                'q' => request('q'),
+                'category' => request('category'),
+            ])->filter(fn($v) => filled($v));
+        @endphp
+        <div class="mt-6">
+            <x-posts-filter :categories="$categories"
+                             :users="collect()"
+                             :active-filters="$activeFilters"
+                             :action="route('home')"
+                             :reset-url="route('home')"
+                             :show-author="false"
+                             :show-user="false"
+                             :cols="3" />
+        </div>
     </x-slot>
 
     <div class="py-8">
@@ -32,23 +49,6 @@
             <!-- Carousel Últimas Postagens -->
             <div class="mb-10">
                 <x-latest-posts-carousel />
-            </div>
-            <!-- Filtros reutilizáveis -->
-            @php
-                $activeFilters = collect([
-                    'q' => request('q'),
-                    'category' => request('category'),
-                ])->filter(fn($v) => filled($v));
-            @endphp
-            <div class="mb-8">
-                <x-posts-filter :categories="$categories"
-                                 :users="collect()"
-                                 :active-filters="$activeFilters"
-                                 :action="route('home')"
-                                 :reset-url="route('home')"
-                                 :show-author="false"
-                                 :show-user="false"
-                                 :cols="3" />
             </div>
             @if($posts->count() > 0)
                 <!-- Hero Section -->
