@@ -34,14 +34,6 @@
                     </figure>
                 @endif
 
-                <!-- Book author info -->
-                @if($post->book_author)
-                    <div class="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50 dark:bg-blue-900/20">
-                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('posts.fields.author') }}</p>
-                        <p class="font-medium text-gray-900 dark:text-gray-100">{{ $post->book_author }}</p>
-                    </div>
-                @endif
-
                 <article class="prose dark:prose-invert max-w-none leading-relaxed text-gray-800 dark:text-gray-200">
                     {!! nl2br(e($post->description)) !!}
                 </article>

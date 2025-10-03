@@ -4,7 +4,7 @@ use App\Http\Controllers\{CategoryController, CommentController, ModerationContr
 use App\Http\Controllers\{DashboardController, HomeController, PostPublicController};
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', HomeController::class);
+Route::get('/', HomeController::class)->name('home');
 
 // Rota pública para visualização de posts
 Route::get('/posts/{post:slug}', [PostPublicController::class, 'show'])->name('posts.show');
