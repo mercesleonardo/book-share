@@ -33,6 +33,6 @@ class RatingController extends Controller
 
         $messageKey = $existing ? 'posts.messages.rating_updated' : 'posts.messages.rating_saved';
 
-        return redirect()->route('admin.posts.show', $post)->with('success', __($messageKey));
+        return redirect()->back()->with('success', __($messageKey));
     }
 }

@@ -1,12 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\{CategoryController, CommentController, ModerationController, PostController, ProfileController, RatingController, UserController};
+use App\Http\Controllers\{DashboardController, HomeController, PostPublicController};
+use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', HomeController::class);
+
+// Rota pública para visualização de posts
+Route::get('/posts/{post:slug}', [PostPublicController::class, 'show'])->name('posts.show');
+
+// Rota pública para avaliações (requer autenticação)
+Route::post('/posts/{post:slug}/ratings', [RatingController::class, 'store'])->name('posts.ratings.store')->middleware('auth');
 
 Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(function () {
 

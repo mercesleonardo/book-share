@@ -25,7 +25,8 @@
     @auth
         @if(auth()->id() !== $post->user_id)
             @php($userRating = $post->ratings->firstWhere('user_id', auth()->id()))
-            <form method="POST" action="{{ route('admin.posts.ratings.store', $post) }}" class="space-y-3">
+            @php($isPublicRoute = request()->route()->getName() === 'posts.show')
+            <form method="POST" action="{{ $isPublicRoute ? route('posts.ratings.store', $post) : route('admin.posts.ratings.store', $post) }}" class="space-y-3">
                 @csrf
                 <div class="flex flex-col gap-1">
                     <span class="text-xs text-gray-500 dark:text-gray-400">{{ __('posts.meta.your_rating') }}</span>

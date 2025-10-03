@@ -38,7 +38,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <div class="flex items-center gap-x-3">
-                            @if (Auth::user()->profile_photo)
+                            @if (Auth::check() && Auth::user()->profile_photo)
                                 <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Profile Photo"
                                     class="size-12 rounded-full object-cover" />
                             @else
@@ -46,7 +46,7 @@
                             @endif
                             <button
                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                                <div>{{ explode(' ', Auth::user()->name)[0] }}</div>
+                                <div>{{ Auth::check() ? explode(' ', Auth::user()->name)[0] : 'Guest' }}</div>
 
                                 <div class="ms-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -122,7 +122,7 @@
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
                 <div class="flex items-center gap-x-3 mb-2">
-                    @if (Auth::user()->profile_photo)
+                    @if (Auth::check() && Auth::user()->profile_photo)
                         <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Profile Photo"
                             class="size-12 rounded-full object-cover" />
                     @else
@@ -134,9 +134,9 @@
                         </svg>
                     @endif
                     <span
-                        class="font-medium text-base text-gray-800 dark:text-gray-200">{{ explode(' ', Auth::user()->name)[0] }}</span>
+                        class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::check() ? explode(' ', Auth::user()->name)[0] : 'Guest' }}</span>
                 </div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                <div class="font-medium text-sm text-gray-500">{{ Auth::check() ? Auth::user()->email : '' }}</div>
             </div>
 
             <div class="mt-3 space-y-1">
