@@ -7,8 +7,16 @@
     'resetUrl' => null, // reset button URL
     'showAuthor' => true, // toggle author input
     'showUser' => true, // toggle user select
+    'cols' => 5, // md:grid-cols-N
 ])
-<form method="GET" action="{{ $action ?? route('admin.posts.index') }}" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+@php
+    $colsInt = (int) ($cols ?? 5);
+    if (! in_array($colsInt, [1, 2, 3, 4, 5, 6], true)) {
+        $colsInt = 5;
+    }
+    $mdColsClass = 'md:grid-cols-' . $colsInt;
+@endphp
+<form method="GET" action="{{ $action ?? route('admin.posts.index') }}" class="grid grid-cols-1 {{ $mdColsClass }} gap-4 items-end">
     <div class="flex flex-col gap-1">
         <x-input-label for="q" :value="__('posts.filters.search')" />
         <x-text-input id="q" name="q" value="{{ request('q') }}"

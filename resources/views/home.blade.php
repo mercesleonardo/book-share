@@ -47,7 +47,8 @@
                                  :action="route('home')"
                                  :reset-url="route('home')"
                                  :show-author="false"
-                                 :show-user="false" />
+                                 :show-user="false"
+                                 :cols="3" />
             </div>
             @if($posts->count() > 0)
                 <!-- Hero Section -->
