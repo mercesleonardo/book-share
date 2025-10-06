@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\{IndexPostRequest, StorePostRequest, UpdatePostRequest};
-use App\Models\{Category, Post};
-use App\Services\Post\{PostFilterService, PostImageService};
-use Illuminate\Http\{RedirectResponse, UploadedFile};
-use Illuminate\Support\Facades\{Auth};
 use Illuminate\View\View;
+use App\Models\{Category, Post};
+use Illuminate\Support\Facades\{Auth};
+use App\Notifications\PostCreatedNotification;
+use Illuminate\Http\{RedirectResponse, UploadedFile};
+use App\Services\Post\{PostFilterService, PostImageService};
+use App\Http\Requests\{IndexPostRequest, StorePostRequest, UpdatePostRequest};
 
 class PostController extends Controller
 {
@@ -41,14 +42,17 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request, PostImageService $images): RedirectResponse
     {
-        $data            = $request->validated();
-        $data['user_id'] = Auth::id();
-        // Fallback if not provided
-        $data['book_author'] = $data['book_author'] ?? Auth::user()->name;
+        $user = Auth::user();
 
-        // Se não vier user_rating, define um padrão (ex: 5) ou deixa null
+        $data            = $request->validated();
+        $data['user_id'] = $user->id;
+
+        // Fallback if not provided
+        $data['book_author'] = $data['book_author'] ?? $user->name;
+
+        // if the key is missing, set to null (author can rate later)
         if (!array_key_exists('user_rating', $data)) {
-            $data['user_rating'] = null; // autor pode avaliar depois
+            $data['user_rating'] = null; // author can rate later
         }
 
         /** @var \Illuminate\Http\Request $request */
@@ -57,7 +61,10 @@ class PostController extends Controller
             $uploaded      = $request->file('image');
             $data['image'] = $images->storeImage($uploaded);
         }
+
         Post::create($data);
+
+        $user->notify(new PostCreatedNotification(Post::latest()->first()));
 
         return redirect()->route('admin.posts.index')->with('success', __('posts.messages.created'));
     }

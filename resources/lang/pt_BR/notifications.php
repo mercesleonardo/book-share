@@ -19,4 +19,8 @@ return [
         'changed_subject' => 'Status da publicação alterado de :from para :to',
         'changed_line'    => 'O status da sua publicação foi atualizado de :from para :to.',
     ],
+    'posts' => [
+        'created_subject' => 'Nova publicação criada: :title',
+        'created_line'    => 'Uma nova publicação foi criada com o título: :title',
+    ],
 ];

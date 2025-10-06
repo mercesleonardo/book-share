@@ -19,4 +19,8 @@ return [
         'changed_subject' => 'Post status changed from :from to :to',
         'changed_line'    => 'Your post status was updated from :from to :to.',
     ],
+    'posts' => [
+        'created_subject' => 'New post created: :title',
+        'created_line'    => 'A new post has been created with the title: :title',
+    ],
 ];
