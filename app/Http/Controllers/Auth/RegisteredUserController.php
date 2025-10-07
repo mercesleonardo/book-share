@@ -9,6 +9,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\Support\Facades\{Auth, Hash};
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -31,7 +32,7 @@ class RegisteredUserController extends Controller
         $validated = $request->validate([
             'name'          => ['required', 'string', 'max:255'],
             'email'         => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password'      => ['required', 'confirmed', Rules\Password::defaults()],
+            'password'      => ['required', 'confirmed', Password::min(8)->letters()->numbers()->mixedCase()->symbols()],
             'profile_photo' => ['nullable', 'image', 'max:2048'],
             'description'   => ['nullable', 'string', 'max:1000'],
         ]);
