@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use App\Models\Post;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -35,7 +34,7 @@ class PostCreatedNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject(__('notifications.posts.created_subject', ['title' => $this->post->title]))
             ->line(__('notifications.posts.created_line', ['title' => $this->post->title]))
             ->action(__('notifications.view_post'), url('/posts/' . $this->post->slug))
