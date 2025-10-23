@@ -11,7 +11,8 @@ use Illuminate\Support\Str;
 
 class Post extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     protected $fillable = [
         'user_id',
