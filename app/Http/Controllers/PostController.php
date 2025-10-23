@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
-use App\Models\{Category, Post};
-use Illuminate\Support\Facades\{Auth};
-use App\Notifications\PostCreatedNotification;
-use Illuminate\Http\{RedirectResponse, UploadedFile};
-use App\Services\Post\{PostFilterService, PostImageService};
 use App\Http\Requests\{IndexPostRequest, StorePostRequest, UpdatePostRequest};
+use App\Models\{Category, Post};
+use App\Notifications\PostCreatedNotification;
+use App\Services\Post\{PostFilterService, PostImageService};
+use Illuminate\Http\{RedirectResponse, UploadedFile};
+use Illuminate\Support\Facades\{Auth};
+use Illuminate\View\View;
 
 class PostController extends Controller
 {
