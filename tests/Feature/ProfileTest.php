@@ -68,7 +68,7 @@ class ProfileTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->delete(route('admin.profile.destroy'), [
-                'password' => 'password',
+                'password' => 'Password@123',
             ]);
 
         $response

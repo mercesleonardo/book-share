@@ -31,7 +31,7 @@ class UserFactory extends Factory
             'description'       => fake()->text(),
             'role'              => UserRole::USER,
             'email_verified_at' => now(),
-            'password'          => static::$password ??= Hash::make('password'),
+            'password'          => static::$password ??= Hash::make('Password@123'),
             'remember_token'    => Str::random(10),
             'password_set_at'   => now(),
         ];

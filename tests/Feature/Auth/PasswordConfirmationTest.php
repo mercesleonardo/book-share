@@ -36,7 +36,7 @@ class PasswordConfirmationTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post('/confirm-password', [
-            'password' => 'Password@123',
+            'password' => 'wrong-password',
         ]);
 
         $response->assertSessionHasErrors();
