@@ -15,11 +15,10 @@ class GoogleSocialiteTest extends TestCase
     public function test_google_callback_creates_user_and_logs_in(): void
     {
         // Prepare a fake Socialite user
-        $socialiteUser         = new SocialiteUser();
-        $socialiteUser->id     = 'google-12345';
-        $socialiteUser->name   = 'Jane Doe';
-        $socialiteUser->email  = 'jane@example.com';
-        $socialiteUser->avatar = 'https://example.com/avatar.jpg';
+        $socialiteUser        = new SocialiteUser();
+        $socialiteUser->id    = 'google-12345';
+        $socialiteUser->name  = 'Jane Doe';
+        $socialiteUser->email = 'jane@example.com';
 
         // Mock the Socialite facade chain driver('google')->user()
         Socialite::shouldReceive('driver->user')->andReturn($socialiteUser);

@@ -64,8 +64,8 @@ class PasswordSetupFlowTest extends TestCase
         $this->post('/register', [
             'name'                  => 'Public User',
             'email'                 => 'public@example.com',
-            'password'              => 'password1234',
-            'password_confirmation' => 'password1234',
+            'password'              => 'Password@123',
+            'password_confirmation' => 'Password@123',
         ])->assertRedirect(route('admin.dashboard', absolute: false));
 
         $user = User::whereEmail('public@example.com')->first();

@@ -40,17 +40,15 @@ class CallBackController extends Controller
         DB::transaction(function () use (&$user, $googleUser) {
             if (!$user) {
                 $user = User::create([
-                    'name'            => $googleUser->getName() ?? $googleUser->getNickname() ?? 'User ' . Str::random(6),
-                    'email'           => $googleUser->getEmail(),
-                    'password'        => Hash::make(Str::random(24)),
-                    'provider_name'   => 'google',
-                    'provider_id'     => $googleUser->getId(),
-                    'provider_avatar' => $googleUser->getAvatar(),
+                    'name'              => $googleUser->getName() ?? $googleUser->getNickname() ?? 'User ' . Str::random(6),
+                    'email'             => $googleUser->getEmail(),
+                    'password'          => Hash::make(Str::random(40)),
+                    'provider_name'     => 'google',
+                    'provider_id'       => $googleUser->getId(),
                     'email_verified_at' => now(),
                 ]);
             } else {
                 $user->update([
-                    'provider_avatar' => $googleUser->getAvatar(),
                     'email_verified_at' => now(),
                 ]);
             }

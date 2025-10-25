@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\User as SocialiteUser;
-use RuntimeException;
 use Tests\TestCase;
 
 class GoogleSocialiteConflictTest extends TestCase
@@ -18,11 +17,10 @@ class GoogleSocialiteConflictTest extends TestCase
         // existing local user using the same email (but not linked to provider)
         User::factory()->create(['email' => 'jane@example.com']);
 
-        $socialiteUser         = new SocialiteUser();
-        $socialiteUser->id     = 'google-999';
-        $socialiteUser->name   = 'Jane Doe';
-        $socialiteUser->email  = 'jane@example.com';
-        $socialiteUser->avatar = 'https://example.com/avatar.jpg';
+        $socialiteUser        = new SocialiteUser();
+        $socialiteUser->id    = 'google-999';
+        $socialiteUser->name  = 'Jane Doe';
+        $socialiteUser->email = 'jane@example.com';
 
         Socialite::shouldReceive('driver->user')->andReturn($socialiteUser);
 

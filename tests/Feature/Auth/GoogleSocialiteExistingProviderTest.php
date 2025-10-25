@@ -20,11 +20,10 @@ class GoogleSocialiteExistingProviderTest extends TestCase
             'provider_id'   => 'google-555',
         ]);
 
-        $socialiteUser         = new SocialiteUser();
-        $socialiteUser->id     = 'google-555';
-        $socialiteUser->name   = 'Existing User';
-        $socialiteUser->email  = 'existing@example.com';
-        $socialiteUser->avatar = 'https://example.com/avatar.jpg';
+        $socialiteUser        = new SocialiteUser();
+        $socialiteUser->id    = 'google-555';
+        $socialiteUser->name  = 'Existing User';
+        $socialiteUser->email = 'existing@example.com';
 
         Socialite::shouldReceive('driver->user')->andReturn($socialiteUser);
 

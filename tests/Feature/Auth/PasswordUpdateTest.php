@@ -19,9 +19,9 @@ class PasswordUpdateTest extends TestCase
             ->actingAs($user)
             ->from('/profile')
             ->put('/password', [
-                'current_password'      => 'password',
-                'password'              => 'new-password',
-                'password_confirmation' => 'new-password',
+                'current_password'      => 'Password@1234',
+                'password'              => 'Password@123',
+                'password_confirmation' => 'Password@123',
             ]);
 
         $response
@@ -39,9 +39,9 @@ class PasswordUpdateTest extends TestCase
             ->actingAs($user)
             ->from('/profile')
             ->put('/password', [
-                'current_password'      => 'wrong-password',
-                'password'              => 'new-password',
-                'password_confirmation' => 'new-password',
+                'current_password'      => 'Password@1234',
+                'password'              => 'Password@123',
+                'password_confirmation' => 'Password@123',
             ]);
 
         $response

@@ -19,8 +19,8 @@ class UserRegistrationTest extends TestCase
         $response = $this->post('/register', [
             'name'                  => 'Test User',
             'email'                 => 'testuser@example.com',
-            'password'              => 'password',
-            'password_confirmation' => 'password',
+            'password'              => 'Password@123',
+            'password_confirmation' => 'Password@123',
             'profile_photo'         => UploadedFile::fake()->image('avatar.jpg'),
             'description'           => 'Descrição de teste',
             'role'                  => 'user',
@@ -40,8 +40,8 @@ class UserRegistrationTest extends TestCase
         $response = $this->post('/register', [
             'name'                  => 'No Photo User',
             'email'                 => 'nophoto@example.com',
-            'password'              => 'password',
-            'password_confirmation' => 'password',
+            'password'              => 'Password@123',
+            'password_confirmation' => 'Password@123',
             'role'                  => 'user',
         ]);
 
