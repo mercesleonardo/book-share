@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\Auth\Google\{CallBackController, RedirectController};
 use App\Http\Controllers\{CategoryController, CommentController, ModerationController, PostController, ProfileController, RatingController, UserController};
 use App\Http\Controllers\{DashboardController, HomeController, PostPublicController};
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+
+Route::get('/auth/google/redirect', RedirectController::class)->name('auth.google.redirect');
+Route::get('/auth/google/callback', CallBackController::class)->name('auth.google.callback');
 
 // Rota pública para visualização de posts
 Route::get('/posts/{post:slug}', [PostPublicController::class, 'show'])->name('posts.show');
