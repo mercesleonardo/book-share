@@ -39,6 +39,8 @@ Boas práticas e arquitetura:
 ## ✨ Principais Funcionalidades
 
 - Autenticação e registro de usuários (Laravel Breeze).
+
+- Social login (Google) — users can sign in or register using their Google account. The project includes controllers, routes, views and tests for the Google Socialite flow.
 - CRUD de categorias e postagens (com slug único, geração automática e atualização reativa ao título).
 - Moderação de postagens com histórico de logs.
 - Comentários e avaliações (ratings) por postagem.
