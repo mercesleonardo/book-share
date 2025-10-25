@@ -86,6 +86,42 @@ Pré-requisitos (sem Docker): PHP 8.3+, Composer, Node 18+ e um banco compatíve
 3. Gerar key, migrar e (opcional) popular dados com seeders.
 4. Subir o servidor e o build do front (dev ou build de produção).
 
+## 🔐 Autenticação social (Google)
+
+Esta versão adiciona suporte a login/registro via conta Google usando Socialite. A implementação inclui controladores, rotas, um componente de botão social e testes de integração.
+
+Passos rápidos para usar localmente:
+
+1. Adicione as variáveis ao seu arquivo `.env`:
+
+```bash
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GOOGLE_REDIRECT=https://your-app.test/auth/google/callback
+```
+
+2. Verifique que `config/services.php` contém as configurações do Google (já incluídas no repositório).
+
+3. Rode a migration que adiciona as colunas sociais na tabela `users`:
+
+```bash
+php artisan migrate
+```
+
+4. As rotas de autenticação social são registradas (ex.: `/auth/google/redirect` e `/auth/google/callback`). Verifique `routes/web.php` para os detalhes.
+
+5. Testes: há testes de feature em `tests/Feature/Auth/` cobrindo o fluxo e casos de conflito. Rode somente os testes relacionados com:
+
+```bash
+php artisan test --filter=GoogleSocialite
+```
+
+6. Formatação: rode o Pint se desejar antes de commitar:
+
+```bash
+vendor/bin/pint
+```
+
 Alternativa com Docker: utilizar Laravel Sail para subir serviços e app de forma padronizada.
 
 > Observação: caso os assets não apareçam no navegador, rode o processo do Vite para compilar Tailwind/JS.
