@@ -238,5 +238,11 @@
   "Share Book": "Compartilhar Livro",
   "Register to Share": "Registre-se para Compartilhar",
   "No books shared yet": "Nenhum livro compartilhado ainda",
-  "Be the first to share": "Seja o primeiro a compartilhar"
+  "Be the first to share": "Seja o primeiro a compartilhar",
+  "Failed to authenticate with Google.": "Falha ao autenticar com o Google.",
+  "Email already in use. Please login and link accounts.": "E-mail já em uso. Por favor, faça login e vincule as contas.",
+  "This email is already in use. Please log in with your existing account.": "Este e-mail já está em uso. Por favor, faça login com sua conta existente.",
+  "Sign in with Google": "Entrar com o Google",
+  "Sign up with Google": "Cadastrar-se com o Google",
+  "auth.verification_link_sent": "Um novo link de verificação foi enviado para o seu endereço de e-mail."
 }
