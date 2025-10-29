@@ -37,6 +37,7 @@ class PostCreatedNotification extends Notification
         return (new MailMessage())
             ->subject(__('notifications.posts.created_subject', ['title' => $this->post->title]))
             ->line(__('notifications.posts.created_line', ['title' => $this->post->title]))
+            ->line(__('posts.messages.under_review'))
             ->action(__('notifications.view_post'), url('/posts/' . $this->post->slug))
             ->line(__('notifications.thanks'));
     }

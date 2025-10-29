@@ -143,7 +143,78 @@ Alternativa com Docker: utilizar Laravel Sail para subir serviços e app de form
 - Filtragem/ordenação na home e paginação infinita.
 - A/B testing de layout do carousel e métricas de engajamento.
 
-## 📄 Licença
+## � Moderação automática (Jobs & OpenAI)
+
+Este projeto inclui uma implementação de moderação automática de descrições de postagens usando um Job enfileirado que chama a API de moderação da OpenAI.
+
+Resumo (contrato):
+
+- Entrada: uma instância de `App\Models\Post` (normalmente com `description` e `user`).
+- Saída: atualização do campo `moderation_status` do Post para `Approved` ou `Rejected`, criação de um registro em `moderation_logs` e notificação ao autor quando o status mudar.
+- Erros: falhas na chamada à API são registradas em logs e o Job é re-tentado de acordo com o `backoff()` definido.
+
+Arquivos principais:
+
+- `app/Jobs/ModeratePostJob.php` — Job que implementa `ShouldQueue`, chama o serviço de moderação, persiste o resultado e notifica o autor quando houver mudança de status.
+- `app/Services/Moderation/OpenAIModerationService.php` — Serviço que faz a chamada HTTP para o endpoint de moderação da OpenAI (`/v1/moderations`, modelo `omni-moderation-latest`).
+- `app/Services/Moderation/ModerationService.php` — Serviço auxiliar usado para mudanças manuais de status (persistência do `ModerationLog`, notificação e limpeza de cache).
+- `app/Notifications/PostModerationStatusChanged.php` — Notificação enviada ao autor quando o status muda.
+
+Fluxo (alto nível):
+
+1. Quando uma postagem precisa ser moderada, o Job `ModeratePostJob` é despachado com a instância do `Post`.
+2. O Job chama `OpenAIModerationService::moderate($post->description)`.
+3. Se a resposta indicar conteúdo seguro, o status é definido como `Approved`, caso contrário `Rejected`.
+4. O Post é atualizado, um registro em `moderation_logs` é criado (quando aplicável) e o autor é notificado via `PostModerationStatusChanged` quando o status muda.
+
+Observações técnicas relevantes:
+
+- A verificação de segurança usa o campo `results[0].flagged` retornado pela API da OpenAI — se `flagged` for true, a postagem é considerada insegura.
+- O `ModeratePostJob` define `backoff()` com os valores `[10, 30, 60, 120, 300]`, então a fila respeitará essas pausas entre tentativas em caso de exceção.
+- Em falhas de comunicação o serviço registra no log (`Log::error(...)`) e o Job lança para acionar o mecanismo de retry do Laravel.
+
+Variáveis de ambiente e configuração:
+
+- Defina a chave da OpenAI em `.env`:
+
+```bash
+OPENAI_API_KEY=sk_xxx
+```
+
+- Verifique que `config/services.php` possui a entrada `openai.key` (o projeto já inclui essa chave mapeada para `env('OPENAI_API_KEY')`).
+- Para execução de filas em desenvolvimento/produção, configure `QUEUE_CONNECTION` no `.env` (ex.: `database`, `redis`, `sync` para execução síncrona).
+
+Como executar localmente / exemplos:
+
+- Exemplo de despacho do Job em código (controller, observer ou event listener):
+
+```php
+use App\Jobs\ModeratePostJob;
+
+// ao criar/atualizar a postagem
+ModeratePostJob::dispatch($post);
+```
+
+- Rodar um worker de fila localmente (ex.: driver `database` ou `redis`):
+
+```bash
+php artisan queue:work --tries=3 --sleep=3
+```
+
+- Para testes rápidos sem worker, use o driver `sync` (executa o Job imediatamente).
+
+Boas práticas e recomendações de testes:
+
+- Nos testes, isole a chamada à OpenAI: utilize injeção de dependência e faça binding de um mock para `App\Services\Moderation\OpenAIModerationService` ou use `Http::fake()` para simular a resposta da API.
+- Utilize `Notification::fake()` para assertar que `PostModerationStatusChanged` foi (ou não) enviada.
+- Escreva ao menos um teste de integração do Job cobrindo ambos os cenários (aprovado/rejeitado) e um teste que garante que `ModerationLog` é criado quando o status é alterado manualmente via `ModerationService`.
+
+Notas operacionais:
+
+- Se preferir que a moderação ocorra imediatamente durante criação em ambientes de desenvolvimento, mantenha `QUEUE_CONNECTION=sync` — porém em produção recomenda-se usar `database`/`redis` e um worker dedicado.
+- Caso precise de maior controle, crie um listener/observer que despache `ModeratePostJob` somente para posts com `moderation_status = Pending`.
+
+## �📄 Licença
 
 Projeto desenvolvido para fins de portfólio. A licença poderá ser definida futuramente.
 

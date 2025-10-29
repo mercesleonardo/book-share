@@ -4,14 +4,15 @@ return [
     'title'  => 'Publicações',
     'single' => 'Publicação',
     'fields' => [
-        'title'       => 'Título',
-        'description' => 'Descrição',
-        'slug'        => 'Slug',
-        'category'    => 'Categoria',
-        'author'      => 'Autor do Livro',
-        'image'       => 'Imagem',
-        'user'        => 'Usuário',
-        'user_rating' => 'Sua avaliação para este livro',
+        'title'             => 'Título',
+        'description'       => 'Descrição',
+        'slug'              => 'Slug',
+        'category'          => 'Categoria',
+        'author'            => 'Autor do Livro',
+        'image'             => 'Imagem',
+        'user'              => 'Usuário',
+        'user_rating'       => 'Sua avaliação para este livro',
+        'moderation_status' => 'Status de Moderação',
     ],
     'actions' => [
         'create' => 'Criar Publicação',
@@ -34,6 +35,7 @@ return [
         'rating_saved'          => 'Avaliação registrada.',
         'rating_updated'        => 'Avaliação atualizada.',
         'rating_self_forbidden' => 'Você não pode avaliar sua própria publicação.',
+        'under_review'          => 'Sua publicação foi recebida e está em análise por nossa equipe.',
     ],
     'filters' => [
         'all'           => 'Todos',
@@ -66,5 +68,12 @@ return [
     'related' => [
         'title' => 'Publicações Relacionadas',
         'none'  => 'Nenhuma publicação relacionada ainda.',
+    ],
+    'moderation_status' => [
+        'pending'  => 'Pendente',
+        'approved' => 'Aprovado',
+        'rejected' => 'Rejeitado',
+        'unknown'  => 'Desconhecido',
+
     ],
 ];

@@ -12,4 +12,5 @@ return [
         'delete'         => 'Excluir',
         'delete_confirm' => 'Excluir este comentário?',
     ],
+    'inappropriate' => 'Seu comentário contém conteúdo inapropriado e não foi publicado.',
 ];

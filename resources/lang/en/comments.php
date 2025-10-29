@@ -12,4 +12,5 @@ return [
         'delete'         => 'Delete',
         'delete_confirm' => 'Delete this comment?',
     ],
+    'inappropriate' => 'Your comment contains inappropriate content and was not published.',
 ];

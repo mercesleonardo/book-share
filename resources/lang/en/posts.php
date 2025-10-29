@@ -4,14 +4,15 @@ return [
     'title'  => 'Posts',
     'single' => 'Post',
     'fields' => [
-        'title'       => 'Title',
-        'description' => 'Description',
-        'slug'        => 'Slug',
-        'category'    => 'Category',
-        'author'      => 'Book Author',
-        'image'       => 'Image',
-        'user'        => 'User',
-        'user_rating' => 'Your rating for this book',
+        'title'             => 'Title',
+        'description'       => 'Description',
+        'slug'              => 'Slug',
+        'category'          => 'Category',
+        'author'            => 'Book Author',
+        'image'             => 'Image',
+        'user'              => 'User',
+        'user_rating'       => 'Your rating for this book',
+        'moderation_status' => 'Moderation Status',
     ],
     'actions' => [
         'create' => 'Create Post',
@@ -34,6 +35,7 @@ return [
         'rating_saved'          => 'Rating saved.',
         'rating_updated'        => 'Rating updated.',
         'rating_self_forbidden' => 'You cannot rate your own post.',
+        'under_review'          => 'Your post was received and is under review by our team.',
     ],
     'filters' => [
         'all'           => 'All',
@@ -66,5 +68,12 @@ return [
     'related' => [
         'title' => 'Related Posts',
         'none'  => 'No related posts yet.',
+    ],
+    'moderation_status' => [
+        'pending'  => 'Pendente',
+        'approved' => 'Aprovado',
+        'rejected' => 'Rejeitado',
+        'unknown'  => 'Desconhecido',
+
     ],
 ];

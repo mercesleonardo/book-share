@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ModerationStatus;
 use App\Http\Requests\{IndexPostRequest, StorePostRequest, UpdatePostRequest};
 use App\Models\{Category, Post};
+use App\Models\User;
 use App\Notifications\PostCreatedNotification;
+use App\Services\Moderation\OpenAIModerationService;
 use App\Services\Post\{PostFilterService, PostImageService};
-use Illuminate\Http\{RedirectResponse, UploadedFile};
+use Illuminate\Http\{RedirectResponse};
 use Illuminate\Support\Facades\{Auth};
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    public function __construct()
+    protected OpenAIModerationService $moderation;
+
+    public function __construct(OpenAIModerationService $moderation)
     {
         $this->authorizeResource(Post::class, 'post');
+        $this->moderation = $moderation;
     }
 
     public function index(IndexPostRequest $request, PostFilterService $filter): View
@@ -23,7 +29,7 @@ class PostController extends Controller
         $posts = $filter->paginate($query, 15);
 
         $categories = Category::orderBy('name')->get(['id', 'name']);
-        $users      = \App\Models\User::orderBy('name')->get(['id', 'name']);
+        $users      = User::orderBy('name')->get(['id', 'name']);
 
         return view('posts.index', compact('posts', 'categories', 'users'));
     }
@@ -44,29 +50,25 @@ class PostController extends Controller
     {
         $user = Auth::user();
 
-        $data            = $request->validated();
-        $data['user_id'] = $user->id;
+        $data                      = $request->validated();
+        $data['user_id']           = $user->id;
+        $data['book_author']       = $data['book_author'] ?? $user->name;
+        $data['user_rating']       = $data['user_rating'] ?? null;
+        $data['moderation_status'] = ModerationStatus::Pending->value;
 
-        // Fallback if not provided
-        $data['book_author'] = $data['book_author'] ?? $user->name;
-
-        // if the key is missing, set to null (author can rate later)
-        if (!array_key_exists('user_rating', $data)) {
-            $data['user_rating'] = null; // author can rate later
-        }
-
-        /** @var \Illuminate\Http\Request $request */
         if ($request->hasFile('image')) {
-            /** @var UploadedFile $uploaded */
-            $uploaded      = $request->file('image');
-            $data['image'] = $images->storeImage($uploaded);
+            $data['image'] = $images->storeImage($request->file('image'));
         }
 
-        Post::create($data);
+        $post = Post::create($data);
 
-        $user->notify(new PostCreatedNotification(Post::latest()->first()));
+        $user->notify(new PostCreatedNotification($post));
 
-        return redirect()->route('admin.posts.index')->with('success', __('posts.messages.created'));
+        return redirect()
+            ->route('admin.posts.index')
+            ->with('warning', __('posts.messages.under_review', [
+                'title' => $post->title,
+            ]));
     }
 
     public function edit(Post $post): View
@@ -117,20 +119,14 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post, PostImageService $images): RedirectResponse
     {
-        $data = $request->validated();
-        // Ensure fallback without relying on the key presence
-        $data['book_author'] = $data['book_author'] ?? Auth::user()->name;
+        $data                      = $request->validated();
+        $data['book_author']       = $data['book_author'] ?? Auth::user()->name;
+        $data['user_rating']       = $post->user_rating ?? null;
+        $data['moderation_status'] = ModerationStatus::Pending->value;
+        $oldImage                  = $post->image;
 
-        if (!array_key_exists('user_rating', $data)) {
-            $data['user_rating'] = $post->user_rating; // mantém existente
-        }
-        $oldImage = $post->image;
-
-        /** @var \Illuminate\Http\Request $request */
         if ($request->hasFile('image')) {
-            /** @var UploadedFile $uploaded */
-            $uploaded      = $request->file('image');
-            $data['image'] = $images->storeImage($uploaded);
+            $data['image'] = $images->storeImage($request->file('image'));
         }
 
         $post->update($data);
@@ -139,7 +135,9 @@ class PostController extends Controller
             $images->deleteImage($oldImage);
         }
 
-        return redirect()->route('admin.posts.index')->with('success', __('posts.messages.updated'));
+        return redirect()
+            ->route('admin.posts.index')
+            ->with('warning', __('posts.messages.under_review'));
     }
 
     public function destroy(Post $post, PostImageService $images): RedirectResponse

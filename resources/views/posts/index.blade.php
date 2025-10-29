@@ -45,6 +45,7 @@
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.author') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.meta.community_average') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('posts.meta.community_count') }}</th>
+                                    <th class="py-2 px-4 border-b text-left">{{ __('posts.fields.moderation_status') }}</th>
                                     <th class="py-2 px-4 border-b text-left">{{ __('Actions') }}</th>
                                 </tr>
                             </thead>
@@ -74,6 +75,13 @@
                                             @endif
                                         </td>
                                         <td class="py-2 px-4 border-b text-sm">{{ $post->community_ratings_count }}</td>
+                                        <td class="py-2 px-4 border-b text-sm">
+                                            @if($post->moderation_status instanceof \App\Enums\ModerationStatus)
+                                                <span class="px-2 py-1 rounded-full {{ $post->moderation_status->color() }} text-xs font-semibold">{{ $post->moderation_status->label() }}</span>
+                                            @else
+                                                <span class="px-2 py-1 rounded-full bg-gray-100 text-gray-800 text-xs font-semibold">{{ __('posts.moderation_status.unknown') }}</span>
+                                            @endif
+                                        </td>
                                         <td class="py-2 px-4 border-b">
                                             <div class="flex flex-wrap gap-2">
                                                 <x-secondary-button x-data="" x-on:click.prevent="window.location.href='{{ route('admin.posts.show', $post) }}'">{{ __('posts.actions.view') }}</x-secondary-button>

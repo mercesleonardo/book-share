@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\ModerationStatus;
 use App\Models\Post;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +13,7 @@ class PostModerationStatusChanged extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(public Post $post, public string $from, public string $to)
+    public function __construct(public Post $post, public ModerationStatus $from, public ModerationStatus $to)
     {
     }
 
@@ -23,8 +24,8 @@ class PostModerationStatusChanged extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        $fromLabel = __('moderation.' . $this->from);
-        $toLabel   = __('moderation.' . $this->to);
+        $fromLabel = __('moderation.' . $this->from->value);
+        $toLabel   = __('moderation.' . $this->to->value);
 
         return (new MailMessage())
             ->subject(__('notifications.moderation.changed_subject', ['from' => $fromLabel, 'to' => $toLabel]))
@@ -36,8 +37,8 @@ class PostModerationStatusChanged extends Notification implements ShouldQueue
     {
         return [
             'post_id' => $this->post->id,
-            'from'    => $this->from,
-            'to'      => $this->to,
+            'from'    => $this->from->value,
+            'to'      => $this->to->value,
             'title'   => $this->post->title,
         ];
     }
