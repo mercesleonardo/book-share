@@ -29,8 +29,6 @@ class OpenAIModerationService
         $useCache = false;
 
         try {
-            // Build a single text input regardless of whether we received a
-            // Post or a raw string.
             if ($input instanceof Post) {
                 $parts = [];
 
@@ -48,7 +46,6 @@ class OpenAIModerationService
 
                 $text = implode("\n\n", $parts);
             } else {
-                // raw string (e.g. comment body)
                 $text = (string) $input;
             }
 
@@ -62,9 +59,6 @@ class OpenAIModerationService
 
             $failureKey = $key . ':failure';
 
-            // During automated tests we avoid caching to prevent cross-test
-            // pollution (phpunit uses an in-memory array cache that persists
-            // for the process). In production/staging caching is enabled.
             $useCache = !app()->runningUnitTests() && config('cache.default') !== 'array';
 
             if ($useCache) {
@@ -89,7 +83,7 @@ class OpenAIModerationService
 
             if ($response->failed()) {
                 Log::error('OpenAI Moderation API failed', ['response' => $response->body()]);
-                $failureTtl = config('services.openai.moderation_failure_cache_minutes', 2);
+                $failureTtl = (int) config('services.openai.moderation_failure_cache_minutes', 2);
                 if ($useCache) {
                     Cache::put($failureKey, true, now()->addMinutes($failureTtl));
                 }
@@ -99,16 +93,9 @@ class OpenAIModerationService
 
             $result = $response->json();
             $safe = !($result['results'][0]['flagged'] ?? false);
-            // Log debug information to help trace discrepancies between
-            // service result and controller usage.
-            Log::debug('OpenAI moderation result', [
-                'key' => $key,
-                'useCache' => $useCache,
-                'safe' => $safe,
-                'response_summary' => $result['results'][0] ?? null,
-            ]);
+
             if ($useCache) {
-                $ttl = config('services.openai.moderation_cache_ttl', 60 * 60 * 24); // seconds
+                $ttl = (int) config('services.openai.moderation_cache_ttl', 60 * 60 * 24);
                 Cache::put($key, $safe, now()->addSeconds($ttl));
             }
 
