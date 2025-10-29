@@ -122,8 +122,8 @@ class PostController extends Controller
         $data                      = $request->validated();
         $data['book_author']       = $data['book_author'] ?? Auth::user()->name;
         $data['user_rating']       = $post->user_rating ?? null;
-        $data['moderation_status'] = ModerationStatus::Pending->value;
         $oldImage                  = $post->image;
+        $data['moderation_status'] = ModerationStatus::Pending->value;
 
         if ($request->hasFile('image')) {
             $data['image'] = $images->storeImage($request->file('image'));

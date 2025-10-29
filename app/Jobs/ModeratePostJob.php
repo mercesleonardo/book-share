@@ -30,14 +30,22 @@ class ModeratePostJob implements ShouldQueue
      */
     public function handle(OpenAIModerationService $moderation): void
     {
-        if ($this->post->moderation_status instanceof ModerationStatus) {
-            $previousStatus = $this->post->moderation_status;
+        $currentStatus = $this->post->moderation_status;
+
+        if ($currentStatus instanceof ModerationStatus) {
+            $previousStatus = $currentStatus;
+        } elseif (is_string($currentStatus)) {
+            try {
+                $previousStatus = ModerationStatus::from($currentStatus);
+            } catch (\ValueError $e) {
+                $previousStatus = ModerationStatus::Pending;
+            }
         } else {
-            $previousStatus = ModerationStatus::from($this->post->moderation_status);
+            $previousStatus = ModerationStatus::Pending;
         }
 
         try {
-            $isSafe = $moderation->moderate($this->post->description);
+            $isSafe = $moderation->moderate($this->post);
 
             $newStatus = $isSafe
                 ? ModerationStatus::Approved
