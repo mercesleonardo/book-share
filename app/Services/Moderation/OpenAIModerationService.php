@@ -3,7 +3,7 @@
 namespace App\Services\Moderation;
 
 use App\Models\Post;
-use Illuminate\Support\Facades\{Http, Log, Cache};
+use Illuminate\Support\Facades\{Cache, Http, Log};
 
 class OpenAIModerationService
 {
@@ -15,50 +15,68 @@ class OpenAIModerationService
     }
 
     /**
-     * Moderate a Post using OpenAI Moderation API.
+     * Moderate content using OpenAI Moderation API.
      *
-     * The service is responsible for composing the input from the Post fields
-     * (title, book_author, description) and applying a safe size limit before
-     * sending to OpenAI.
+     * Accepts either an instance of `Post` (will compose title/author/description)
+     * or a raw string (for comments or other free text). The service composes
+     * the input, enforces a size limit, consults cache and calls OpenAI when
+     * needed.
+     *
+     * @param Post|string $input
      */
-    public function moderate(Post $post): bool
+    public function moderate(Post|string $input): bool
     {
+        $useCache = false;
+
         try {
-            $parts = [];
+            // Build a single text input regardless of whether we received a
+            // Post or a raw string.
+            if ($input instanceof Post) {
+                $parts = [];
 
-            if (!empty($post->title)) {
-                $parts[] = 'Title: ' . $post->title;
+                if (!empty($input->title)) {
+                    $parts[] = 'Title: ' . $input->title;
+                }
+
+                if (!empty($input->book_author)) {
+                    $parts[] = 'Book author: ' . $input->book_author;
+                }
+
+                if (!empty($input->description)) {
+                    $parts[] = 'Description: ' . $input->description;
+                }
+
+                $text = implode("\n\n", $parts);
+            } else {
+                // raw string (e.g. comment body)
+                $text = (string) $input;
             }
-
-            if (!empty($post->book_author)) {
-                $parts[] = 'Book author: ' . $post->book_author;
-            }
-
-            if (!empty($post->description)) {
-                $parts[] = 'Description: ' . $post->description;
-            }
-
-            $input = implode("\n\n", $parts);
 
             $max = config('services.openai.moderation_input_max', 3000);
 
-            if (mb_strlen($input) > $max) {
-                $input = mb_substr($input, 0, $max);
+            if (mb_strlen($text) > $max) {
+                $text = mb_substr($text, 0, $max);
             }
 
-            // Cache key based on the input text
-            $key = 'moderation:' . sha1($input);
+            $key = 'moderation:' . sha1($text);
 
-            // Short-circuit if there's a recent failure to avoid stampede
             $failureKey = $key . ':failure';
-            if (Cache::has($failureKey)) {
-                return false;
-            }
 
-            // Try cache first
-            $cached = Cache::get($key);
-            if ($cached !== null) {
-                return (bool) $cached;
+            // During automated tests we avoid caching to prevent cross-test
+            // pollution (phpunit uses an in-memory array cache that persists
+            // for the process). In production/staging caching is enabled.
+            $useCache = !app()->runningUnitTests() && config('cache.default') !== 'array';
+
+            if ($useCache) {
+                if (Cache::has($failureKey)) {
+                    return false;
+                }
+
+                $cached = Cache::get($key);
+
+                if ($cached !== null) {
+                    return (bool) $cached;
+                }
             }
 
             $response = Http::withHeaders([
@@ -66,26 +84,33 @@ class OpenAIModerationService
                 'Content-Type'  => 'application/json',
             ])->post('https://api.openai.com/v1/moderations', [
                 'model' => 'omni-moderation-latest',
-                'input' => $input,
+                'input' => $text,
             ]);
 
             if ($response->failed()) {
                 Log::error('OpenAI Moderation API failed', ['response' => $response->body()]);
-
-                // cache a short failure marker to avoid repeated immediate retries
                 $failureTtl = config('services.openai.moderation_failure_cache_minutes', 2);
-                Cache::put($failureKey, true, now()->addMinutes($failureTtl));
+                if ($useCache) {
+                    Cache::put($failureKey, true, now()->addMinutes($failureTtl));
+                }
 
                 return false;
             }
 
             $result = $response->json();
-
             $safe = !($result['results'][0]['flagged'] ?? false);
-
-            // store the boolean verdict in cache
-            $ttl = config('services.openai.moderation_cache_ttl', 60 * 60 * 24); // seconds
-            Cache::put($key, $safe, now()->addSeconds($ttl));
+            // Log debug information to help trace discrepancies between
+            // service result and controller usage.
+            Log::debug('OpenAI moderation result', [
+                'key' => $key,
+                'useCache' => $useCache,
+                'safe' => $safe,
+                'response_summary' => $result['results'][0] ?? null,
+            ]);
+            if ($useCache) {
+                $ttl = config('services.openai.moderation_cache_ttl', 60 * 60 * 24); // seconds
+                Cache::put($key, $safe, now()->addSeconds($ttl));
+            }
 
             return $safe;
 
