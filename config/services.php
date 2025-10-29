@@ -46,5 +46,9 @@ return [
         // Maximum characters to send to the moderation endpoint when composing
         // title, author and description. Configurable via env.
         'moderation_input_max' => env('OPENAI_MODERATION_INPUT_MAX', 3000),
+        // Cache TTL (in seconds) for moderation verdicts. Default: 1 day.
+        'moderation_cache_ttl' => env('OPENAI_MODERATION_CACHE_TTL', 86400),
+        // Failure cache TTL (in minutes) to avoid retry stampede when API fails.
+        'moderation_failure_cache_minutes' => env('OPENAI_MODERATION_FAILURE_CACHE_MINUTES', 2),
     ],
 ];

@@ -3,7 +3,7 @@
 namespace App\Services\Moderation;
 
 use App\Models\Post;
-use Illuminate\Support\Facades\{Http, Log};
+use Illuminate\Support\Facades\{Http, Log, Cache};
 
 class OpenAIModerationService
 {
@@ -46,6 +46,21 @@ class OpenAIModerationService
                 $input = mb_substr($input, 0, $max);
             }
 
+            // Cache key based on the input text
+            $key = 'moderation:' . sha1($input);
+
+            // Short-circuit if there's a recent failure to avoid stampede
+            $failureKey = $key . ':failure';
+            if (Cache::has($failureKey)) {
+                return false;
+            }
+
+            // Try cache first
+            $cached = Cache::get($key);
+            if ($cached !== null) {
+                return (bool) $cached;
+            }
+
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->apiKey,
                 'Content-Type'  => 'application/json',
@@ -57,12 +72,22 @@ class OpenAIModerationService
             if ($response->failed()) {
                 Log::error('OpenAI Moderation API failed', ['response' => $response->body()]);
 
+                // cache a short failure marker to avoid repeated immediate retries
+                $failureTtl = config('services.openai.moderation_failure_cache_minutes', 2);
+                Cache::put($failureKey, true, now()->addMinutes($failureTtl));
+
                 return false;
             }
 
             $result = $response->json();
 
-            return !($result['results'][0]['flagged'] ?? false);
+            $safe = !($result['results'][0]['flagged'] ?? false);
+
+            // store the boolean verdict in cache
+            $ttl = config('services.openai.moderation_cache_ttl', 60 * 60 * 24); // seconds
+            Cache::put($key, $safe, now()->addSeconds($ttl));
+
+            return $safe;
 
         } catch (\Throwable $e) {
             Log::error('OpenAI Moderation Exception', ['message' => $e->getMessage()]);
