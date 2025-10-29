@@ -184,6 +184,8 @@ OPENAI_API_KEY=sk_xxx
 - Verifique que `config/services.php` possui a entrada `openai.key` (o projeto já inclui essa chave mapeada para `env('OPENAI_API_KEY')`).
 - Para execução de filas em desenvolvimento/produção, configure `QUEUE_CONNECTION` no `.env` (ex.: `database`, `redis`, `sync` para execução síncrona).
 
+- Configuração adicional: você pode controlar o tamanho máximo (em caracteres) do texto enviado para a API de moderação via `.env` usando `OPENAI_MODERATION_INPUT_MAX` (padrão `3000`). Essa opção é mapeada em `config/services.php` como `openai.moderation_input_max`.
+
 Como executar localmente / exemplos:
 
 - Exemplo de despacho do Job em código (controller, observer ou event listener):

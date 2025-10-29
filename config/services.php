@@ -43,5 +43,8 @@ return [
 
     'openai' => [
         'key' => env('OPENAI_API_KEY'),
+        // Maximum characters to send to the moderation endpoint when composing
+        // title, author and description. Configurable via env.
+        'moderation_input_max' => env('OPENAI_MODERATION_INPUT_MAX', 3000),
     ],
 ];
